@@ -1,4 +1,4 @@
-# Проверка версии 0.3.4
+# Проверка версии 0.3.5
 
 Проверено 1 октября 2026 года в текущей cloud-машине: Python 3.12.14, Node 24.19.0 и Chromium. Тесты используют отдельные временные базы и сохраняют пользовательский дневник.
 
@@ -10,9 +10,10 @@
 - Распакованный ZIP запускается через Python-лаунчер и получает режим package. В ZIP нет `.git`, `.local`, пользовательских CSV, действующих токенов или окружения. Включены явные публичные архивы с upstream-лицензиями. Детерминированность, SHA-256, манифест и права Unix-лаунчеров проверены.
 - Windows timezone fallback проверен при отсутствии системной базы IANA: DST, осенний повтор часа, UTC и bootstrap стандартных профилей. На Linux не запускаются Windows/macOS-исполняемые файлы. Windows UTF-8 child arguments и SIGBREAK cleanup проверены регрессиями.
 - Native Windows run [0.3.3 / a3206e5](https://github.com/NeatherFrog/awesome-x402/actions/runs/36847268715): **372 теста прошли на Windows**, JavaScript syntax прошёл. Последующие этапы выявили необходимость whole-script PowerShell transport и явного импорта совместимого системного модуля. Проверка подписи не отключена. Финальный portable-пакет публикуется только после полного успешного native run для соответствующего commit.
+- Native run [0.3.4 / 9d1a74f](https://github.com/NeatherFrog/awesome-x402/actions/runs/36847748248): официальный runtime/подписи, 372 теста, запуск, обновление и сохранение данных прошли; финальная проверка TCP отказа получила неопределённый WSAEWOULDBLOCK при таймауте 0.5 с. Публикация была остановлена; таймаут увеличен до 5 с без принятия неопределённого результата.
 - `.github/workflows/windows-package.yml` собирает официальный CPython 3.13.16 на Windows, проверяет закреплённый SHA-256 официального HTTPS-архива и Authenticode, затем выполняет `scripts/smoke_windows_package.py` встроенным интерпретатором. Проверка включает пути с пробелами, isolated imports, точный commit, SQLite, настоящее обновление/перезапуск и сохранение runtime/дневника/настроек. Публикация требует успешного `windows-validation.json` именно для этого исходного commit; Linux-тест структуры не заменяет эту проверку. При опубликованном Windows-пакете результат и ссылка на run находятся рядом с ZIP в ветке distribution.
 - `node --check static/app.js`, `python3 -m compileall -q propdesk scripts launch.py` и `git diff --check` прошли.
-- `bash scripts/start.sh` и `python3 scripts/check_ready.py` подтвердили сервер 0.3.4, восемь стратегий, профили, JavaScript, scanner, autopilot, news status и updater API. Готовность проверяется без внешних запросов и изменения дневника.
+- `bash scripts/start.sh` и `python3 scripts/check_ready.py` подтвердили сервер 0.3.5, восемь стратегий, профили, JavaScript, scanner, autopilot, news status и updater API. Готовность проверяется без внешних запросов и изменения дневника.
 
 ## Рыночные эксперименты
 

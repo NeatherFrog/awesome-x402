@@ -180,7 +180,10 @@ def main():
             # Windows SO_REUSEADDR can bind beside a live listener. An
             # exclusive bind can instead fail solely because of TIME_WAIT.
             # Require an actual refusal of a fresh connection after shutdown.
-            stopped.settimeout(.5)
+            # Windows may delay loopback refusal for several SYN attempts.
+            # A short timeout returns WSAEWOULDBLOCK without establishing
+            # whether a listener exists. Still require an explicit refusal.
+            stopped.settimeout(5)
             result = stopped.connect_ex(("127.0.0.1", port))
             if result not in (errno.ECONNREFUSED, getattr(errno, "WSAECONNREFUSED", 10061)):
                 raise RuntimeError(f"Stopped Windows server did not refuse a fresh connection: {result}")
