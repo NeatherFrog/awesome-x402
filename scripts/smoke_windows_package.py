@@ -7,6 +7,7 @@ The release archive itself is never modified by this check.
 from __future__ import annotations
 
 import argparse
+import errno
 import hashlib
 import json
 import os
@@ -176,8 +177,13 @@ def main():
                                        capture_output=True, timeout=10)
                         process.wait(timeout=10)
         with socket.socket() as stopped:
-            stopped.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            stopped.bind(("127.0.0.1", port))
+            # Windows SO_REUSEADDR can bind beside a live listener. An
+            # exclusive bind can instead fail solely because of TIME_WAIT.
+            # Require an actual refusal of a fresh connection after shutdown.
+            stopped.settimeout(.5)
+            result = stopped.connect_ex(("127.0.0.1", port))
+            if result not in (errno.ECONNREFUSED, getattr(errno, "WSAECONNREFUSED", 10061)):
+                raise RuntimeError(f"Stopped Windows server did not refuse a fresh connection: {result}")
     validation = archive.parent / "windows-validation.json"
     validation.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(record))
