@@ -83,7 +83,10 @@ def main():
             "import json,ssl,sqlite3,zoneinfo,propdesk,sys; "
             "print(json.dumps({'python':sys.version.split()[0], 'isolated':sys.flags.isolated, "
             "'sqlite':sqlite3.sqlite_version,'ssl':ssl.OPENSSL_VERSION}))"],
-            cwd=app, capture_output=True, text=True, check=True)
+            cwd=app, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if runtime_check.returncode:
+            detail = (runtime_check.stdout + runtime_check.stderr)[-8000:]
+            raise RuntimeError(f"Bundled runtime import check failed ({runtime_check.returncode}):\n{detail}")
         record["runtime"] = json.loads(runtime_check.stdout)
         assert record["runtime"]["isolated"] == 1
         match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", version)
@@ -160,6 +163,9 @@ def main():
                 record.update(status="passed", checks=["clean_extraction", "isolated_runtime_imports", "path_with_spaces",
                     "health_exact_commit", "bootstrap", "supervised_updater", "real_update_restart",
                     "journal_preserved", "settings_preserved", "runtime_preserved", "update_noop"])
+            except Exception as exc:
+                detail = (work / "server.log").read_text(encoding="utf-8", errors="replace")[-8000:]
+                raise RuntimeError(f"Windows package smoke failed: {exc}\nLauncher log:\n{detail}") from exc
             finally:
                 if process is not None and process.poll() is None:
                     try:

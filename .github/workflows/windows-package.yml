@@ -12,11 +12,13 @@ on:
       - 'launch.py'
       - 'START-*'
       - 'RELEASE.json'
+      - '.gitattributes'
       - '.github/workflows/windows-package.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
+  checks: write
 
 concurrency:
   group: windows-package-${{ github.ref }}
@@ -28,19 +30,20 @@ jobs:
     timeout-minutes: 25
     env:
       TRADING_AUTOPILOT_DEFAULT: '0'
+      TRADING_CI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - name: Test application
-        run: python -m unittest discover -s tests -q
+        run: python -X utf8 scripts/ci_check.py tests
       - name: Check browser script
         run: node --check static/app.js
       - name: Build official Python portable package
-        run: python scripts/build_windows_distribution.py --commit ${{ github.sha }} --output-dir dist
+        run: python -X utf8 scripts/ci_check.py build
       - name: Run actual Windows package and update
-        run: python scripts/smoke_windows_package.py --archive (Get-ChildItem dist/PROP-LAB-Windows-x64-*.zip).FullName
+        run: python -X utf8 scripts/ci_check.py smoke
       - name: Retain tested package
         uses: actions/upload-artifact@v4
         with:
@@ -51,5 +54,4 @@ jobs:
             dist/windows-validation.json
           retention-days: 30
       - name: Publish tested package for direct download
-        shell: bash
-        run: python scripts/publish_windows_package.py --source-commit "${GITHUB_SHA}" --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+        run: python -X utf8 scripts/ci_check.py publish

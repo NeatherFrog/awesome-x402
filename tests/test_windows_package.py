@@ -46,7 +46,9 @@ def write_runtime(path, members):
 
 
 def signature_records(files):
-    return {"python_version": windows.RUNTIME_VERSION, "records": [
+    major, minor, micro = (int(part) for part in windows.RUNTIME_VERSION.split("."))
+    return {"python_version": windows.RUNTIME_VERSION,
+            "python_resource_version": [major, minor, micro * 1000 + 150, 1013], "records": [
         {"name": name, "status": "Valid" if name in windows.CORE_SIGNED_FILES else "NotSigned",
          "subject": "CN=Python Software Foundation" if name in windows.CORE_SIGNED_FILES else None,
          "thumbprint": "TEST_ONLY" if name in windows.CORE_SIGNED_FILES else None}
@@ -125,6 +127,20 @@ class WindowsPackageTests(unittest.TestCase):
         with self.assertRaises(windows.WindowsBuildError):
             windows._validate_signatures({**observed, "records": observed["records"][:-1]}, files)
 
+    def test_signed_file_version_and_encoded_windows_build_agree(self):
+        files = runtime_members()
+        observed = signature_records(files)
+        self.assertEqual(observed["python_version"], "3.13.16")
+        self.assertEqual(observed["python_resource_version"], [3, 13, 16150, 1013])
+        self.assertEqual(windows._validate_signatures(observed, files), observed["records"])
+        for version, resource in (("3.13.16150", [3, 13, 16150, 1013]),
+                                  ("3.13.16", [3, 13, 16, 1013]),
+                                  ("3.13.16", [3, 13, 16140, 1013])):
+            with self.subTest(version=version, resource=resource):
+                with self.assertRaises(windows.WindowsBuildError):
+                    windows._validate_signatures({**observed, "python_version": version,
+                                                  "python_resource_version": resource}, files)
+
     def test_linux_cannot_claim_verified_windows_publication(self):
         with patch.object(windows.sys, "platform", "linux"):
             with patch.object(windows, "_download_official") as download:
@@ -143,7 +159,8 @@ class WindowsPackageTests(unittest.TestCase):
             # pure Python: whole-archive official comparison must reject it.
             write_runtime(supplied, {**members, windows.PTH_NAME: b"tampered"})
             with patch.object(windows.sys, "platform", "win32"):
-                with patch.object(windows, "_download_official", return_value=official) as download:
+                with patch.object(windows, "_download_official", return_value=official) as download, \
+                        patch.object(windows, "RUNTIME_ARCHIVE_SHA256", windows.file_digest(official)):
                     with patch.object(windows, "_authenticode", return_value=signature_records(members)) as signatures:
                         with self.assertRaisesRegex(windows.WindowsBuildError, "independently downloaded"):
                             windows._verify_runtime(supplied, root)
@@ -151,8 +168,23 @@ class WindowsPackageTests(unittest.TestCase):
                         files, verification = windows._verify_runtime(official, root)
                         self.assertEqual(files, members)
                         self.assertEqual(verification["source_archive_sha256"], windows.file_digest(official))
+                        self.assertEqual(verification["pinned_source_archive_sha256"], windows.file_digest(official))
                         self.assertEqual(verification["source_url"], windows.RUNTIME_URL)
                         self.assertEqual(download.call_count, 2)
+
+    def test_changed_official_archive_is_rejected_before_inventory_or_signatures(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            official = root / "official.zip"
+            write_runtime(official, runtime_members())
+            with patch.object(windows.sys, "platform", "win32"), \
+                    patch.object(windows, "_download_official", return_value=official), \
+                    patch.object(windows, "_runtime_files") as inventory, \
+                    patch.object(windows, "_authenticode") as signatures:
+                with self.assertRaisesRegex(windows.WindowsBuildError, "version-controlled archive SHA-256 pin"):
+                    windows._verify_runtime(None, root)
+            inventory.assert_not_called()
+            signatures.assert_not_called()
 
     def test_official_download_redirects_preserve_https_origin(self):
         handler = windows._OfficialRedirect()

@@ -1,0 +1,11 @@
+# Public research snapshots and license fingerprints require identical bytes.
+* text=auto eol=lf
+# Preserve upstream snapshot bytes, including any deliberate CRLF originals.
+data/** -text
+*.zip -text
+*.png -text
+propdesk/tzdata/Europe/* -text
+propdesk/tzdata/America/* -text
+propdesk/tzdata/Asia/* -text
+propdesk/tzdata/Etc/* -text
+propdesk/tzdata/UTC -text

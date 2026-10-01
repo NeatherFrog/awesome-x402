@@ -114,4 +114,4 @@ API изменений принимает JSON и проверяет Origin дл
 
 Локальные процессы не переживают публикацию cloud snapshot. Повторный запуск: перейти в существующий `/workspace/trading`, проверить Python 3.11+, запустить `python3 -m propdesk serve`. Рабочий каталог уже изолирован: новый Git worktree не нужен.
 
-Windows portable ZIP использует официальный изолированный CPython 3.13.16 из `runtime/`. Лаунчер предпочитает его; source ZIP/macOS/Linux требуют установленный Python 3.11+. Updater сохраняет runtime и пользовательское состояние. Сам Python обновляется заменой полного portable-пакета; native Windows CI отдельно проверяет сборку, запуск и update-сценарий. Версия приложения — 0.3.0.
+Windows portable ZIP использует официальный изолированный CPython 3.13.16 из `runtime/`. Лаунчер предпочитает его; source ZIP/macOS/Linux требуют установленный Python 3.11+. Updater сохраняет runtime и пользовательское состояние. Сам Python обновляется заменой полного portable-пакета; native Windows CI отдельно проверяет сборку, запуск и update-сценарий. Версия приложения — 0.3.1.

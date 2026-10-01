@@ -33,6 +33,7 @@ RUNTIME_TAG_COMMIT = "cbc944f4bc59639a444dd971c737788ba2283a91"
 RUNTIME_ARCH = "amd64"
 RUNTIME_FILENAME = "python-" + RUNTIME_VERSION + "-embed-" + RUNTIME_ARCH + ".zip"
 RUNTIME_URL = "https://www.python.org/ftp/python/" + RUNTIME_VERSION + "/" + RUNTIME_FILENAME
+RUNTIME_ARCHIVE_SHA256 = "97dae5274cc54867065e8d5a3226e48c35017ed332a0fdb0e27d5b5821961297"
 STDLIB_NAME = "python313.zip"
 PTH_NAME = "python313._pth"
 MAX_ARCHIVE_BYTES = 40 * 1024 * 1024
@@ -140,7 +141,8 @@ $records = @($native | ForEach-Object {
                thumbprint=$signature.SignerCertificate.Thumbprint}
 })
 $version = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $runtimePath 'python.exe'))
-[ordered]@{python_version=('{0}.{1}.{2}' -f $version.FileMajorPart,$version.FileMinorPart,$version.FileBuildPart);
+[ordered]@{python_version=$version.FileVersion;
+           python_resource_version=@($version.FileMajorPart,$version.FileMinorPart,$version.FileBuildPart,$version.FilePrivatePart);
            records=$records} | ConvertTo-Json -Depth 5 -Compress
 '''
     completed = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "-"],
@@ -152,6 +154,15 @@ $version = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $runtimePath
 def _validate_signatures(observed, files):
     if not isinstance(observed, dict) or observed.get("python_version") != RUNTIME_VERSION:
         raise WindowsBuildError("Signed runtime version differs from the pinned Python release")
+    # CPython's third Windows resource field encodes micro*1000 +
+    # release_level*10 + serial, so 3.13.16 final has 16150, not 16.
+    # The human-readable signed FileVersion string above is PY_VERSION.
+    major, minor, micro = (int(part) for part in RUNTIME_VERSION.split("."))
+    resource = observed.get("python_resource_version")
+    if (not isinstance(resource, list) or len(resource) != 4
+            or any(type(part) is not int or not 0 <= part <= 65535 for part in resource)
+            or resource[:3] != [major, minor, micro * 1000 + 150]):
+        raise WindowsBuildError("Signed Windows version resource differs from the pinned final Python release")
     records = observed.get("records")
     native_names = {name for name in files if name.lower().endswith((".exe", ".dll", ".pyd"))}
     if (not isinstance(records, list) or len(records) != len(native_names)
@@ -174,6 +185,8 @@ def _verify_runtime(local_archive, directory):
     directory = Path(directory)
     official = _download_official(directory / RUNTIME_FILENAME)
     official_hash = file_digest(official)
+    if official_hash != RUNTIME_ARCHIVE_SHA256:
+        raise WindowsBuildError("Official runtime differs from the version-controlled archive SHA-256 pin")
     if local_archive is not None and file_digest(local_archive) != official_hash:
         raise WindowsBuildError("Supplied runtime differs from the independently downloaded official archive")
     files = _runtime_files(official)
@@ -181,18 +194,22 @@ def _verify_runtime(local_archive, directory):
     extracted.mkdir()
     for name, body in files.items():
         (extracted / name).write_bytes(body)
-    records = _validate_signatures(_authenticode(extracted), files)
+    observed = _authenticode(extracted)
+    records = _validate_signatures(observed, files)
     verification = {
         "schema": 1, "python_version": RUNTIME_VERSION, "architecture": "Windows x64",
+        "python_resource_version": observed["python_resource_version"],
         "source_url": RUNTIME_URL, "source_archive": RUNTIME_FILENAME, "source_archive_sha256": official_hash,
+        "pinned_source_archive_sha256": RUNTIME_ARCHIVE_SHA256,
+        "archive_pin_source": "Recorded from verified official HTTPS python.org archive bytes on 2026-10-01",
         "cpython_tag": "v" + RUNTIME_VERSION, "cpython_tag_commit": RUNTIME_TAG_COMMIT,
-        "verification_method": "independent official HTTPS archive comparison + valid PSF core Authenticode",
+        "verification_method": "version-controlled archive SHA-256 + independent official HTTPS archive comparison + valid PSF core Authenticode",
         "verified_at_utc": datetime.now(timezone.utc).isoformat(), "native_signatures": records,
         "runner": {name: os.environ.get(name) for name in (
             "GITHUB_ACTIONS", "GITHUB_REPOSITORY", "GITHUB_SHA", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "GITHUB_WORKFLOW_REF",
         )},
         "limitations": [
-            "Archive identity comes from verified HTTPS python.org transport, not an independently pinned publisher checksum or signed archive manifest.",
+            "The version-controlled archive pin was recorded from verified official HTTPS bytes; an independently signed publisher archive checksum or manifest was not available.",
             "PSF Authenticode authenticates Python core native binaries. Other native files' statuses are recorded; unsigned files and stdlib ZIP are bound by the whole official HTTPS archive comparison.",
             "GitHub run identifiers are provenance metadata, not a cryptographic artifact attestation; the workflow should publish a GitHub build provenance attestation separately.",
             "Bundled runtime is preserved by application updates; replace the complete Windows package to receive Python security updates.",
