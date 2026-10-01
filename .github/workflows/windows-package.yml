@@ -36,12 +36,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - name: Build official Python portable package
+        run: python -X utf8 scripts/ci_check.py build
       - name: Test application
         run: python -X utf8 scripts/ci_check.py tests
       - name: Check browser script
         run: node --check static/app.js
-      - name: Build official Python portable package
-        run: python -X utf8 scripts/ci_check.py build
       - name: Run actual Windows package and update
         run: python -X utf8 scripts/ci_check.py smoke
       - name: Retain tested package

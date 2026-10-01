@@ -132,7 +132,12 @@ def _authenticode(directory):
     environment["TRADING_RUNTIME_VERIFY_DIR"] = str(directory)
     script = r'''
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+# Windows PowerShell 5.1 can inherit pwsh 7's incompatible module paths
+# from the GitHub runner. Resolve built-in modules for this host only.
+$env:PSModulePath = [IO.Path]::Combine($PSHOME, 'Modules')
+Import-Module -Name ([IO.Path]::Combine($PSHOME, 'Modules', 'Microsoft.PowerShell.Security', 'Microsoft.PowerShell.Security.psd1')) -ErrorAction Stop
 $runtimePath = [Environment]::GetEnvironmentVariable('TRADING_RUNTIME_VERIFY_DIR')
 $native = @(Get-ChildItem -LiteralPath $runtimePath -File | Where-Object { $_.Extension -in '.exe','.dll','.pyd' })
 $records = @($native | ForEach-Object {

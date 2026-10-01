@@ -147,8 +147,10 @@ class WindowsPackageTests(unittest.TestCase):
     def test_signature_script_is_executed_whole_without_interactive_stdin(self):
         observed = signature_records(runtime_members())
         completed = subprocess.CompletedProcess([], 0, "\ufeff" + json.dumps(observed), "")
-        with patch.object(windows.subprocess, "run", return_value=completed) as run:
-            self.assertEqual(windows._authenticode("C:/path with spaces/runtime"), observed)
+        with patch.dict(os.environ, {"PSModulePath": "C:/PowerShell7/Modules"}):
+            with patch.object(windows.subprocess, "run", return_value=completed) as run:
+                self.assertEqual(windows._authenticode("C:/path with spaces/runtime"), observed)
+            self.assertEqual(os.environ["PSModulePath"], "C:/PowerShell7/Modules")
         command = run.call_args.args[0]
         self.assertEqual(command[:-1], ["powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-EncodedCommand"])
         script = base64.b64decode(command[-1], validate=True).decode("utf-16-le")
@@ -156,6 +158,9 @@ class WindowsPackageTests(unittest.TestCase):
         self.assertIn("python_version=$version.FileVersion", script)
         self.assertIn("$version.FileBuildPart", script)
         self.assertIn("[Console]::OutputEncoding", script)
+        self.assertIn("$ProgressPreference = 'SilentlyContinue'", script)
+        self.assertIn("$env:PSModulePath = [IO.Path]::Combine($PSHOME, 'Modules')", script)
+        self.assertIn("Import-Module -Name ([IO.Path]::Combine($PSHOME, 'Modules', 'Microsoft.PowerShell.Security', 'Microsoft.PowerShell.Security.psd1')) -ErrorAction Stop", script)
         self.assertNotIn("input", run.call_args.kwargs)
         self.assertEqual(run.call_args.kwargs["encoding"], "utf-8")
         self.assertEqual(run.call_args.kwargs["env"]["TRADING_RUNTIME_VERIFY_DIR"], "C:/path with spaces/runtime")
