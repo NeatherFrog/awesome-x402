@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-01T10:36:56.357401Z",
+  "scope": "Source provenance and exact published signal rules; independent performance validation is a separate experiment.",
+  "study_families": [
+    "qc_ema_15_30",
+    "backtrader_sma_10_30",
+    "faber_monthly_sma_10"
+  ],
+  "sources": [
+    {
+      "id": "qc_ema_15_30",
+      "institution": "QuantConnect Corporation",
+      "source_type": "Official project algorithm example",
+      "verification_status": "official_repository_body_retrieved",
+      "license": "Apache-2.0",
+      "current_source": {
+        "path": "Algorithm.Python/MovingAverageCrossAlgorithm.py",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Algorithm.Python/MovingAverageCrossAlgorithm.py",
+        "retrieved_at": "2026-10-01T10:30:55.462319Z",
+        "bytes": 3450,
+        "sha256": "1db7156684722fd9ddeefdffa2a20d5c60bb02bca39cf973027378ea0c660edf",
+        "http_status": 200,
+        "commit": "41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4"
+      },
+      "pre_test_signal_source": {
+        "path": "Algorithm.CSharp/MovingAverageCrossAlgorithm.cs",
+        "history_api_url": "https://api.github.com/repositories/27251463/commits?per_page=1&path=Algorithm.CSharp%2FMovingAverageCrossAlgorithm.cs&page=6",
+        "history_body_sha256": "cea442195aa4b3f48d97d7a3886ce36d8d8a09e038b9f818a09684c2a5fd49d7",
+        "earliest_path_commit": "55a6215da636296df3c7dd7bcf4a141a3838366c",
+        "earliest_path_commit_author_date": "2015-06-17T21:42:59Z",
+        "earliest_path_commit_committer_date": "2015-06-17T21:44:02Z",
+        "message": "Split QCAlgorithm and Algorith,CSharp into separate projects, added FSharp project for algorithms",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/55a6215da636296df3c7dd7bcf4a141a3838366c/Algorithm.CSharp/MovingAverageCrossAlgorithm.cs",
+        "retrieved_at": "2026-10-01T10:33:51.839983Z",
+        "bytes": 4309,
+        "sha256": "1d9a93ed65c408bcdc40607b774f82099046bfd592a38f14b64a8608c8c2abc5",
+        "http_status": 200
+      },
+      "chronology_note": "Official C# file history records the same signal thresholds in June 2015. Commit timestamps are repository metadata, not independent journal publication certification. The Python example was added in February 2016.",
+      "exact_signal_rules": {
+        "asset_in_example": "SPY",
+        "indicator": "daily exponential moving averages",
+        "fast_period": 15,
+        "slow_period": 30,
+        "long_entry_when_flat": "fast EMA > slow EMA * 1.00015",
+        "exit_when_long": "fast EMA < slow EMA",
+        "policy": "level condition, not a fresh crossover requirement",
+        "frequency": "at most once per calendar date after slow indicator readiness",
+        "position_in_example": "long 100 percent allocation or flat",
+        "fixed_stop_or_profit_target": null
+      },
+      "execution_note": "The 2015 C# example subscribes minute data and evaluates daily indicators once per day; a daily next-open backtest is an execution adaptation.",
+      "performance_claim": "No profitability claim inferred from a software example or regression."
+    },
+    {
+      "id": "backtrader_sma_10_30",
+      "author": "Daniel Rodriguez",
+      "institution": "Official Backtrader project",
+      "source_type": "Built-in strategy example",
+      "verification_status": "official_repository_body_retrieved",
+      "license": "GPL-3.0-or-later",
+      "current_source": {
+        "path": "backtrader/strategies/sma_crossover.py",
+        "commit": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
+        "url": "https://raw.githubusercontent.com/mementum/backtrader/b853d7c90b6721476eb5a5ea3135224e33db1f14/backtrader/strategies/sma_crossover.py",
+        "retrieved_at": "2026-10-01T10:32:55.398537Z",
+        "http_status": 200,
+        "bytes": 2197,
+        "sha256": "527c784ced876f55e4b966ed39f73f18c962532b3dddd3795253240e579f0585"
+      },
+      "current_crossover_helper": {
+        "path": "backtrader/strategies/sma_crossover.py",
+        "commit": "b853d7c90b6721476eb5a5ea3135224e33db1f14",
+        "url": "https://raw.githubusercontent.com/mementum/backtrader/b853d7c90b6721476eb5a5ea3135224e33db1f14/backtrader/strategies/sma_crossover.py",
+        "retrieved_at": "2026-10-01T10:32:55.398537Z",
+        "http_status": 200,
+        "bytes": 2197,
+        "sha256": "527c784ced876f55e4b966ed39f73f18c962532b3dddd3795253240e579f0585"
+      },
+      "pre_test_signal_source": {
+        "path": "backtrader/strategies/sma_crossover.py",
+        "commit": "fa853548c1923452fddab5415dba37e451892a50",
+        "url": "https://raw.githubusercontent.com/mementum/backtrader/fa853548c1923452fddab5415dba37e451892a50/backtrader/strategies/sma_crossover.py",
+        "retrieved_at": "2026-10-01T10:33:22.968004Z",
+        "bytes": 1505,
+        "sha256": "77b54178b2b7cf91f9249783243e5f80074f98a1164504635d6c49984ff2f0a0",
+        "http_status": 200
+      },
+      "pre_test_crossover_helper": {
+        "path": "backtrader/indicators/crossover.py",
+        "commit": "fa853548c1923452fddab5415dba37e451892a50",
+        "url": "https://raw.githubusercontent.com/mementum/backtrader/fa853548c1923452fddab5415dba37e451892a50/backtrader/indicators/crossover.py",
+        "retrieved_at": "2026-10-01T10:34:41.279079Z",
+        "http_status": 200,
+        "bytes": 3195,
+        "sha256": "c3d6c771bb363d9307a19a8f6918450288e4a4083e355e67ec5c1e9b5d0c91bc"
+      },
+      "source_history": {
+        "path": "backtrader/strategies/sma_crossover.py",
+        "retrieved_at": "2026-10-01T10:33:22.375031Z",
+        "history_api_url": "https://api.github.com/repositories/29050338/commits?per_page=1&path=backtrader%2Fstrategies%2Fsma_crossover.py&page=7",
+        "history_body_sha256": "e8fd71685f54621343f901608adcafbb8af36ab48e832b9ea96c8c818c76c5c9",
+        "earliest_path_commit": "fa853548c1923452fddab5415dba37e451892a50",
+        "earliest_path_commit_author_date": "2015-08-16T12:19:37Z",
+        "earliest_path_commit_committer_date": "2015-08-16T12:19:37Z",
+        "message": "Sample strategy SMA_CrossOver"
+      },
+      "exact_signal_rules": {
+        "indicator": "simple moving average",
+        "fast_period": 10,
+        "slow_period": 30,
+        "long_entry_when_flat": "fresh bullish crossover only",
+        "exit_when_long": "fresh bearish crossover only",
+        "position": "long or flat",
+        "sizing": "not specified in the strategy class",
+        "order_type": "market",
+        "fixed_stop_or_profit_target": null
+      },
+      "version_specific_equality_rules": {
+        "2015_source": "Upward crossing requires immediately previous fast < slow and current fast > slow; downward crossing uses the opposite strict inequalities. An equality bar breaks the crossing.",
+        "current_source": "Crossing remembers the last nonzero fast-minus-slow difference across equality bars. This is a later tie-handling change."
+      },
+      "chronology_note": "Official strategy and corresponding strict previous-bar crossover helper both retrieved from the history commit dated 2015-08-16. Do not attribute the modern nonzero-difference tie handling to this older snapshot.",
+      "performance_claim": "No profitability claim inferred from the source example."
+    },
+    {
+      "id": "faber_monthly_sma_10",
+      "author": "Mebane T. Faber",
+      "institution_in_document": "Cambria Investment Management, LP",
+      "title": "A Quantitative Approach to Tactical Asset Allocation",
+      "document_dates": {
+        "original_working_paper": "May 2006",
+        "journal_publication_stated_in_pdf": "Spring 2007, The Journal of Wealth Management",
+        "retrieved_document_update": "February 2013"
+      },
+      "source_type": "Original paper text obtained from an unaffiliated public GitHub mirror",
+      "verification_status": "mirror_body_retrieved_original_host_integrity_not_verified",
+      "mirror_source": {
+        "url": "https://raw.githubusercontent.com/nerdfilip/SSNR_962461/22ca332cb07fea31bf1dde57c6a086d43a0122cd/ssrn-962461.pdf",
+        "retrieved_at": "2026-10-01T10:35:27.769180Z",
+        "http_status": 200,
+        "bytes": 1158589,
+        "sha256": "e19667fcad0ed40914512d9dcf3c5f08e5a6329181932626a79dfe9c1eb3ab37",
+        "mirror_commit": "22ca332cb07fea31bf1dde57c6a086d43a0122cd",
+        "integrity_against_author_or_publisher_original": "not_verified",
+        "content_identity": "PDF identifies Mebane T. Faber, February 2013 update, SSRN abstract 962461"
+      },
+      "original_source_urls": [
+        "https://mebfaber.com/wp-content/uploads/2016/05/SSRN-id962461.pdf",
+        "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=962461"
+      ],
+      "exact_signal_rules": {
+        "frequency": "last trading day of each month; ignore intramonth signal changes",
+        "indicator": "10-month simple average of total-return month-end observations, including the just-completed current month and nine previous months",
+        "long_entry": "month-end total-return price > 10-month average",
+        "cash_exit": "month-end total-return price < 10-month average",
+        "equality": "neither rule fires; retain previous position",
+        "data": "total-return series including dividends",
+        "execution_in_paper": "signal-day close",
+        "cash_in_paper": "90-day Treasury bills",
+        "costs_in_original_tables": "taxes, commissions and slippage excluded",
+        "fixed_stop_or_profit_target": null,
+        "original_five_asset_classes": [
+          "US large-cap equities",
+          "foreign developed equities",
+          "US 10-year government bonds",
+          "commodities",
+          "REITs"
+        ],
+        "allocation": "each asset-class sleeve equally weighted at 20 percent, independently long or cash"
+      },
+      "chronology_note": "The mirrored document identifies the simple rule as the 2006/2007 model and a February 2013 update. Publisher/author original bodies were inaccessible in this environment, so provenance is weaker than for official code.",
+      "performance_claim": "Paper claims are not treated as our independently verified returns."
+    }
+  ],
+  "study_adaptations_to_disclose": [
+    "Signals observed only on a completed daily/monthly bar, with entry/exit at a later executable price instead of assuming a known closing price can be traded at that same close.",
+    "A fixed 3 * ATR(14) protective stop, risk budgeting and position caps are our 2026 research overlay; none of the three source models specifies this stop.",
+    "Five available ETF proxies, costs, zero-interest cash and any prop-rule replay are not the original paper portfolio or a verified executable CFD/futures contract.",
+    "Modern equality handling must remain the policy explicitly frozen before price retrieval; it cannot be changed after seeing results.",
+    "A dated source rule and protocol frozen before our fetch reduce our own parameter selection; retrospective market history remains visible to source authors and does not constitute prospective live proof."
+  ],
+  "access_limitations": {
+    "date": "2026-10-01",
+    "original_host_attempts": "AQR, its image host, author Meb Faber, SSRN, Yale, Duke and Oxford requests were rejected by the network proxy with CONNECT HTTP 403. Narrow source domains were saved in the environment draft, but saving does not apply network configuration and actual requests still failed.",
+    "fallback": "No paper numbers or rule excerpts are asserted to have been retrieved from blocked primary hosts. Faber is explicitly a mirror; the two official algorithm projects were actually retrieved on immutable GitHub commit URLs.",
+    "raw_sources_redistributed": false
+  },
+  "not_used_for_study": [
+    "Connors RSI(2) rules: no verified primary text retrieved; not included.",
+    "AQR / Moskowitz-Ooi-Pedersen time-series momentum and century trend evidence: original bodies not retrieved in this session; bibliographic familiarity is not source-body verification.",
+    "QuantConnect RSI and MACD examples inspected as alternatives, then excluded before this three-family price study."
+  ]
+}

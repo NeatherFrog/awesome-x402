@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-10-01T11:19:25.852031Z",
+  "scope": "Source/method audit. No fresh market quotes, no author performance reproduction; fixed daily hypothesis explicitly reuses viewed ETF history",
+  "source_bodies_redistributed": false,
+  "market_quotes_fetched": false,
+  "strategy_sources": [
+    {
+      "strategy_id": "rsi2_pullback_5",
+      "source_implementation_id": "pyalgotrade_rsi2_10_2014",
+      "publisher": "gbeced/pyalgotrade official project example",
+      "publication_verified": true,
+      "original_connors_authorship_verified": false,
+      "exact_replication": false,
+      "publication_commit": "2960c56c0e0a0365f340720ca1ab71c6e6493018",
+      "published_at": "2014-05-03T17:49:35Z",
+      "url": "https://github.com/gbeced/pyalgotrade/blob/2960c56c0e0a0365f340720ca1ab71c6e6493018/samples/rsi2.py",
+      "runner_url": "https://github.com/gbeced/pyalgotrade/blob/2960c56c0e0a0365f340720ca1ab71c6e6493018/samples/rsi2_sample.py",
+      "receipts": [
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/samples/rsi2.py",
+          "status": 200,
+          "bytes": 3110,
+          "sha256": "3666643ac150ab8becd47233ac8f52d5c1e6e7566c14e76423aa7b55cad1b2d1",
+          "retrieved_at": "2026-10-01T11:16:50.567381Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/samples/rsi2_sample.py",
+          "status": 200,
+          "bytes": 1241,
+          "sha256": "5ae01455c94c0838caacfeabbd7b3a4d2fbaaf126457baa17c0694d4d6b62f15",
+          "retrieved_at": "2026-10-01T11:16:50.600587Z"
+        },
+        {
+          "url": "https://api.github.com/repos/gbeced/pyalgotrade/commits/2960c56c0e0a0365f340720ca1ab71c6e6493018",
+          "status": 200,
+          "bytes": 73859,
+          "sha256": "ccfebf44cc6d7fc4146d62122f16ed57172d456874097fa99866aa5e7ae6eb46",
+          "retrieved_at": "2026-10-01T11:16:51.504437Z"
+        },
+        {
+          "url": "https://api.github.com/repos/gbeced/pyalgotrade/commits?path=samples%2Frsi2.py&per_page=100",
+          "status": 200,
+          "bytes": 12673,
+          "sha256": "89c4198d8a4feeedc60512066ccb1255350a67eca52207794ac751c7ab3cb8cf",
+          "retrieved_at": "2026-10-01T11:16:09.946743Z",
+          "link": null
+        },
+        {
+          "url": "https://api.github.com/repos/gbeced/pyalgotrade/commits?path=samples%2Frsi2_sample.py&per_page=100",
+          "status": 200,
+          "bytes": 7931,
+          "sha256": "fa8cc454e755e2db0bc29bba72bce9c375a8c4ad447a0cd83ad13144c5979fc1",
+          "retrieved_at": "2026-10-01T11:16:09.889457Z",
+          "link": null
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/7c4cb528ee5a3600ccbd698c1e9fae9b95a0cb78/samples/rsi2.py",
+          "status": 404,
+          "bytes": 14,
+          "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed",
+          "retrieved_at": "2026-10-01T11:17:48.635388Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/7c4cb528ee5a3600ccbd698c1e9fae9b95a0cb78/samples/rsi2_sample.py",
+          "status": 404,
+          "bytes": 14,
+          "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed",
+          "retrieved_at": "2026-10-01T11:17:48.634502Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/pyalgotrade/technical/rsi.py",
+          "status": 200,
+          "bytes": 5568,
+          "sha256": "3e9ce7d087b8cdeecdc2afe08a777700f053f3c68e3633154f02d7507c85d2e9",
+          "retrieved_at": "2026-10-01T11:16:50.560041Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/pyalgotrade/technical/cross.py",
+          "status": 200,
+          "bytes": 4134,
+          "sha256": "227ee8a5ac88345ab1bd2cf3ad52820989a8df5fb111a55a897a73eb564b477e",
+          "retrieved_at": "2026-10-01T11:16:50.852204Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/pyalgotrade/broker/backtesting.py",
+          "status": 200,
+          "bytes": 32103,
+          "sha256": "0a543f067f611b19d4e154373849399a4b38a3404093836acb889122d48f081d",
+          "retrieved_at": "2026-10-01T11:16:50.863109Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/pyalgotrade/strategy/__init__.py",
+          "status": 200,
+          "bytes": 25754,
+          "sha256": "b4467de060a141c80c1e0b796cf4d9f35d835aaf798f4874f63dd749a88fde5b",
+          "retrieved_at": "2026-10-01T11:17:48.732611Z"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/gbeced/pyalgotrade/2960c56c0e0a0365f340720ca1ab71c6e6493018/LICENSE.txt",
+          "status": 200,
+          "bytes": 583,
+          "sha256": "ad87e7564ed28e6dd203e51df7616c6b92b6f058a1342449671fd753f7eb75f8",
+          "retrieved_at": "2026-10-01T11:17:48.670065Z"
+        }
+      ],
+      "history": {
+        "strategy_commits_at_path": 5,
+        "runner_commits_at_path": 3,
+        "pagination_next_absent": true,
+        "earliest_added_files": [
+          "samples/rsi2.py",
+          "samples/rsi2_sample.py"
+        ],
+        "parent_commit": "7c4cb528ee5a3600ccbd698c1e9fae9b95a0cb78",
+        "parent_paths_http404": true,
+        "limit": "Earliest observed added files in project, not date of invention or proof of original Connors publication"
+      },
+      "source_rules": {
+        "sample_symbol": "DIA",
+        "sample_years": [
+          2009,
+          2012
+        ],
+        "initial_cash_default": 1000000,
+        "sma_entry": 200,
+        "sma_exit": 5,
+        "rsi_period": 2,
+        "long_entry": "adjusted close>SMA200 and RSI2<=10",
+        "short_entry": "adjusted close<SMA200 and RSI2>=90",
+        "long_exit": "Fresh cross above SMA5: previous difference<=0 and current difference>0",
+        "short_exit": "Fresh cross below SMA5: previous difference>=0 and current difference<0",
+        "exit_cancellation": "Resubmit canceled market exit;2015 revision prevents duplicate active exit submissions",
+        "sizing": "Integer90% current broker cash/current bar rawClose in pinned2014; not a stop-risk budget",
+        "positions": "One tracked long or short; no protective stop/target/time limit/session flatten",
+        "price_basis": "Pinned2014 forces adjusted values and uses adjusted close indicators; later2016 version uses adjusted prices if available",
+        "fill_model": "Market orders default onClose=False. Pinned broker processes queued orders before strategy OnBars and fills at next bar adjusted open, subject to model conditions",
+        "cost_model": "Pinned default broker NoCommission; no documented spread/slippage/funding/news model in this sample",
+        "rsi_initialization": "RSIEventWindow first average from N changes over N+1 closes, then Wilder recursive gain/loss smoothing",
+        "rsi_flat_convention": "Pinned source returns100 if average loss==0, including both averages0"
+      },
+      "fixed_project_adaptations": [
+        "Strict RSI2<5 replaces source<=10; no threshold search",
+        "Long/cash only removes source short branch",
+        "Close>SMA5 level exit replaces fresh crossover condition",
+        "Protective fixed3ATR14 stop and position risk/cash caps added; no source stop exists",
+        "Five equal ETF buckets, risk1.25% current bucket balance, integer shares/gross1x replace90% brokercash",
+        "Price-only vendor OHLC/no adjclose/dividend/cashinterest differs from source adjustedclose",
+        "RSI both gain/loss0 uses neutral50 rather than source100",
+        "Fees/spread/slippage/carry stress and segment-flat resets are project assumptions",
+        "Nextopen execution remains causal but exact historical adjusted fills, source model and liquidity are not reproduced"
+      ],
+      "prop_compatibility": {
+        "overnight_possible": true,
+        "weekend_possible": true,
+        "overnight_forbidden_product_compatible": false,
+        "restricted_news_compliance_verified": false,
+        "gap_loss_bounded": false,
+        "real_firm_qualified": false
+      },
+      "performance_reproduced": false,
+      "source_performance_inherited": false
+    }
+  ],
+  "verified_alternative_not_selected": {
+    "id": "qc_regression_channel_30_2_2016",
+    "publisher": "QuantConnect/Lean official example",
+    "published_at": "2016-10-10T15:48:09Z",
+    "commit": "47a75771c605a77b99757c85718ccae69704651e",
+    "receipts": [
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/47a75771c605a77b99757c85718ccae69704651e/Algorithm.CSharp/RegressionChannelAlgorithm.cs",
+        "status": 200,
+        "bytes": 3434,
+        "sha256": "b6e0cd0b5889effcc451633d003e31f0489fd84c5e580c02c1e37ad616d8aa7f",
+        "retrieved_at": "2026-10-01T11:15:48.128847Z"
+      },
+      {
+        "url": "https://api.github.com/repos/QuantConnect/Lean/commits/47a75771c605a77b99757c85718ccae69704651e",
+        "status": 200,
+        "bytes": 30252,
+        "sha256": "16476ef50b427b678d484cbea826a3d4e0989a491ddc6a9af7969eea0163125f",
+        "retrieved_at": "2026-10-01T11:15:48.730885Z"
+      },
+      {
+        "url": "https://api.github.com/repos/QuantConnect/Lean/commits?path=Algorithm.CSharp%2FRegressionChannelAlgorithm.cs&per_page=100",
+        "status": 200,
+        "bytes": 12460,
+        "sha256": "2fb4078ec29f5de9425218aa9508f7bd32e8bc954ba3c47906616032cf3cadf6",
+        "retrieved_at": "2026-10-01T11:14:46.948629Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/47a75771c605a77b99757c85718ccae69704651e/Indicators/RegressionChannel.cs",
+        "status": 200,
+        "bytes": 5112,
+        "sha256": "9676f1302ef376a44522fe905e8adfceaea8e0d225a8ea9457e934e989b67679",
+        "retrieved_at": "2026-10-01T11:17:48.853479Z"
+      }
+    ],
+    "rules": "SPY minute prices compared to ready30-day OLS channel±2 standard deviations of prices: long100% below lower if currentquantity<=0,short100% aboveupper ifcurrentquantity>=0; reverse at opposite extremes, no stop, target or session flat",
+    "signal_resolution": "Minute triggers/daily channel; a dailyclose nextopen variant would be another adaptation",
+    "sample_window": [
+      "2009-01-01",
+      "2015-01-01"
+    ],
+    "initial_cash": 100000,
+    "rsi2_equivalent": false,
+    "performance_reproduced": false,
+    "role": "Verified pre2017 meanreversion class example only; not used to authenticate RSI2 parameters or included in current performance study"
+  },
+  "unverified_original_attribution": {
+    "name": "Connors RSI2 / StockCharts RSI2 discussion",
+    "bodies_retrieved": false,
+    "attempts": [
+      {
+        "url": "https://chartschool.stockcharts.com/table-of-contents/trading-strategies-and-models/trading-strategies/rsi-2",
+        "error": "URLError",
+        "started_at": "2026-10-01T11:12:38.398191Z"
+      },
+      {
+        "url": "https://school.stockcharts.com/doku.php?id=trading_strategies:rsi2",
+        "error": "URLError",
+        "started_at": "2026-10-01T11:12:38.398543Z"
+      }
+    ],
+    "meaning": "Do not claim original Larry Connors paper/book/body verified or source identical; retrieved PyAlgoTrade example is separately attributable",
+    "terminology": "Two-period WilderRSI is not the composite ConnorsRSI streak/percentile indicator"
+  },
+  "chronology_and_reuse_limits": [
+    "A2014 implementation predates2017 but does not make already inspected2017–2026 quotes globally blind",
+    "Published software example is not evidence that author had unexposed validation or live profitability",
+    "Only one fixed RSI2<5 policy will be evaluated; source<=10 is not a post-result fallback",
+    "Portfolio months must be synchronized and resampled in blocks; multiple correlated ETF trades are not IID evidence",
+    "Price-only data omit income and corporate-action semantics differ from adjustedclose source; verified contract/news/fees and prospective observation remain required"
+  ]
+}

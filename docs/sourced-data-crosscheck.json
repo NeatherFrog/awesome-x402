@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-01T10:43:16.479752Z",
+  "symbol": "SPY",
+  "purpose": "Independent published-data sanity check only, not a strategy selection or profitability experiment.",
+  "period": {
+    "start_inclusive": "2013-01-01",
+    "end_exclusive": "2017-01-01",
+    "role": "Gap between study training and the 2017+ retrospective test; no 2017+ or 2024+ strategy metrics inspected."
+  },
+  "primary_input": {
+    "path": "data/sourced-history/SPY-1d.json",
+    "source_sha256": "7113130cc0b60732346fe445741ebe68c23311b0c8ca17ab70fbe3af300aa399",
+    "provider": "Yahoo Chart (public unofficial endpoint)",
+    "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?period1=1104537600&period2=1790812800&interval=1d&includePrePost=false&events=div%2Csplits",
+    "requested_at": "2026-10-01T10:37:51.076625Z",
+    "retrieved_at": "2026-10-01T10:37:51.592514Z",
+    "normalization": "No dividends credited; raw quote price-only, never adjclose",
+    "split_events_present": false
+  },
+  "comparison_dataset": {
+    "publisher": "QuantConnect official Lean repository",
+    "commit": "41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4",
+    "archive_member": "spy.csv",
+    "quote_vendor_origin": "Not established from the retrieved README/metadata; official repository publisher is verified, independent upstream vendor lineage is not.",
+    "records": [
+      {
+        "path": "Data/readme.md",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Data/readme.md",
+        "retrieved_at": "2026-10-01T10:40:39.996525Z",
+        "bytes": 2914,
+        "sha256": "2885930d2532d47f4676b02fdbe2eab28d02dd9d4f36f1f9dd636e97ec6b2b59",
+        "http_status": 200
+      },
+      {
+        "path": "LICENSE",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/LICENSE",
+        "retrieved_at": "2026-10-01T10:40:40.266940Z",
+        "bytes": 10737,
+        "sha256": "522cf0a716ce03f67d46f8fceb5bf78c5b84400ec5cd8d14bf9f02cddc1cb6ba",
+        "http_status": 200
+      },
+      {
+        "path": "Data/equity/usa/daily/spy.zip",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Data/equity/usa/daily/spy.zip",
+        "retrieved_at": "2026-10-01T10:41:07.904861Z",
+        "bytes": 103363,
+        "sha256": "aaa1febad0cb8f91011212c92ff7caac6d4d6415a3b7f73c4b98c438db4274ad",
+        "http_status": 200
+      },
+      {
+        "path": "Data/equity/usa/factor_files/spy.csv",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Data/equity/usa/factor_files/spy.csv",
+        "retrieved_at": "2026-10-01T10:41:08.172112Z",
+        "bytes": 2649,
+        "sha256": "ad53e292de2e7076ff36721e1dcffd1db0d04fe6813b59aeece8620fb0d4cec1",
+        "http_status": 200
+      },
+      {
+        "path": "Common/Data/Market/TradeBar.cs",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Common/Data/Market/TradeBar.cs",
+        "retrieved_at": "2026-10-01T10:41:08.421850Z",
+        "bytes": 38079,
+        "sha256": "8c447b5a30c93f60df58f582deb7db39eec3cd1ddbe70303b601e4bdca46a5dc",
+        "http_status": 200
+      },
+      {
+        "path": "readme.md",
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/readme.md",
+        "retrieved_at": "2026-10-01T10:42:42.092550Z",
+        "bytes": 11001,
+        "sha256": "c93d2d649740ffdbfeca35ee5035eff668dc1f0a6b97873756addb70f4f4b91e",
+        "http_status": 200
+      }
+    ]
+  },
+  "normalization": {
+    "lean_prices": "Equity OHLC integer values divided by 10000, confirmed from the actual official TradeBar.cs parser.",
+    "lean_volume": "Unscaled numeric field; publisher aggregation differences retained.",
+    "session_date": "Yahoo UTC session-opening timestamp converted to America/New_York calendar date; Lean first-column YYYYMMDD used as session date.",
+    "split_factors": "All 16 SPY factor rows dated in the comparison gap have split factor 1. Yahoo reports no split events. Therefore raw and split-adjusted SPY units coincide in this gap.",
+    "dividend_adjustments": "Not applied on either side. Lean price factors are not multiplied into prices; Yahoo adjclose is not used. This checks price-only OHLC and does not validate total-return or dividend cash-flow handling."
+  },
+  "results": {
+    "yahoo_gap_bars": 1008,
+    "lean_gap_bars": 1008,
+    "matched_days": 1008,
+    "first_matched_date": "2013-01-02",
+    "last_matched_date": "2016-12-30",
+    "lean_days_missing_in_yahoo": [],
+    "yahoo_days_missing_in_lean": [],
+    "price_fields": {
+      "open": {
+        "mean_abs_difference_usd": 0.03033751835898707,
+        "median_abs_difference_usd": 0.019999389648432953,
+        "max_abs_difference_usd": 2.9199969482421864,
+        "mean_abs_difference_bp": 1.5460159441246084,
+        "max_abs_difference_bp": 140.0142366585103,
+        "within_one_cent": 384,
+        "within_five_cents": 953,
+        "within_one_dollar": 1006
+      },
+      "high": {
+        "mean_abs_difference_usd": 0.025886107550724215,
+        "median_abs_difference_usd": 4.8828125045474735e-06,
+        "max_abs_difference_usd": 3.9500061035156193,
+        "mean_abs_difference_bp": 1.3419104435708604,
+        "max_abs_difference_bp": 187.33725345857405,
+        "within_one_cent": 945,
+        "within_five_cents": 969,
+        "within_one_dollar": 999
+      },
+      "low": {
+        "mean_abs_difference_usd": 0.028579099745974907,
+        "median_abs_difference_usd": 4.8828125045474735e-06,
+        "max_abs_difference_usd": 2.749996948242199,
+        "mean_abs_difference_bp": 1.489303078749512,
+        "max_abs_difference_bp": 131.86271436110727,
+        "within_one_cent": 932,
+        "within_five_cents": 956,
+        "within_one_dollar": 1001
+      },
+      "close": {
+        "mean_abs_difference_usd": 0.0211228682502853,
+        "median_abs_difference_usd": 0.009995117187486358,
+        "max_abs_difference_usd": 0.4099981689453216,
+        "mean_abs_difference_bp": 1.1399067007434038,
+        "max_abs_difference_bp": 25.557796635400443,
+        "within_one_cent": 596,
+        "within_five_cents": 891,
+        "within_one_dollar": 1008
+      }
+    },
+    "volume": {
+      "identical_dates": 0,
+      "note": "Volume aggregation/venue coverage can differ; no volume acceptance assertion."
+    }
+  },
+  "finding": "All 1008 session dates agree and price units are consistent. Closing-price differences are small on average but prices are not identical; some intraday OHLC discrepancies are material for stop execution. This is partial source sanity evidence, not certification of every bar or executable broker prices.",
+  "coverage_limits": [
+    "Only SPY and the 2013–2016 gap were compared. The other ETFs and the 2017–2023 / 2024–2026 study prices were not cross-validated by this check.",
+    "Original upstream vendor identity and source independence are not established merely by two publication endpoints.",
+    "The repository Apache-2.0 LICENSE and data-format README were read. No separate price-data redistribution grant was found; raw ZIP, factor file and Yahoo rows remain local scratch/input only.",
+    "Volume differs on all matching dates; venue/session aggregation and cleaning differences are not resolved here.",
+    "No source switching, strategy change, parameter optimization or retrospective winner substitution is authorized by this comparison."
+  ],
+  "raw_files_redistributed": false,
+  "acceptance_gate": "Descriptive comparison only; no binary market-data accuracy or profitability pass is asserted."
+}

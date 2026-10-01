@@ -77,8 +77,12 @@ class Application:
         self.updater = Updater(root or ROOT, self.store.path.parent / "updater")
         self.running_commit = self.updater.status().get("current_commit")
         self.restart_requested = False
+        self._warm_diary_quotes = False
+        from .trader import Trader
+        self.trader = Trader(self.store.path.parent, root or ROOT)
         from .jobs import ScannerJobs
-        self.scanner = ScannerJobs(self.store.path.parent / "scanner", self.scan_markets)
+        self.scanner = ScannerJobs(self.store.path.parent / "scanner", self.trader_scan)
+        self.trader.recover(self.scanner)
         from .news import CalendarFeed
         self.news = CalendarFeed(self.store.path.parent)
         from .autopilot import Autopilot
@@ -91,6 +95,7 @@ class Application:
             self.store.path.parent / "autopilot.json", self.start_auto_scan,
             self.auto_scan_result, latest_scan=self.scanner.latest,
             can_start=self.auto_scan_available, enabled=enabled)
+        self._warm_diary_quotes = self.autopilot.status()["enabled"]
 
     def auto_scan_available(self):
         if self.restart_requested or self.updater.status().get("busy"):
@@ -125,6 +130,64 @@ class Application:
                     report["automation"] = "research_only"
                     self.store.save_research(report)
         return job
+
+    def trader_scan(self, payload, progress):
+        """Record one bounded attempt around the existing locked scanner worker."""
+        job = self.scanner.latest()
+        identifier = job["id"]
+        self.trader.begin(identifier, payload)
+
+        def tracked(stage, details=None):
+            if isinstance(details, dict) and details.get("training_lock"):
+                self.trader.training_locked(identifier, details)
+            progress(stage, details)
+
+        try:
+            # Diary quotes are warmed by this background worker, never by a GET.
+            # Their availability does not change qualification or entry rules.
+            if self._warm_diary_quotes:
+                try:
+                    from .diary import warm_diary_quotes
+                    progress("diary", {"state": "loading"})
+                    diary = warm_diary_quotes(self.trader.root, directory=self.store.path.parent / "diary-quotes")
+                    progress("diary", {"state": diary.get("state", "unknown")})
+                except Exception:
+                    progress("diary", {"state": "unavailable"})
+            result = self.scan_markets(payload, tracked)
+            self.trader.finish(identifier, result)
+            return result
+        except BaseException as exc:
+            # Error messages may contain vendor URLs or credentials; the compact
+            # strategy ledger only records the exception type.
+            record = self.trader.attempt(identifier)
+            if record and record.get("state") == "running":
+                self.trader.finish(identifier, error_type=type(exc).__name__)
+            raise
+
+    def trader_board(self):
+        context_path = self.store.path.parent / "context.json"
+        context = None
+        if context_path.exists():
+            if context_path.is_symlink() or context_path.stat().st_size > MAX_BODY:
+                raise ValueError("Сохранённый контекст имеет недопустимый размер или путь")
+            context = json.loads(context_path.read_text(encoding="utf-8"))
+        return self.trader.board(self.scanner.latest(), self.autopilot.status(),
+                                 self.news.context(), context=context)
+
+    def find_setups(self, payload):
+        if payload:
+            raise ValueError("Поиск сетапов принимает пустой JSON объект; настройки стратегии выбираются автоматически")
+        self._warm_diary_quotes = True
+        active = self.scanner.latest()
+        if isinstance(active, dict) and active.get("state") in ("queued", "running"):
+            from .trader import compact_job
+            return {"queued": True, "reused": True, "job": compact_job(active),
+                    "automation": self.autopilot.status(), "live_orders": False}
+        state = self.autopilot.run_now()
+        from .trader import compact_job
+        return {"queued": bool(state.get("running") or state.get("manual_requested")),
+                "reused": False, "job": compact_job(self.scanner.latest()),
+                "automation": state, "live_orders": False}
 
     def reference_reports(self):
         file = ROOT / "docs" / "research-results.json"
@@ -543,6 +606,32 @@ def make_handler(app):
                                        "supervised": os.environ.get("TRADING_SUPERVISED") == "1"})
                 elif path == "/api/scanner/jobs/latest":
                     self.respond(200, {"job": app.scanner.latest()})
+                elif path == "/api/trader/board":
+                    self.respond(200, app.trader_board())
+                elif path == "/api/trader/attempts":
+                    query = parse_qs(parsed.query, keep_blank_values=True)
+                    if set(query) - {"limit"} or any(len(values) != 1 for values in query.values()):
+                        raise ValueError("Журнал поиска принимает только один параметр limit")
+                    try:
+                        limit = int(query.get("limit", ["20"])[0])
+                    except ValueError:
+                        raise ValueError("limit: целое число от 1 до 100") from None
+                    self.respond(200, app.trader.listing(limit))
+                elif path.startswith("/api/trader/attempts/"):
+                    query = parse_qs(parsed.query, keep_blank_values=True)
+                    if query not in ({}, {"download": ["1"]}):
+                        raise ValueError("Экспорт попытки поиска принимает только download=1")
+                    record = app.trader.export_attempt(path.removeprefix("/api/trader/attempts/"))
+                    attachment = f"strategy-audit-{record['id']}.json" if query else None
+                    self.respond(200, record, attachment=attachment)
+                elif path == "/api/trader/diary":
+                    from .diary import build_diary
+                    query = parse_qs(parsed.query, keep_blank_values=True)
+                    if set(query) - {"month", "study"} or any(len(values) != 1 for values in query.values()):
+                        raise ValueError("Дневник принимает по одному параметру month и study")
+                    self.respond(200, build_diary(app.trader.root, month=query.get("month", [None])[0],
+                                                 directory=app.store.path.parent / "diary-quotes",
+                                                 study=query.get("study", ["sourced_daily"])[0]))
                 elif path == "/api/autopilot":
                     self.respond(200, app.autopilot.status())
                 elif path == "/api/news/status":
@@ -682,6 +771,8 @@ def make_handler(app):
                         self.respond(202, app.autopilot.run_now())
                     else:
                         self.respond(200, app.autopilot.configure(payload))
+                elif path == "/api/trader/find-setups":
+                    self.respond(202, app.find_setups(payload))
                 elif path == "/api/news/refresh":
                     if payload:
                         raise ValueError("Обновление календаря принимает пустой JSON объект")

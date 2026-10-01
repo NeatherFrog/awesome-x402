@@ -2,12 +2,14 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const state = {profiles: [], strategies: [], journal: {trades: [], stats: {}}, research: null, activeProfile: null, detailId: null, accountDirty: false, updates: null, updateAction: false, setup: null, scanJob: null, scanStarting: false, autopilot: null, autopilotAction: false, autopilotError: ''};
+Object.assign(state,{trader:null,traderAction:false,traderError:'',replayDiary:null});
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const num = (value, digits = 2) => value === null || value === undefined || !Number.isFinite(Number(value)) ? '—' : Number(value).toLocaleString('ru-RU', {minimumFractionDigits: digits, maximumFractionDigits: digits});
 const money = value => value === null || value === undefined ? '—' : '$' + num(value);
 const pct = value => value === null || value === undefined ? '—' : num(value) + '%';
 const signClass = value => Number(value) > 0 ? 'positive' : Number(value) < 0 ? 'negative' : '';
 const timestamp = value => { if (!value) return '—'; const d = new Date(value); return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString('ru-RU', {timeZone: 'Europe/Kyiv', day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) + ' · Киев'; };
+const localTimestamp = value => {if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});};
 const shortDate = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString('ru-RU',{timeZone:'UTC',day:'2-digit',month:'short'}); };
 const fields = form => Object.fromEntries(new FormData(form));
 const numeric = (form, name) => Number(form.elements.namedItem(name).value);
@@ -54,7 +56,7 @@ const messages = {
 };
 const translate = value => {const s = String(value ?? ''); if(messages[s]) return messages[s]; const m=s.match(/^Holdout has (\d+) trades; at least (\d+) are required\.$/);if(m)return 'На тесте '+m[1]+' сделок; требуется минимум '+m[2]+'.';return s;};
 const tabMeta = {
-overview:{label:'Обзор',eyebrow:'ОТ ИДЕИ ДО ПРОВЕРЕННОГО СЕТАПА',title:'Ваш торговый процесс.<br><span>Под контролем.</span>',description:'Стратегии, ограничения и дисциплина — в одном рабочем пространстве.'},
+overview:{label:'Сегодня',eyebrow:'СЕТАП · УРОВНИ · ПРИЧИНА РЕШЕНИЯ',title:'Ваш план на сегодня.<br><span>По условиям рынка.</span>',description:'Найдите сетапы. Программа сама проверит рынки и покажет, где есть допустимый план, а где нужно ждать.'},
 scanner:{label:'Автопоиск',eyebrow:'РЫНКИ · СТРАТЕГИИ · НЕЗАВИСИМАЯ ПРОВЕРКА',title:'Пусть данные выбирают.<br><span>Вы следуете плану.</span>',description:'Автоматическое сравнение рынков с правом отклонить все варианты и остаться вне рынка.'},
 lab:{label:'Лаборатория',eyebrow:'ИССЛЕДОВАНИЕ · СРАВНЕНИЕ · ОТБОР',title:'Не угадывайте.<br><span>Проверяйте гипотезы.</span>',description:'Бэктест с издержками, отложенная выборка и проверка устойчивости.'},
 setups:{label:'Сетапы',eyebrow:'ВХОД · РИСК · ЦЕЛЬ · ОТМЕНА',title:'Планируйте уровни.<br><span>Проверяйте контекст.</span>',description:'Условные зоны по исследованной истории, режиму рынка и доступному новостному календарю.'},
@@ -66,6 +68,7 @@ updates:{label:'Обновления',eyebrow:'GITHUB · ВАША КОПИЯ PRO
 };
 function navigate(tab, updateHash = true) {
 if(!tabMeta[tab]) tab='overview';
+const advanced=$('#advanced-tools');advanced.open=Boolean(advanced.querySelector('[data-tab="'+tab+'"]'));
 $$('.tab-panel').forEach(el=>el.hidden=el.id!=='tab-'+tab);
 $$('[data-tab]').forEach(el=>{const active=el.dataset.tab===tab;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
 $('#breadcrumb-current').textContent=tabMeta[tab].label;
@@ -95,6 +98,7 @@ function renderProfiles() {
 const options=state.profiles.map(p=>'<option value="'+esc(p.id)+'">'+esc(profileLabel(p))+'</option>').join('');
 ['active-profile-select','research-profile','check-profile','payout-profile','scanner-profile'].forEach(id=>{const select=$('#'+id);if(!select)return;const old=select.value;select.innerHTML=options;select.value=itemById(state.profiles,old)?old:state.activeProfile;});
 const p=itemById(state.profiles,state.activeProfile);
+if(p)$('#today-profile-name').textContent=p.name;
 if(p)$('#active-profile-summary').innerHTML=badge(p.status==='user_verified'?'ПРОВЕРЕНО ПОЛЬЗОВАТЕЛЕМ':'ПРАВИЛА НЕ ПРОВЕРЕНЫ',p.status==='user_verified'?'good':'warning')+
 '<div class="profile-mini-row"><span>Капитал / цель</span><strong>'+esc(money(p.account_size))+' / '+esc(pct(p.profit_target_pct))+'</strong></div><div class="profile-mini-row"><span>Дневной / общий лимит</span><strong>'+esc(pct(p.daily_loss_pct))+' / '+esc(pct(p.max_loss_pct))+'</strong></div><div class="profile-mini-row"><span>Стоимость / доля выплаты</span><strong>'+esc(money(p.challenge_fee))+' / '+esc(pct(p.payout_split_pct))+'</strong></div>';
 $('#profiles-list').innerHTML=state.profiles.map(p=>'<article class="profile-card '+(p.id===state.activeProfile?'active':'')+'"><div class="profile-card-head"><div><h3>'+esc(p.name)+'</h3><div class="profile-type">'+esc({static:'Статическая просадка',trailing_eod:'Trailing на конец дня',trailing_intraday:'Trailing intraday'}[p.drawdown_type]||p.drawdown_type)+'</div></div>'+badge(p.status==='user_verified'?'ПРОВЕРЕНО ВАМИ':'УЧЕБНЫЙ ПРИМЕР',p.status==='user_verified'?'good':'warning')+'</div><div class="profile-numbers"><div><small>Аккаунт</small><strong>'+esc(money(p.account_size))+'</strong></div><div><small>Цель</small><strong>'+esc(pct(p.profit_target_pct))+'</strong></div><div><small>Доля выплаты</small><strong>'+esc(pct(p.payout_split_pct))+'</strong></div></div><div class="profile-mini-row"><span>Лимиты: день / всего</span><strong>'+esc(pct(p.daily_loss_pct))+' / '+esc(pct(p.max_loss_pct))+'</strong></div><div class="profile-mini-row"><span>Отбор / минимальные дни</span><strong>'+esc(money(p.challenge_fee))+' / '+esc(num(p.min_trading_days,0))+'</strong></div><div class="profile-rules">'+[['news_allowed','Новости'],['overnight_allowed','Ночь'],['weekend_allowed','Выходные'],['ea_allowed','Алгоритмы']].map(([key,label])=>'<span class="'+(p[key]!==true?'restricted':'')+'">'+esc(label)+' '+(p[key]===true?'✓':p[key]===false?'×':'?')+'</span>').join('')+'</div><div class="profile-actions"><button class="button button-secondary" data-edit-profile="'+esc(p.id)+'">Редактировать ↗</button><button class="button '+(p.id===state.activeProfile?'button-secondary':'button-primary')+'" data-select-profile="'+esc(p.id)+'">'+(p.id===state.activeProfile?'Активный профиль':'Использовать →')+'</button></div><p class="profile-meta">'+esc(p.verified_at?'Сверено: '+timestamp(p.verified_at):'Условия реальной фирмы не подтверждены')+'</p></article>').join('');
@@ -462,6 +466,160 @@ finally{busy(button,false);}
 }
 
 let scannerPollTimer;
+let traderPollTimer,traderExpiryTimer,traderRequestSerial=0;
+const traderActiveSetups=new Map();
+let traderNotifiedSetups=[];
+try{const remembered=JSON.parse(localStorage.getItem('prop-lab-paper-setup-alerts')||'[]');if(Array.isArray(remembered))traderNotifiedSetups=remembered.filter(value=>typeof value==='string').slice(-100);}catch{}
+function announceTraderChanges(setups,board) {
+const active=new Map(setups.map(market=>[market.symbol+'|'+market.setup.strategy_id+'|'+(market.setup.signal_time||market.setup.reference_close_time||market.setup.reference_time||market.setup.expires_at),market]));
+const fresh=[...active.keys()].filter(key=>!traderNotifiedSetups.includes(key));
+const expired=[...traderActiveSetups.entries()].filter(([key,market])=>!active.has(key)&&(new Date(market.setup.expires_at).getTime()<=Date.now()||board.markets?.some(current=>current.symbol===market.symbol&&['stale','expired_next_bar'].includes(current.price_state)))).map(([,market])=>market.symbol);
+if(fresh.length){const symbols=fresh.map(key=>active.get(key).symbol);notice('today-alert','Новый бумажный сетап: '+symbols.join(', ')+'. Проверьте условия входа и текущий риск.','success');traderNotifiedSetups=traderNotifiedSetups.concat(fresh).slice(-100);try{localStorage.setItem('prop-lab-paper-setup-alerts',JSON.stringify(traderNotifiedSetups));}catch{}}
+else if(expired.length)notice('today-alert','План '+[...new Set(expired)].join(', ')+' истёк или потерял свежесть. Отмените сценарий входа; это не сигнал закрытия реальной позиции.','warning');
+else if(active.size===0&&traderActiveSetups.size>0)notice('today-alert','Предыдущий бумажный план больше не подтверждён. Дождитесь новой проверки условий.','warning');
+traderActiveSetups.clear();active.forEach((market,key)=>traderActiveSetups.set(key,market));
+}
+let replayDiaryPollTimer, replayDiaryRequest = 0;
+function tradingViewLink(value) {
+try{const url=new URL(value);if(url.protocol==='https:'&&['www.tradingview.com','tradingview.com'].includes(url.hostname)&&!url.username&&!url.password)return '<a class="button button-secondary small" href="'+esc(url.href)+'" target="_blank" rel="noopener noreferrer">Открыть в TradingView ↗</a>';}catch{}
+return '';
+}
+function replayCandleChart(trade) {
+const source=trade.chart,bars=Array.isArray(source?.bars)?source.bars.slice(-120):[];
+if(source?.state!=='ready'||!bars.length)return '<div class="replay-chart-empty">OHLC-график недоступен: подтверждённые котировки для этого окна не загружены.</div>';
+let previous=-Infinity;
+for(const bar of bars){const stamp=new Date(bar.time).getTime(),values=[bar.open,bar.high,bar.low,bar.close];if(!Number.isFinite(stamp)||stamp<=previous||values.some(value=>value===null||!Number.isFinite(Number(value))||Number(value)<=0)||Number(bar.high)<Math.max(...values.map(Number))||Number(bar.low)>Math.min(...values.map(Number)))return '<div class="replay-chart-empty">Структура OHLC не подтверждена; график скрыт.</div>';previous=stamp;}
+const indexAt=value=>bars.findIndex(bar=>new Date(bar.time).getTime()===new Date(value).getTime());
+const markers=[{index:indexAt(trade.entry_time),price:trade.entry_price,label:'Вход модели',tone:'#b6f46f'}];
+if(trade.status==='closed'&&trade.exit_time)markers.push({index:indexAt(trade.exit_time),price:trade.exit_price,label:'Выход модели',tone:'#8dc9ee'});
+const visible=markers.filter(marker=>marker.index>=0&&marker.price!==null&&Number.isFinite(Number(marker.price))&&Number(marker.price)>0);
+const width=720,height=240,left=59,right=16,top=22,bottom=32;
+const prices=bars.flatMap(bar=>[Number(bar.low),Number(bar.high)]).concat(visible.map(marker=>Number(marker.price)));
+let low=Math.min(...prices),high=Math.max(...prices);const pad=(high-low||high*.02)*.12;low-=pad;high+=pad;
+const x=index=>left+(index+.5)*(width-left-right)/bars.length,y=value=>top+(high-Number(value))/(high-low)*(height-top-bottom),body=Math.max(1,Math.min(8,(width-left-right)/bars.length*.65));
+let svg='<svg class="replay-candles" viewBox="0 0 '+width+' '+height+'" role="img" aria-label="'+esc('Исторические OHLC '+trade.symbol+'; маркеры означают только смоделированные сделки')+'"><title>'+esc('Реальная история OHLC '+trade.symbol+' · '+bars[0].time+' — '+bars.at(-1).time)+'</title>';
+for(let i=0;i<4;i++){const value=high-(high-low)*i/3,position=y(value);svg+='<line x1="'+left+'" y1="'+position.toFixed(2)+'" x2="'+(width-right)+'" y2="'+position.toFixed(2)+'" stroke="#2a4050" stroke-dasharray="3 5"/><text x="'+(left-8)+'" y="'+(position+3).toFixed(2)+'" text-anchor="end" fill="#839dad" font-size="10">'+esc(price(value))+'</text>';}
+bars.forEach((bar,index)=>{const color=Number(bar.close)>=Number(bar.open)?'#a7d789':'#e49393',position=x(index),open=y(bar.open),close=y(bar.close);svg+='<line x1="'+position.toFixed(2)+'" x2="'+position.toFixed(2)+'" y1="'+y(bar.high).toFixed(2)+'" y2="'+y(bar.low).toFixed(2)+'" stroke="'+color+'" stroke-width="1"/><rect x="'+(position-body/2).toFixed(2)+'" y="'+Math.min(open,close).toFixed(2)+'" width="'+body.toFixed(2)+'" height="'+Math.max(1,Math.abs(open-close)).toFixed(2)+'" fill="'+color+'"/>';});
+visible.forEach((marker,index)=>{const position=x(marker.index),level=y(marker.price),labelX=Math.min(width-right-5,Math.max(left+5,position)),anchor=position>width*.7?'end':'start';svg+='<line x1="'+position.toFixed(2)+'" x2="'+position.toFixed(2)+'" y1="'+top+'" y2="'+(height-bottom)+'" stroke="'+marker.tone+'" stroke-dasharray="2 5" opacity=".45"/><circle cx="'+position.toFixed(2)+'" cy="'+level.toFixed(2)+'" r="4" fill="'+marker.tone+'" stroke="#0e1a24" stroke-width="2"/><text x="'+labelX.toFixed(2)+'" y="'+(index?height-bottom-8:top+11)+'" fill="'+marker.tone+'" font-size="10" text-anchor="'+anchor+'">'+marker.label+'</text>';});
+svg+='<text x="'+left+'" y="'+(height-10)+'" fill="#839dad" font-size="10">'+esc(shortDate(bars[0].time))+'</text><text x="'+(width-right)+'" y="'+(height-10)+'" text-anchor="end" fill="#839dad" font-size="10">'+esc(shortDate(bars.at(-1).time))+'</text></svg>';
+return '<div class="replay-chart">'+svg+'</div><p class="replay-chart-caption">Локальный график реальных OHLC · '+esc(localTimestamp(bars[0].time))+' — '+esc(localTimestamp(bars.at(-1).time))+(source.entry_in_view===false?' · вход за пределами окна':'')+'. История по ссылке TradingView может отличаться.</p>';
+}
+function historicalStrategyLabel(strategy) {
+return ({bt_sma_10_30:'SMA10/30 · дневной тренд',qc_ema_15_30:'EMA15/30 · дневной тренд',faber_sma_10m:'SMA10 месяцев · долгий тренд',rsi2_pullback_5:'RSI2 · короткий откат'})[strategy?.id]||strategy?.name||strategy?.id||'Сохранённый алгоритм';
+}
+function renderReplayDiary(data) {
+state.replayDiary=data;const ready=data.state==='ready',summary=data.summary||{},trades=Array.isArray(data.trades)?data.trades:[];
+$('#replay-diary-status').textContent=ready?'ИСТОРИЧЕСКАЯ СИМУЛЯЦИЯ':data.state==='in_progress'?'Формируется':'Нет отчёта';
+$('#replay-diary-status').className='badge badge-'+(ready?'neutral':'warning');
+$('#replay-diary-note').textContent=ready?'Период: '+(data.period?.month||'не указан')+' · '+historicalStrategyLabel(data.strategy)+'. Исторический сценарий на акциях/ETF. Это не исполнения на проп-счёте. Метки времени относятся к дневным барам; точный момент исполнения внутри дня не установлен.':data.reason||'Автоматический дневник появится после сохранения проверяемого исторического сценария.';
+$('#replay-diary-summary').innerHTML=ready?inlineMetric('Позиций модели',num(summary.positions,0),'','Закрыто: '+num(summary.closed_in_month,0)+' · открыто на границе: '+num(summary.open_at_period_end,0))+inlineMetric('Изменение капитала за месяц',money(summary.month_equity_change),signClass(summary.month_equity_change),'USD · модель, включая оценку границы')+inlineMetric('Доходность месяца',pct(summary.month_return_pct),signClass(summary.month_return_pct))+inlineMetric('P&L закрытых позиций',money(summary.closed_trade_pnl),signClass(summary.closed_trade_pnl),'За сделки целиком, включая переносы до месяца'):'';
+$('#replay-diary-trades').innerHTML=ready&&trades.length?trades.map(trade=>{
+const closed=trade.status==='closed',boundary=trade.valuation_boundary;
+return '<article class="replay-trade" data-replay-trade="'+esc(trade.id)+'"><div class="replay-trade-heading"><div><h3>'+esc(trade.symbol)+' · '+(trade.side==='short'?'SHORT':'LONG')+'</h3><p>'+esc(trade.carried_from_previous_month?'Перенос из предыдущего месяца':'Вход в этом месяце')+' · '+esc(localTimestamp(trade.entry_time))+'</p></div>'+badge(closed?'ЗАКРЫТА В МОДЕЛИ':'ОТКРЫТА НА ГРАНИЦЕ','neutral')+'</div><div class="replay-trade-numbers">'+inlineMetric('Вход модели',price(trade.entry_price))+inlineMetric('Стоп',price(trade.stop))+inlineMetric(closed?'Выход модели':'Фиксированная цель',closed?price(trade.exit_price):trade.take_profit===null||trade.take_profit===undefined?'Выход по правилу':price(trade.take_profit))+inlineMetric('P&L закрытой позиции',closed?money(trade.pnl):'—',closed?signClass(trade.pnl):'')+'</div>'+replayCandleChart(trade)+'<div class="replay-trade-explanation"><div><h4>Почему вход</h4><ul class="reasons-list">'+setupReasons(trade.entry_reasons||[])+'</ul></div><div><h4>Почему выход / ожидание</h4><ul class="reasons-list">'+setupReasons(trade.exit_reasons||[])+'</ul>'+(closed?'<p>Бар выхода: '+esc(localTimestamp(trade.exit_time))+'</p>':'')+'</div></div>'+(boundary?'<p class="replay-valuation">'+esc(boundary.reason)+' Цена гипотетической оценки: '+esc(price(boundary.hypothetical_liquidation_price))+'.</p>':'')+'<details class="replay-trade-costs"><summary>Объём, риск и издержки модели</summary><p>Объём: '+esc(num(trade.quantity,4))+' · бюджет риска: '+esc(money(trade.risk_amount))+' · результат R от бюджета: '+esc(num(trade.return_r,3))+'.</p>'+(trade.costs?'<p>Комиссии: '+esc(money(trade.costs.fees))+' · спред: '+esc(money(trade.costs.spread))+' · проскальзывание: '+esc(money(trade.costs.slippage))+' · финансирование: '+esc(money(trade.costs.financing_total))+' · суммарно: '+esc(money(trade.costs.total_costs))+'.</p>':'<p>Окончательные издержки открытой позиции не рассчитаны как закрытая сделка.</p>')+'</details><div class="replay-trade-actions">'+tradingViewLink(trade.tradingview_url)+'<small>Отдельный график TradingView. Локальный OHLC выше — график программы.</small></div></article>';
+}).join(''):ready?'<div class="empty-state compact"><p>В выбранном месяце позиций этого сценария нет.</p></div>':'<div class="empty-state compact"><p>Исторические сделки не подставляются, пока проверяемый отчёт недоступен.</p></div>';
+$('#replay-diary-details').hidden=!data.warnings?.length&&!data.qualification?.reasons?.length;
+$('#replay-diary-provenance').innerHTML='<ul class="reasons-list">'+setupReasons([...(data.warnings||[]),...(data.qualification?.reasons||[])])+'</ul>';
+}
+async function loadReplayDiary() {
+clearTimeout(replayDiaryPollTimer);
+const request=++replayDiaryRequest, study=$('#replay-diary-study').value;
+try{const response=await api('/api/trader/diary?study='+encodeURIComponent(study));if(request!==replayDiaryRequest)return;renderReplayDiary(response.diary||response);notice('replay-diary-error','');}
+catch(e){if(request!==replayDiaryRequest)return;$('#replay-diary-status').textContent='Нет связи';notice('replay-diary-error','Дневник симуляций недоступен: '+e.message);}
+finally{if(request===replayDiaryRequest)replayDiaryPollTimer=setTimeout(loadReplayDiary,state.replayDiary?.state==='in_progress'?15000:60000);}
+}
+$('#replay-diary-study').addEventListener('change',()=>{state.replayDiary=null;$('#replay-diary-status').textContent='Загрузка…';$('#replay-diary-summary').innerHTML='';$('#replay-diary-trades').innerHTML='';$('#replay-diary-details').hidden=true;$('#replay-diary-note').textContent='Загружаются решения выбранного алгоритма за последний завершённый месяц.';loadReplayDiary();});
+function acceptedTraderSetups(board) {
+if(state.traderError||state.traderAction||board?.status!=='paper_review'||board.mode!=='paper'||board.live_orders!==false)return [];
+return (board.setups||[]).filter(market=>{
+const plan=market.setup,zone=plan?.entry_zone,target=plan?.take_profit_zone,invalidation=plan?.invalidation_zone;
+const values=[zone?.low,zone?.high,plan?.stop_loss,target?.low,target?.high,invalidation?.low,invalidation?.high];
+if(market.status!=='qualified'||market.price_state!=='fresh'||market.primary!==true||market.selected!==true||market.historical_qualified!==true||market.blockers?.length||plan?.status!=='paper_review'||plan.planning_only!==true||plan.can_trade!==false||!['long','short'].includes(plan.direction)||values.some(value=>value===null||value===undefined||!Number.isFinite(Number(value))||Number(value)<=0))return false;
+return Number(zone.low)<=Number(zone.high)&&Number(target.low)<=Number(target.high)&&Number(invalidation.low)<=Number(invalidation.high)&&new Date(plan.expires_at).getTime()>Date.now();
+});
+}
+function traderEvidenceReason(value) {
+const text=String(value||'').replace(/^(historical_holdout|confirmation):\s*/,'');
+if(text==='Descriptive99% synchronized-month interval includes zero or has fewer than24 months')return '99% интервал месячного результата включает ноль или не имеет достаточной выборки: устойчивость не подтверждена.';
+if(text==='Descriptive99% monthly interval includeszero or insufficientmonths')return 'Длинный период пока не подтверждает устойчивость: 99% интервал средней месячной доходности включает ноль.';
+const intradayReasons={
+'Fewer than60holdouttrades':'На контрольном периоде меньше 60 сделок.',
+'Fewer than120holdoutsessions':'На контрольном периоде меньше 120 торговых сессий.',
+'Net holdout return is not positive after assumed costs':'После расходов контрольный период не принёс прибыль.',
+'Profit factor below1.2 or no finite loss sample':'Соотношение прибылей и убытков ниже 1,2 или недостаточно наблюдаемых убытков.',
+'Double friction stress is not positive':'При удвоенных расходах прибыль исчезает.',
+'Worst-bar drawdown reaches8%':'Просадка достигает установленного лимита 8%.',
+'99% synchronized5-session-block confidence lower bound does not exceedzero':'99% интервал дневного результата включает ноль: преимущество не подтверждено.'
+};
+if(intradayReasons[text])return intradayReasons[text];
+return translate(text);
+}
+function secondaryTraderEvidence(evidence) {
+const studies=Array.isArray(evidence?.studies)?evidence.studies.filter(study=>study.id!=='sourced_daily'):[];
+if(!studies.length)return '';
+return '<div class="secondary-evidence"><h3>Дополнительные зафиксированные проверки</h3>'+studies.map(study=>{
+const primary=study.primary,title=study.title||'Отдельная проверка',symbols=Array.isArray(study.symbols)?study.symbols.join(', '):'';
+if(!primary){const unavailable=study.state==='source_incomplete';return '<article><h4>'+esc(title)+'</h4><p>'+esc(unavailable?'Недостаточно корректных сессионных данных. Доходность не рассчитана; цены исполнения не выдумываются.':study.state==='unavailable'?'Проверяемого отчёта пока нет.':'Проверка ещё не завершена; итог и сетапы из неё не создаются.')+'</p>'+(unavailable&&study.availability_errors?.length?'<ul class="reasons-list">'+study.availability_errors.slice(0,3).map(item=>'<li>'+esc(item.symbol)+' · '+esc(item.reason)+'</li>').join('')+'</ul>':'')+'</article>'; }
+const windows=Object.values(primary.windows||{});
+return '<article><div class="panel-header"><h4>'+esc(title)+'</h4>'+badge(primary.status==='historically_positive_watch'?'WATCH · НЕТ ДОПУСКА':'ОТБОР НЕ ПРОЙДЕН','warning')+'</div><p>'+esc(historicalStrategyLabel(primary))+(symbols?' · '+esc(symbols):'')+(study.interval?' · '+esc(study.interval):'')+'</p>'+windows.map(window=>{const metrics=window.metrics||{},stress=window.friction_stress||{},data=window.data||{};return '<p class="field-help">Отложенная история: '+esc(localTimestamp(data.start))+' — '+esc(localTimestamp(data.end))+'.</p><div class="inline-metrics">'+inlineMetric('Результат после издержек',pct(metrics.net_return_pct),signClass(metrics.net_return_pct))+inlineMetric('Просадка модели',pct(metrics.max_drawdown_pct))+inlineMetric('Сделки модели',num(metrics.total_trades,0))+(stress.net_return_pct!==undefined?inlineMetric('При повышенных издержках',pct(stress.net_return_pct),signClass(stress.net_return_pct)):'')+'</div>';}).join('')+'<ul class="reasons-list">'+setupReasons((primary.reasons||[]).slice(0,3).map(traderEvidenceReason))+'</ul><p class="field-help">'+esc(study.decision||'Применимость к реальному проп-контракту не подтверждена.')+'</p></article>';
+}).join('')+(evidence.sequential_search_notice?'<p class="field-help">'+esc(evidence.sequential_search_notice)+'</p>':'')+'</div>';
+}
+function renderTraderEvidence(board) {
+const evidence=board?.evidence,primary=evidence?.primary;
+$('#today-evidence').hidden=!primary;if(!primary)return;
+$('#today-evidence-title').textContent=historicalStrategyLabel(primary);
+$('#today-evidence-status').textContent=primary.status==='historically_positive_watch'?'WATCH · НЕТ ДОПУСКА':'ОТБОР НЕ ПРОЙДЕН';
+const reasons=(primary.reasons||[]).map(traderEvidenceReason);
+$('#today-evidence-reason').textContent=(primary.status==='historically_positive_watch'?'Два исторических периода положительны после издержек. ':'')+(reasons[0]||'Применимость инструментов, исполнения и договора проп-фирмы ещё не подтверждена.')+' Алгоритм остаётся под наблюдением; готовый вход определяется отдельной проверкой условий.';
+$('#today-evidence-windows').innerHTML=['historical_holdout','confirmation'].map(key=>{const window=primary.windows?.[key];if(!window)return '';const metrics=window.metrics||{},data=window.data||{};return '<article><h3>'+({historical_holdout:'Отложенная история',confirmation:'Последующее подтверждение'}[key])+'</h3><p>'+esc(localTimestamp(data.start))+' — '+esc(localTimestamp(data.end))+'</p><div>'+inlineMetric('Результат после издержек',pct(metrics.net_return_pct),signClass(metrics.net_return_pct))+inlineMetric('Максимальная просадка',pct(metrics.max_drawdown_pct))+inlineMetric('Сделки модели',num(metrics.total_trades,0))+'</div></article>';}).join('');
+$('#today-evidence-related').innerHTML=secondaryTraderEvidence({...evidence,studies:(evidence.studies||[]).filter(study=>study.id!=='sourced_daily'&&study.primary?.status==='historically_positive_watch')});
+const sources=Array.isArray(primary.sources)?primary.sources:[];
+$('#today-evidence-detail-content').innerHTML='<p class="field-help">'+esc(evidence.decision||'Исторические результаты требуют отдельной проверки применимости к проп-счёту.')+'</p>'+(primary.rules?'<h3>Зафиксированные правила</h3><pre class="code-block">'+esc(typeof primary.rules==='string'?primary.rules:JSON.stringify(primary.rules,null,2))+'</pre>':'')+(sources.length?'<h3>Источники стратегии</h3><ul class="reasons-list">'+sources.map(source=>'<li>'+officialSourceLink(source.url||source.source_url,source.title||source.name||source.strategy_id||'Официальный источник')+'</li>').join('')+'</ul>':'')+'<ul class="reasons-list">'+[...reasons,...(evidence.limitations||[]).map(translate)].map(reason=>'<li>'+esc(reason)+'</li>').join('')+'</ul>'+secondaryTraderEvidence(evidence);
+}
+function renderTraderBoard() {
+const board=state.trader,button=$('#find-setups'),error=state.traderError;
+renderTraderEvidence(board);
+const searching=state.traderAction||board?.status==='searching'||['queued','running'].includes(board?.job?.state);
+const setups=acceptedTraderSetups(board),ready=!searching&&!error&&setups.length>0;
+if(searching||error)notice('today-alert','');
+clearTimeout(traderExpiryTimer);
+if(!searching&&!error&&board)announceTraderChanges(setups,board);
+if(ready){const expiry=Math.min(...setups.map(market=>new Date(market.setup.expires_at).getTime()));traderExpiryTimer=setTimeout(renderTraderBoard,Math.min(2147483647,Math.max(1,expiry-Date.now()+1)));}
+button.disabled=searching;button.innerHTML=searching?'Ищем сетапы…':'Найти сетапы <span>↗</span>';
+$('#today-board').setAttribute('aria-busy',String(searching||!board&&!error));
+$('#today-status').className='badge badge-'+(ready?'good':searching?'neutral':'warning');
+$('#today-status').textContent=error?'Нет связи':searching?'Проверяем рынки':ready?'БУМАЖНЫЙ ПЛАН':'ВНЕ РЫНКА';
+$('#today-title').textContent=error?'Решение сейчас неизвестно':searching?'Ищем допустимые сетапы':ready?(setups.length===1?'Есть сетап для проверки':'Есть сетапы для проверки'):'Сейчас остаёмся вне рынка';
+$('#today-action').textContent=error?'Дождитесь связи или повторите поиск.':searching?'Дождитесь проверки котировок, стратегии и правил.':ready?'Вход только при выполнении условий и проверке риска.':'Не открывайте новый сценарий по этому решению.';
+const progress=board?.job?.progress,details=progress?.details||{};
+$('#today-reason').textContent=error||searching?(error||((Number.isFinite(Number(details.finished))&&Number(details.total)>0)?'Проверено рынков: '+num(details.finished,0)+' из '+num(details.total,0)+'.':'Программа сама проверяет доступные рынки. Можно продолжать работу с дневником.')):board?.status==='paper_review'&&!ready?'Сохранённый план истёк или не содержит полного подтверждённого ценового сценария. Дождитесь новой проверки.':board?.decision||'Сохранённого допустимого сетапа пока нет. Нажмите «Найти сетапы» для проверки рынков.';
+$('#today-levels').hidden=!ready;
+$('#today-levels').innerHTML=ready?setups.map(market=>{const plan=market.setup;return '<article class="today-setup-card"><div class="today-setup-heading"><h3>'+esc(market.symbol)+' · '+(plan.direction==='long'?'LONG':'SHORT')+'</h3>'+badge('УСЛОВНЫЙ ВХОД','neutral')+'</div><div class="price-zones">'+zoneCard('Зона входа',plan.entry_zone,'entry',typeof plan.entry_zone.trigger==='string'?translate(plan.entry_zone.trigger):'Только после выполнения условия')+zoneCard('Стоп-лосс',plan.stop_loss,'stop','Граница риска сценария')+zoneCard('Зона take profit',plan.take_profit_zone,'target','Цели из сохранённого плана')+zoneCard('Отмена идеи',plan.invalidation_zone,'cancel','Вне условий сценарий отменяется')+'</div><p class="today-setup-time">Закрытая свеча: '+esc(localTimestamp(plan.reference_close_time||plan.reference_time))+' · действителен до '+esc(localTimestamp(plan.expires_at))+'</p>'+(plan.reasons?.length?'<ul class="reasons-list">'+setupReasons(plan.reasons)+'</ul>':'')+'<button class="button button-secondary small" data-go="checker">Чекер риска →</button></article>';}).join(''):'';
+const markets=Array.isArray(board?.markets)?board.markets:[],primary=markets.find(market=>market.primary),blockers=primary?.blockers||[];
+const quoteFailures=markets.filter(market=>market.status==='unavailable').length;
+const quoteReason=quoteFailures===markets.length&&quoteFailures>0?'Котировки всех '+quoteFailures+' запрошенных рынков недоступны. Свежие условия входа проверить невозможно.':quoteFailures>0?'Котировки '+quoteFailures+' из '+markets.length+' рынков недоступны; охват проверки неполный.':'';
+notice('today-risk',!ready&&!searching&&!error?[quoteReason,...blockers.slice(0,4).map(translate)].filter(Boolean).join('\n'):'','warning');
+$('#today-next-check').textContent=searching?'После завершения проверки':board?.next_check_at&&board?.automation?.enabled!==false?localTimestamp(board.next_check_at):board?.automation?.enabled?'По автоматическому расписанию':'По кнопке «Найти сетапы»';
+$('#today-source').textContent=error?'Данные не подтверждены':board?.generated_at?'Состояние на '+localTimestamp(board.generated_at):'Сохранённое состояние ещё не получено';
+$('#today-market-statuses').innerHTML=markets.length?markets.map(market=>'<article class="today-market"><div><strong>'+esc(market.symbol)+'</strong>'+badge(market.status==='qualified'?'История прошла отбор':market.status==='unavailable'?'Нет котировок':'Отбор не пройден',market.status==='qualified'?'neutral':'warning')+'</div><p>'+esc({fresh:'Свежие закрытые бары',stale:'Котировки устарели',future_unclosed:'Свеча ещё не закрыта',expired_next_bar:'План истёк',unknown:'Свежесть не подтверждена'}[market.price_state]||'Свежесть не подтверждена')+'</p>'+(market.blockers?.length?'<ul class="reasons-list">'+setupReasons(market.blockers)+'</ul>':'')+'</article>').join(''):'<p class="field-help">Состояние отдельных рынков появится после проверки.</p>';
+}
+function scheduleTraderPoll() {
+clearTimeout(traderPollTimer);traderPollTimer=setTimeout(()=>loadTraderBoard(),state.traderError?5000:state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state)?1500:15000);
+}
+async function loadTraderBoard(force=false) {
+clearTimeout(traderPollTimer);if(state.traderAction&&!force)return;
+const serial=++traderRequestSerial;
+try{const response=await api('/api/trader/board');if(serial!==traderRequestSerial)return;state.trader=response.board||response;state.traderError='';renderTraderBoard();}
+catch(e){if(serial!==traderRequestSerial)return;state.traderError='Связь с помощником недоступна: '+e.message;renderTraderBoard();}
+finally{if(serial===traderRequestSerial&&!state.traderAction)scheduleTraderPoll();}
+}
+$('#find-setups').addEventListener('click',async()=>{
+if(state.traderAction||state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state))return;
+navigate('overview');clearTimeout(traderPollTimer);++traderRequestSerial;state.traderAction=true;state.traderError='';renderTraderBoard();
+try{await post('/api/trader/find-setups',{});await loadTraderBoard(true);}
+catch(e){state.traderError='Найти сетапы не удалось: '+e.message;}
+finally{state.traderAction=false;renderTraderBoard();scheduleTraderPoll();}
+});
+
 function scannerSourceControls() {
 const archive=$('#scanner-form').elements.namedItem('scanner_source').value==='reference';
 $('#scanner-online-controls').hidden=archive;
@@ -719,7 +877,7 @@ renderProfiles();renderCatalog();renderJournal(data.journal||{trades:[],stats:{}
 if(state.activeProfile)selectProfile(state.activeProfile);
 if(data.symbols?.length)$('#research-symbol').innerHTML=data.symbols.map(symbol=>'<option>'+esc(symbol)+'</option>').join('');
 $('#webhook-status').textContent=data.webhook_configured?'Приём событий настроен. Заявки не исполняются.':'Приём webhook не настроен. Для подключения задайте WEBHOOK_TOKEN в окружении сервера; секрет не показывается в интерфейсе.';$('#app-version').textContent=data.version?'v'+data.version:'—';$('#connection-status').textContent='Локальный сервер';$('#connection-status').className='connection connected';
-if(data.latest_research){renderResearch(data.latest_research);}loadSignals();loadUpdateStatus();loadScannerLatest();loadAutopilotStatus();loadFirmReview();loadCalendarStatus();
+if(data.latest_research){renderResearch(data.latest_research);}loadSignals();loadUpdateStatus();loadScannerLatest();loadAutopilotStatus();loadFirmReview();loadCalendarStatus();loadTraderBoard();loadReplayDiary();
 }catch(e){notice('global-error',e.message);$('#connection-status').textContent='Нет связи';$('#connection-status').className='connection disconnected';}
 }
 initialize();

@@ -31,6 +31,10 @@ def main():
             autopilot = json.load(response)
         with urlopen(base + "/api/news/status", timeout=2) as response:
             news = json.load(response)
+        with urlopen(base + "/api/trader/board", timeout=3) as response:
+            board = json.load(response)
+        with urlopen(base + "/api/trader/diary", timeout=5) as response:
+            diary = json.load(response)
         if health.get("ok") is not True or health.get("mode") != "paper" or bootstrap.get("version") != VERSION:
             raise ValueError("На порту работает другой сервер")
         if len(bootstrap.get("strategies", [])) < 8 or not bootstrap.get("profiles") or len(script) < 100:
@@ -39,8 +43,12 @@ def main():
             raise ValueError("Автопоиск или обновления не готовы")
         if not isinstance(autopilot.get("enabled"), bool) or news.get("state") not in ("ready", "stale", "unknown"):
             raise ValueError("Автопилот или состояние календаря не готовы")
+        if board.get("mode") != "paper" or board.get("live_orders") is not False or not isinstance(board.get("markets"), list):
+            raise ValueError("Экран сетапов не готов")
+        if not isinstance(diary, dict) or "state" not in diary or diary.get("live_orders") is not False:
+            raise ValueError("Автоматический дневник не готов")
         if not args.quiet:
-            print("READY: API, стратегии, профили, автопилот, календарь, обновления и JavaScript доступны; режим paper")
+            print("READY: сетапы, автоматический дневник, API, профили, автопилот, календарь, обновления и JavaScript доступны; режим paper")
     except (URLError, OSError, ValueError) as exc:
         if not args.quiet:
             print(f"NOT READY: {exc}")

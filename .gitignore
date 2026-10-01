@@ -14,6 +14,9 @@ dist/
 *.sqlite3-wal
 data/current-history/*/*.csv
 data/current-history/*/*.json
+data/sourced-history/
+data/intraday-history/
+data/mean-reversion-history/
 !data/current-history/**/protocol.json
 !data/current-history/**/provenance.json
 !data/current-history/**/training-lock.json

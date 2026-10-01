@@ -37,9 +37,11 @@ def main():
                 page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="ru-RU")
                 page.on("pageerror", lambda err: errors.append(str(err)))
                 page.goto(f"http://127.0.0.1:{server.server_port}", wait_until="networkidle")
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 expect(page.locator("#global-error")).to_be_hidden()
                 expect(page.locator("#active-profile-select option")).to_have_count(3)
                 page.screenshot(path=str(output / "overview-empty.png"), full_page=True)
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="lab"]').click()
                 page.locator("#research-submit").click()
                 expect(page.locator("#research-output")).to_be_visible(timeout=30000)
@@ -76,8 +78,10 @@ def main():
                 page.screenshot(path=str(output / "overview.png"), full_page=True)
                 page.reload(wait_until="networkidle")
                 expect(page.locator("#metric-journal")).to_contain_text("1")
+                page.locator("#today-technical").evaluate("element => element.open = true")
                 expect(page.locator("#equity-chart svg")).to_be_visible()
 
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="integrations"]').click()
                 page.locator("#pine-strategy").select_option("ema_pullback")
                 with page.expect_download() as download:
@@ -85,6 +89,7 @@ def main():
                 destination = output / "example.pine"
                 download.value.save_as(destination)
                 assert destination.read_text().startswith("//@version=6")
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="firms"]').click()
                 page.locator("#new-profile").click()
                 profile = page.locator("#profile-form")

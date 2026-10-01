@@ -58,8 +58,10 @@ def main():
                     page.on("request", lambda request: posts.append(request.url)
                             if request.method == "POST" else None)
                     page.goto(f"http://127.0.0.1:{server.server_port}", wait_until="networkidle")
+                    page.locator("#advanced-tools").evaluate("element => element.open = true")
                     expect(page.locator("#global-error")).to_be_hidden()
                     expect(page.locator("#autopilot-badge")).to_have_text("Выключен")
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     expect(page.locator("#autopilot-run")).to_be_enabled(timeout=15000)
                     expect(page.locator("#autopilot-results")).to_be_disabled()
                     assert posts == [], "Opening the interface must not send automatic POST requests"
@@ -68,6 +70,7 @@ def main():
                     assert calendar_fetch.call_count == 0, "Page loads must read only the cached calendar"
 
                     # Enabling the actual scheduler launches one bounded search.
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-toggle").click()
                     expect(page.locator("#autopilot-toggle")).to_contain_text("Выключить")
                     expect(page.locator("#autopilot-error")).to_contain_text("Котировки не получены", timeout=30000)
@@ -85,6 +88,7 @@ def main():
                     assert calendar_fetch.call_count == 1
                     page.screenshot(path=str(output / "autopilot.png"), full_page=True)
 
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-results").click()
                     expect(page.locator("#scanner-output")).to_contain_text("История не получена")
                     expect(page.locator(".scanner-diagnostics li")).to_have_count(len(SCAN_SYMBOLS))
@@ -108,16 +112,19 @@ def main():
                             route.continue_()
 
                     page.route("**/api/autopilot", denied_change)
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-toggle").click()
                     expect(page.locator("#autopilot-toggle")).to_be_enabled()
                     expect(page.locator("#autopilot-error")).to_contain_text("Изменение автопилота не выполнено")
                     expect(page.locator("#autopilot-error")).to_contain_text("Контрольная ошибка сохранения")
                     assert app.autopilot.status()["enabled"] is True
                     page.unroute("**/api/autopilot", denied_change)
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-refresh").click()
                     expect(page.locator("#autopilot-error")).to_contain_text("Котировки не получены")
                     expect(page.locator("#autopilot-error")).not_to_contain_text("Изменение автопилота")
 
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-toggle").click()
                     expect(page.locator("#autopilot-badge")).to_have_text("Выключен")
                     expect(page.locator("#autopilot-next-attempt")).to_have_text("Остановлен")
@@ -128,8 +135,10 @@ def main():
                     # disabled and does not turn automatic execution back on.
                     with page.expect_response(lambda response: response.url.endswith("/api/autopilot")
                                               and response.request.method == "POST"):
+                        page.locator("#autopilot-settings").evaluate("element => element.open = true")
                         page.locator("#autopilot-run").click()
                     expect(page.locator("#autopilot-result")).to_have_text("Нужна повторная проверка", timeout=30000)
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     expect(page.locator("#autopilot-run")).to_be_enabled(timeout=15000)
                     retry = app.scanner.latest()
                     assert retry["id"] != job["id"] and retry["state"] == "completed"
@@ -151,8 +160,10 @@ def main():
                                                          "interval": "1d", "range": "2y"}})
                     with page.expect_response(lambda response: response.url.endswith("/api/autopilot")
                                               and response.request.method == "POST"):
+                        page.locator("#autopilot-settings").evaluate("element => element.open = true")
                         page.locator("#autopilot-run").click()
                     expect(page.locator("#autopilot-result")).to_have_text("Устойчивый кандидат не найден", timeout=30000)
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     expect(page.locator("#autopilot-run")).to_be_enabled(timeout=15000)
                     completed = app.scanner.latest()
                     assert completed["id"] != retry["id"] and completed["state"] == "completed"
@@ -161,6 +172,7 @@ def main():
                     stored = app.store.latest_research()
                     assert stored["autopilot_job_id"] == completed["id"]
                     assert stored["selected_strategy"] is None
+                    page.locator("#advanced-tools").evaluate("element => element.open = true")
                     page.locator('[data-tab="lab"]').click()
                     expect(page.locator("#research-output")).to_be_visible(timeout=10000)
                     expect(page.locator("#research-data-banner")).to_contain_text("AAPL")
@@ -169,6 +181,7 @@ def main():
                     page.locator('[data-tab="overview"]').click()
                     page.screenshot(path=str(output / "autopilot-research.png"), full_page=True)
 
+                    page.locator("#advanced-tools").evaluate("element => element.open = true")
                     page.locator('[data-tab="setups"]').click()
                     expect(page.locator("#calendar-feed-badge")).to_have_text("Нет данных")
                     expect(page.locator("#calendar-feed-message")).to_contain_text("Контрольная недоступность")
@@ -193,13 +206,16 @@ def main():
                                       body=json.dumps(fixture))
 
                     page.route("**/api/autopilot", diagnostic_status)
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-refresh").click()
                     expect(page.locator("#autopilot-result")).to_have_text("Устойчивый кандидат не найден")
                     expect(page.locator("#autopilot-error")).to_be_hidden()
                     page.unroute("**/api/autopilot", diagnostic_status)
+                    page.locator("#autopilot-settings").evaluate("element => element.open = true")
                     page.locator("#autopilot-refresh").click()
                     expect(page.locator("#autopilot-result")).to_have_text("Устойчивый кандидат не найден")
 
+                    page.locator("#advanced-tools").evaluate("element => element.open = true")
                     page.locator('[data-tab="firms"]').click()
                     expect(page.locator(".firm-review-product")).to_have_count(3, timeout=10000)
                     expect(page.locator("#firm-review-error")).to_be_hidden()

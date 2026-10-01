@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-10-01T10:55:04.977463Z",
+  "scope": "Source and method audit only; no intraday market prices fetched, no third-party code run, no claim of profit or real-prop eligibility",
+  "market_prices_fetched": false,
+  "backtests_run": false,
+  "live_orders": false,
+  "source_bodies_redistributed": false,
+  "quantconnect_orb": {
+    "publisher": "QuantConnect/Lean official repository",
+    "license": "Apache-2.0 source header; only facts and short diagnostic expressions paraphrased here",
+    "path": "Algorithm.CSharp/OpeningBreakoutAlgorithm.cs",
+    "current_pinned_commit": "41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4",
+    "current_commit_date": "2026-09-30T16:10:07Z",
+    "current_receipt": {
+      "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Algorithm.CSharp/OpeningBreakoutAlgorithm.cs",
+      "http_status": 200,
+      "bytes": 22740,
+      "sha256": "5e3c73ab484a38c7772fd2bea8b11036f73dfe5909160bc494f2b1e99b5be6be",
+      "retrieved_at": "2026-10-01T10:47:56.156654Z"
+    },
+    "earliest_observed_path_commit": "222a44f45b7247b68a277e62986754a24f4495db",
+    "earliest_author_date": "2015-09-28T17:26:11Z",
+    "earliest_committer_date": "2015-09-28T17:28:10Z",
+    "earliest_receipt": {
+      "url": "https://raw.githubusercontent.com/QuantConnect/Lean/222a44f45b7247b68a277e62986754a24f4495db/Algorithm.CSharp/OpeningBreakoutAlgorithm.cs",
+      "http_status": 200,
+      "bytes": 22399,
+      "sha256": "410514d290d9ee5b1fc870fc6a32e4084cee2c91105889373f446a95da8c4ff9",
+      "retrieved_at": "2026-10-01T10:48:33.376556Z"
+    },
+    "history_receipt": {
+      "url": "https://api.github.com/repos/QuantConnect/Lean/commits?path=Algorithm.CSharp%2FOpeningBreakoutAlgorithm.cs&per_page=100&page=1",
+      "http_status": 200,
+      "bytes": 46578,
+      "sha256": "c22f21bee07571655f1a819f00f8e9a24d13782b04df2cb1ee4c8707f5e9508e",
+      "retrieved_at": "2026-10-01T10:47:56.795639Z"
+    },
+    "history_count": 12,
+    "history_complete_for_path": true,
+    "earliest_added_metadata_receipt": {
+      "url": "https://api.github.com/repos/QuantConnect/Lean/commits/222a44f45b7247b68a277e62986754a24f4495db",
+      "http_status": 200,
+      "bytes": 28795,
+      "sha256": "ace85cbc750a9834227264ab5ad9ed61b38eca143012a5df36bb33fa11e9fba8",
+      "retrieved_at": "2026-10-01T10:48:33.699497Z"
+    },
+    "earliest_parent_commit": "0d0c9449f6e2c864ea50f885eea6106e1a7d6031",
+    "earliest_parent_path_absence": {
+      "url": "https://raw.githubusercontent.com/QuantConnect/Lean/0d0c9449f6e2c864ea50f885eea6106e1a7d6031/Algorithm.CSharp/OpeningBreakoutAlgorithm.cs",
+      "http_status": 404,
+      "bytes": 14,
+      "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed",
+      "retrieved_at": "2026-10-01T10:50:06.438778Z"
+    },
+    "chronology_limit": "Earliest observed commit of this exact official path, not earliest invention or proof of deployment/profit",
+    "declared_example": {
+      "symbol": "SPY",
+      "start": "2013-10-07",
+      "end": "2013-10-11",
+      "initial_cash": 100000,
+      "currency": "USD",
+      "brokerage_model": "Tradier",
+      "maximum_leverage": 4,
+      "data_resolution": "second",
+      "algorithm_timezone": "America/New_York default verified in pinned2015 QCAlgorithm"
+    },
+    "rules": {
+      "opening_span_minutes": 3,
+      "opening_comment_disagreement": "Header says five-minute bar; operative constant is3",
+      "range_construction": "At session-open+3 minutes, aggregate previous3 minute high/low and current security close, then widen high/low by breakout fraction",
+      "breakout_threshold_fraction": 5e-05,
+      "entry_cutoff_local": "10:00:00",
+      "entry_time_comparison": "Time.TimeOfDay.Hours>=10 rejects new entries",
+      "long_signal": "ADX28-hour>20 and +DI>-DI and smoothed daily volatility predicate and latest price>widened opening high",
+      "intended_short_signal": "ADX28-hour>20 and -DI>+DI and smoothed daily volatility predicate and latest price<widened opening low",
+      "daily_atr_period": 14,
+      "daily_std_period": 14,
+      "adx_period": 28,
+      "adx_resolution": "hour",
+      "volatility_smoothing_ema_period": 32,
+      "volatility_smoothing_updates": "Daily ATR/STD indicator updates;32 is derived by integer truncation of5*6.5, not32 hourly samples",
+      "atr_volatility_fraction": 0.00275,
+      "std_volatility_fraction": 0.005,
+      "volatility_predicate": "smoothedATR>price*.00275 OR smoothedSTD>price*.005; explicit smoother readiness gate absent in entrance method",
+      "warmup": "Manually request20 daily bars and update ADX,ATR,STD; this is not proof every downstream indicator has reached readiness",
+      "risk_fraction_proxy": 0.0025,
+      "sizing": "integer(0.0025*portfolio_equity/(0.1*dailyATR)), capped by CalculateOrderQuantity(symbol,4x)",
+      "initial_long_stop": "latest second-bar low*(1-.001)",
+      "intended_short_stop": "latest second-bar high*(1+.001)",
+      "stop_fraction": 0.001,
+      "risk_limit_caveat": "Sizing denominator0.1*ATR is not actual fill-to-stop distance and excludes roundtrip costs; source does not enforce0.25% actual worst-case account risk",
+      "psar_af_start": 0.0001,
+      "psar_af_increment": 0.0001,
+      "psar_reset": "One minute before regular session open",
+      "psar_updates": "Every second-data OnData callback despite PSARMin name",
+      "psar_activation_profit_fraction": 0.0003,
+      "psar_activation": "Profit above.0003, PSAR on correct side and tighter than current stop; after enabled, readyPSAR replaces stop without an explicit monotonic-stop check at each later update",
+      "trade_count_guard": "After stop ticket fills, clear opening range and disable further entries for that day; code is a stop-fill guard, not an independently validated order-count guarantee",
+      "short_order_sign_bug": {
+        "expression": "MarketOrder(symbol, - -shares)",
+        "actual_direction": "positive quantity / buy",
+        "present_in_current_and_earliest": true,
+        "meaning": "Cannot represent faithful short execution; correction is an explicitly new adaptation"
+      },
+      "current_flattening": "CurrentSymbol OnEndOfDay liquidates; pinned engine security event is10 minutes before scheduled session close (15:50 regular,12:50 at13:00 earlyclose)",
+      "earliest_flattening": "2015 parameterless OnEndOfDay liquidates at engine algorithm event23:58 local, not session close; it cannot guarantee zero overnight or immediate fill",
+      "short_stop_sign_bug": {
+        "expression": "StopMarketOrder(symbol, -shares, above_market_stop)",
+        "actual_direction": "negative quantity / sell",
+        "present_in_current_and_earliest": true,
+        "meaning": "A genuine short position requires positive buy-to-cover stop quantity; changing only the entry sign does not repair protection"
+      }
+    },
+    "engine_evidence": [
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/222a44f45b7247b68a277e62986754a24f4495db/Algorithm/QCAlgorithm.cs",
+        "http_status": 200,
+        "bytes": 48825,
+        "sha256": "25f8316da8b841a1923186df3f740dd50023a24d214c8a903770ac5b78b271d6",
+        "retrieved_at": "2026-10-01T10:50:59.146317Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/222a44f45b7247b68a277e62986754a24f4495db/Engine/RealTime/BacktestingRealTimeHandler.cs",
+        "http_status": 200,
+        "bytes": 5227,
+        "sha256": "5c424d921d5af282565c3ba5657970d4f17a961a0e40c00e7d33d0528cdd92a8",
+        "retrieved_at": "2026-10-01T10:52:19.502857Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/222a44f45b7247b68a277e62986754a24f4495db/Common/Scheduling/ScheduledEvent.cs",
+        "http_status": 200,
+        "bytes": 9273,
+        "sha256": "fc817e0e4c0816be26490f58726b82ff0a83b6fe3631f7ca8c8f9a14801bc396",
+        "retrieved_at": "2026-10-01T10:50:58.881905Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/222a44f45b7247b68a277e62986754a24f4495db/Engine/RealTime/ScheduledEventFactory.cs",
+        "http_status": 200,
+        "bytes": 9193,
+        "sha256": "e86f221f4635f6a1aab84fc8fbf210d827e0c6e8fcf9732754f88bacdf9ab5fd",
+        "retrieved_at": "2026-10-01T10:51:50.824717Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Engine/RealTime/BaseRealTimeHandler.cs",
+        "http_status": 200,
+        "bytes": 12162,
+        "sha256": "be59c6eb623bb90d89ad9f0878d93843c9c322935b25a4dc7123ac5b82868ae4",
+        "retrieved_at": "2026-10-01T10:50:06.589182Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Common/Scheduling/ScheduledEvent.cs",
+        "http_status": 200,
+        "bytes": 10105,
+        "sha256": "aee9f9e5e6e10271025ef8826d5dfc2b8abfd3f920ca54770d796b4d34b86afc",
+        "retrieved_at": "2026-10-01T10:50:58.897405Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Engine/RealTime/ScheduledEventFactory.cs",
+        "http_status": 200,
+        "bytes": 9509,
+        "sha256": "2d423cb64262d4fdd34d2bc52c003b7089ba09e546147d96ef53a12c7d7f5e21",
+        "retrieved_at": "2026-10-01T10:51:50.869297Z"
+      }
+    ],
+    "one_hour_fidelity": "Not feasible: first60-minute opening candle is known at10:30, after original10:00 entrance deadline;3-minute range and secondPSAR/stop path cannot be recovered from1hOHLC",
+    "performance_verified": false,
+    "real_prop_qualified": false
+  },
+  "noise_area_thirdparty": {
+    "publisher": "giovannibrusco/zarattini-2024-momentum-spy (third-party replication claims)",
+    "commit": "ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1",
+    "commit_date": "2026-07-27T10:57:48Z",
+    "commit_metadata_receipt": {
+      "url": "https://api.github.com/repos/giovannibrusco/zarattini-2024-momentum-spy/commits/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1",
+      "http_status": 200,
+      "bytes": 7130,
+      "sha256": "1d97dfc105492f5e3add41748d0570bd03627dd9f0a78d985b567c4c2521866c",
+      "retrieved_at": "2026-10-01T10:50:06.967383Z"
+    },
+    "receipts": [
+      {
+        "url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/README.md",
+        "http_status": 200,
+        "bytes": 9422,
+        "sha256": "5cca6d77d3145c1b575285708ebae667e109296441b78a9c36c5a825540107c1",
+        "retrieved_at": "2026-10-01T10:50:06.255082Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/docs/SPEC.md",
+        "http_status": 200,
+        "bytes": 6919,
+        "sha256": "bc8f098eebb62a682db8feb279dfa370615cbd6280f5668ab32f80af0f14d87f",
+        "retrieved_at": "2026-10-01T10:50:06.217774Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/docs/CONCLUSIONS.md",
+        "http_status": 200,
+        "bytes": 4265,
+        "sha256": "ac242a9db550f004c1b01d631a9941894a32071860ceeacbec203680c2da2bd3",
+        "retrieved_at": "2026-10-01T10:50:06.318314Z"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/reports/validation.md",
+        "http_status": 200,
+        "bytes": 3064,
+        "sha256": "f8bd0634f5b110ddfe3e768f7a4121484dfca50a8fcf1d9c1c0b93ad829d8af3",
+        "retrieved_at": "2026-10-01T10:50:06.369537Z"
+      }
+    ],
+    "claimed_original_paper": {
+      "title": "Beat the Market: An Effective Intraday Momentum Strategy for S&P500 ETF (SPY)",
+      "authors": [
+        "Carlo Zarattini",
+        "Andrew Aziz",
+        "Andrea Barbon"
+      ],
+      "year": 2024,
+      "ssrn_id": "4824172",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172",
+      "body_retrieved": false,
+      "status": "Original paper unavailable in this audit; descriptions below are attributable to retrieved third-party documents"
+    },
+    "described_rules": {
+      "noise_lookback_sessions": 14,
+      "noise": "At each session time t, average absolute(price_at_same_time/open-1) over14 prior trading sessions",
+      "upper_band": "max(current_session_open,previous_session_close)*(1+sigma_at_time)",
+      "lower_band": "min(current_session_open,previous_session_close)*(1-sigma_at_time)",
+      "source_bars": "one-minute RTH09:30–16:00 America/New_York",
+      "entry_checks_minutes": 30,
+      "entry": "above upper goes long, below lower goes short; direction flips permitted",
+      "base_exit": "Opposite band at scheduled checks",
+      "final_exit": "Long exit threshold max(sessionVWAP,upperBand), short mirror min(sessionVWAP,lowerBand); discrete check-time interpretation, not verified continuous tick stop",
+      "flatten_time_local": "16:00:00",
+      "sizing_daily_vol_target": 0.02,
+      "sizing_daily_vol_lookback": 14,
+      "maximum_leverage": 4,
+      "data_claims": "ES/IB stitched futures and SPY/AlpacaIEX; raw minute bars not in repository and require third-party account/data access"
+    },
+    "reported_not_reproduced": {
+      "source": "docs/CONCLUSIONS.md and reports/validation.md at pinnedcommit",
+      "SPY_validation_sample": [
+        "2020-07-27",
+        "2026-07-08"
+      ],
+      "SPY_final_reported_cagr_pct": 15.89,
+      "SPY_final_reported_sharpe": 1.11,
+      "SPY_final_reported_max_drawdown_pct": -24.2,
+      "SPY_final_reported_trade_expectancy_bps": 2.58,
+      "SPY_final_reported_2025_return_pct": -4.9,
+      "SPY_final_reported_2026_through_July_return_pct": -12.9,
+      "author_claim": "Recent standalone allocation not justified; recent advantage described as compressed",
+      "independently_reproduced": false,
+      "raw_data_audited": false,
+      "publisher_verified_only": true
+    },
+    "one_hour_limits": [
+      "Minute-specific/30-minute decisions and true sessionVWAP unavailable in1hOHLCV; volume-weighted bar typical-price is not the sourceVWAP",
+      "Fourteen prior-session slot statistics and priorclose anchors must be strictly lagged, with slot alignment inNewYork timezone",
+      "One-hour fixedrisk/fixedstop/2R/no-flip changes are explicitly new hypotheses, never validation of reported source performance",
+      "2024–2026 examples already discussed by external authors; new quote inputs are not globally blind"
+    ],
+    "performance_verified": false
+  },
+  "official_qc_calendar": {
+    "url": "https://raw.githubusercontent.com/QuantConnect/Lean/41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4/Data/market-hours/market-hours-database.json",
+    "commit": "41c6e603e5671ca7b5d3de0cbe13b3c4b109bba4",
+    "bytes": 3400500,
+    "sha256": "bffec9c2e5efe30c0f21a1af9d1803b2a8e9a1356ac4f7408130693b7261e440",
+    "root_receipt_started_at": "2026-10-01T10:50:40.735612Z",
+    "root_receipt_completed_at": "2026-10-01T10:50:41.315597Z",
+    "audit_method": "Independently recomputed SHA256 and parsed root-fetched body; receipt clocks supplied by root; no redundant network refetch",
+    "key": "Equity-usa-[*]",
+    "timezone": "America/New_York",
+    "regular_market": [
+      "09:30:00",
+      "16:00:00"
+    ],
+    "study_interval": [
+      "2024-10-01",
+      "2026-10-01"
+    ],
+    "early_closes": {
+      "2024-11-29": "13:00:00",
+      "2024-12-24": "13:00:00",
+      "2025-07-03": "13:00:00",
+      "2025-11-28": "13:00:00",
+      "2025-12-24": "13:00:00"
+    },
+    "fully_closed_dates": [
+      "2024-11-28",
+      "2024-12-25",
+      "2025-01-01",
+      "2025-01-09",
+      "2025-01-20",
+      "2025-02-17",
+      "2025-04-18",
+      "2025-05-26",
+      "2025-06-19",
+      "2025-07-04",
+      "2025-09-01",
+      "2025-11-27",
+      "2025-12-25",
+      "2026-01-01",
+      "2026-01-19",
+      "2026-02-16",
+      "2026-04-03",
+      "2026-05-25",
+      "2026-06-19",
+      "2026-07-03",
+      "2026-09-07"
+    ],
+    "explicit_absence": "2026-07-02 is not listed as an earlyclose in this pinnedQC calendar; this is configuration evidence, not independent exchange certification",
+    "proposed_hourly_flatten_regular": "15:30:00",
+    "proposed_hourly_flatten_early": "12:30:00",
+    "limits": [
+      "Engine calendar is a fixed public configuration, not a firm contract or independently certified exchange schedule",
+      "Freeze session/holiday rules before prices; never infer a favorable day exclusion after observing its PnL",
+      "Timestamp+1h overstates the final30-minute candle duration; metadata/calendar determine actual close",
+      "Incomplete/outage days must be recorded and treated consistently under a predeclared rule; live availability differs from historical full-session knowledge"
+    ]
+  },
+  "adaptation_review": {
+    "status": "Source-informed candidate constraints only; actual experiment protocol must freeze complete rules before intraday price fetch",
+    "hourly_noise14": "Retain lagged14-session, same-slot movement and max/min gap anchors; explicitly new60-minute/no-minuteVWAP/risk/stop/dayflat implementation",
+    "hourly_orb60": "Opening hour range, closed-later-bar confirmation, next-opening fill, opposite-range stop and2Rtarget are distinct from QC3-minute example",
+    "donchian20_ema50": "Existing project-family20-bar channel/EMA50/3ATR/2R with intradayflatten wrapper; no independent external source verification established by this audit",
+    "common_requirements": [
+      "No future daily close/ATR/vol or future slot observations in decisions",
+      "No same-close signal fills; stop/target collision stop-first, gap exits adverse, no finalflatten-slot entries",
+      "Size from actual stop distance+roundtripcost; fees/slippage per side, full spread once across roundtrip",
+      "ATR,EMA,noise/session samples use causal warmup and explicit prior-session boundaries",
+      "Short selling, borrowability, contract sizing, live spreads, news and firm rules require separate verification",
+      "Resample synchronized portfolio sessions, not IID trades across correlatedSPYQQQIWM",
+      "Freeze family/market primary on training and retain all heldout diagnostic outcomes without replacement",
+      "No source example, retrospective model or generic floor replay proves actual prop payout"
+    ]
+  },
+  "hourly_feasibility_lineage": {
+    "basis": "Execution-availability audit supplied by researcher; separate amendment before any performance, not original-policy success",
+    "original_protocol_sha256": "a5d58b2801a9fb55743ba28e726473f4b707da49a6d0f603b1ed0d6140b504c8",
+    "original_failure_path": "docs/intraday-source-failure.json",
+    "original_failure_sha256": "b2af98c18983d9907fd65e8fef924397c71b39a24eaeeaa991ed1bbd89aba55d",
+    "amended_protocol_sha256": "39f5012c4c5bc42d91c5c3cd5679d4e4d4210982c07df05a63e12baa20eec447",
+    "amended_at": "2026-10-01T11:05:53.814146Z",
+    "amended_early_flatten": "11:30",
+    "normal_flatten_unchanged": "15:30",
+    "no_session_removed": true,
+    "raw_receipts_unchanged": true,
+    "boundary_rows": "Observed13:00 zero-volume boundary rows have nondegenerate OHLC; not verified instantaneous ticks or12:30 opening fills",
+    "close_reference": "Provider boundary close retained only as next-session non-executable reference; not independently certified exchange closing quote",
+    "uncertain_final_interval": "11:30 halfday bar duration uncertain; excluded from60-minute noise samples, ATR/Donchian count vendor bars",
+    "synthetic_test_scope": "Chronology/accounting checks only; no alpha evidence"
+  },
+  "updated_at": "2026-10-01T11:10:37.093219Z"
+}

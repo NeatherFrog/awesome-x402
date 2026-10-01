@@ -143,6 +143,21 @@ def main():
                 health_until(port, version, commit, process)
                 bootstrap = request(port, "GET", "/api/bootstrap")
                 assert len(bootstrap["strategies"]) == 8 and len(bootstrap["profiles"]) == 3
+                board = request(port, "GET", "/api/trader/board")
+                assert board["mode"] == "paper" and board["live_orders"] is False
+                assert isinstance(board["markets"], list) and isinstance(board["setups"], list)
+                studies = {item["id"]: item for item in board["evidence"]["studies"]}
+                assert {"sourced_daily", "intraday", "mean_reversion"}.issubset(studies)
+                assert studies["sourced_daily"]["primary"]["id"] == "bt_sma_10_30"
+                assert studies["mean_reversion"]["primary"]["id"] == "rsi2_pullback_5"
+                assert all(studies[name]["live_candidate"] is False for name in ("sourced_daily", "intraday", "mean_reversion"))
+                diary = request(port, "GET", "/api/trader/diary")
+                assert diary["mode"] == "historical_replay" and diary["live_orders"] is False
+                assert isinstance(diary["trades"], list) and diary["manual_journal_unchanged"] is True
+                mean_diary = request(port, "GET", "/api/trader/diary?study=mean_reversion&month=2026-09")
+                assert mean_diary["state"] == "ready" and len(mean_diary["trades"]) == 2
+                assert mean_diary["qualification"]["real_prop_qualified"] is False
+                assert mean_diary["summary"]["live_executions"] == 0
                 updater = request(port, "GET", "/api/updates/status")
                 assert updater["can_apply"] is True and updater["supervised"] is True
                 assert request(port, "GET", "/api/autopilot")["enabled"] is False
@@ -162,7 +177,7 @@ def main():
                                  for p in (app / "runtime").rglob("*") if p.is_file()}
                 assert runtime_before == runtime_after
                 record.update(status="passed", checks=["clean_extraction", "isolated_runtime_imports", "path_with_spaces",
-                    "health_exact_commit", "bootstrap", "supervised_updater", "real_update_restart",
+                    "health_exact_commit", "bootstrap", "setup_board", "fixed_evidence_reports", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
                     "journal_preserved", "settings_preserved", "runtime_preserved", "update_noop"])
             except Exception as exc:
                 detail = (work / "server.log").read_text(encoding="utf-8", errors="replace")[-8000:]

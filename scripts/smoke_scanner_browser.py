@@ -52,10 +52,12 @@ def main():
 
                 page.on("request", record_request)
                 page.goto(f"http://127.0.0.1:{server.server_port}", wait_until="networkidle")
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 expect(page.locator("#global-error")).to_be_hidden()
                 assert scan_requests == [], "A page load must not create a scanner job"
                 assert app.scanner.latest() is None
 
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="scanner"]').click()
                 form = page.locator("#scanner-form")
                 auto_costs = form.locator('[name="use_market_costs"]')
@@ -105,6 +107,7 @@ def main():
                 page.locator("[data-use-scan]").first.click()
                 expect(page.locator("#research-output")).to_be_visible(timeout=30000)
                 expect(page.locator("#research-data-banner")).to_contain_text("АРХИВ")
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="setups"]').click()
                 page.locator("#setup-submit").click()
                 expect(page.locator("#setup-output")).to_contain_text("План заблокирован", timeout=10000)
@@ -114,12 +117,14 @@ def main():
                 assert page.locator("[data-check-setup]").count() == 0
                 page.screenshot(path=str(output / "setups.png"), full_page=True)
 
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="scanner"]').click()
                 page.reload(wait_until="networkidle")
                 expect(page.locator("#scanner-output")).to_be_visible(timeout=10000)
                 assert app.scanner.latest()["id"] == job["id"]
                 assert len(scan_requests) == 1, "Reloading must restore, not rerun, the job"
 
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="lab"]').click()
                 page.locator("#load-reference").click()
                 expect(page.locator(".reference-report")).to_have_count(11, timeout=10000)
@@ -135,9 +140,11 @@ def main():
                 page.set_viewport_size({"width": 390, "height": 844})
                 for tab in ("overview", "scanner", "lab", "setups", "firms", "checker",
                             "journal", "integrations", "updates"):
+                    page.locator("#advanced-tools").evaluate("element => element.open = true")
                     page.locator(f'[data-tab="{tab}"]').click()
                     assert not page.evaluate("document.documentElement.scrollWidth > innerWidth + 2"), \
                         f"Mobile horizontal overflow in {tab}"
+                page.locator("#advanced-tools").evaluate("element => element.open = true")
                 page.locator('[data-tab="scanner"]').click()
                 page.screenshot(path=str(output / "scanner-mobile.png"), full_page=True)
 
