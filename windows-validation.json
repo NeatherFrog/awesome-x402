@@ -1,0 +1,27 @@
+{
+  "archive_name": "PROP-LAB-Windows-x64-0.3.5.zip",
+  "archive_sha256": "edbaf7750e79a2650449d439e953726c3d98e2051a578d55ecdaeef32d8d6f8b",
+  "platform": "win32",
+  "status": "passed",
+  "version": "0.3.5",
+  "source_commit": "f59f31ad5a088028207c395baf4ab9080d426aa6",
+  "runtime": {
+    "python": "3.13.16",
+    "isolated": 1,
+    "sqlite": "3.50.4",
+    "ssl": "OpenSSL 3.5.9 29 Sep 2026"
+  },
+  "checks": [
+    "clean_extraction",
+    "isolated_runtime_imports",
+    "path_with_spaces",
+    "health_exact_commit",
+    "bootstrap",
+    "supervised_updater",
+    "real_update_restart",
+    "journal_preserved",
+    "settings_preserved",
+    "runtime_preserved",
+    "update_noop"
+  ]
+}
