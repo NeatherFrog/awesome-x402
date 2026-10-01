@@ -1,7 +1,7 @@
 'use strict';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-const state = {profiles: [], strategies: [], journal: {trades: [], stats: {}}, research: null, activeProfile: null, detailId: null, accountDirty: false, updates: null, updateAction: false, setup: null, scanJob: null, scanStarting: false};
+const state = {profiles: [], strategies: [], journal: {trades: [], stats: {}}, research: null, activeProfile: null, detailId: null, accountDirty: false, updates: null, updateAction: false, setup: null, scanJob: null, scanStarting: false, autopilot: null, autopilotAction: false, autopilotError: ''};
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const num = (value, digits = 2) => value === null || value === undefined || !Number.isFinite(Number(value)) ? '—' : Number(value).toLocaleString('ru-RU', {minimumFractionDigits: digits, maximumFractionDigits: digits});
 const money = value => value === null || value === undefined ? '—' : '$' + num(value);
@@ -57,7 +57,7 @@ const tabMeta = {
 overview:{label:'Обзор',eyebrow:'ОТ ИДЕИ ДО ПРОВЕРЕННОГО СЕТАПА',title:'Ваш торговый процесс.<br><span>Под контролем.</span>',description:'Стратегии, ограничения и дисциплина — в одном рабочем пространстве.'},
 scanner:{label:'Автопоиск',eyebrow:'РЫНКИ · СТРАТЕГИИ · НЕЗАВИСИМАЯ ПРОВЕРКА',title:'Пусть данные выбирают.<br><span>Вы следуете плану.</span>',description:'Автоматическое сравнение рынков с правом отклонить все варианты и остаться вне рынка.'},
 lab:{label:'Лаборатория',eyebrow:'ИССЛЕДОВАНИЕ · СРАВНЕНИЕ · ОТБОР',title:'Не угадывайте.<br><span>Проверяйте гипотезы.</span>',description:'Бэктест с издержками, отложенная выборка и проверка устойчивости.'},
-setups:{label:'Сетапы',eyebrow:'ВХОД · РИСК · ЦЕЛЬ · ОТМЕНА',title:'Планируйте уровни.<br><span>Проверяйте контекст.</span>',description:'Условные зоны по вашей истории, режиму рынка и подтверждённому вручную календарю.'},
+setups:{label:'Сетапы',eyebrow:'ВХОД · РИСК · ЦЕЛЬ · ОТМЕНА',title:'Планируйте уровни.<br><span>Проверяйте контекст.</span>',description:'Условные зоны по исследованной истории, режиму рынка и доступному новостному календарю.'},
 firms:{label:'Проп-фирмы',eyebrow:'СНАЧАЛА ДОГОВОР · ПОТОМ РИСК',title:'Знайте правила.<br><span>Берегите аккаунт.</span>',description:'Соберите собственные профили и сравнивайте ограничения до торговли.'},
 checker:{label:'Чекер сделки',eyebrow:'ПРОВЕРКА ДО ОТКРЫТИЯ ПОЗИЦИИ',title:'Сначала риск.<br><span>Потом решение.</span>',description:'Рассчитайте допустимый объём и проверьте ограничения своего аккаунта.'},
 journal:{label:'Дневник',eyebrow:'ПРОЦЕСС ВАЖНЕЕ ОДНОЙ СДЕЛКИ',title:'Фиксируйте сделки.<br><span>Улучшайте процесс.</span>',description:'Входы, издержки, дисциплина и выводы — в локальном дневнике.'},
@@ -99,6 +99,37 @@ if(p)$('#active-profile-summary').innerHTML=badge(p.status==='user_verified'?'П
 '<div class="profile-mini-row"><span>Капитал / цель</span><strong>'+esc(money(p.account_size))+' / '+esc(pct(p.profit_target_pct))+'</strong></div><div class="profile-mini-row"><span>Дневной / общий лимит</span><strong>'+esc(pct(p.daily_loss_pct))+' / '+esc(pct(p.max_loss_pct))+'</strong></div><div class="profile-mini-row"><span>Стоимость / доля выплаты</span><strong>'+esc(money(p.challenge_fee))+' / '+esc(pct(p.payout_split_pct))+'</strong></div>';
 $('#profiles-list').innerHTML=state.profiles.map(p=>'<article class="profile-card '+(p.id===state.activeProfile?'active':'')+'"><div class="profile-card-head"><div><h3>'+esc(p.name)+'</h3><div class="profile-type">'+esc({static:'Статическая просадка',trailing_eod:'Trailing на конец дня',trailing_intraday:'Trailing intraday'}[p.drawdown_type]||p.drawdown_type)+'</div></div>'+badge(p.status==='user_verified'?'ПРОВЕРЕНО ВАМИ':'УЧЕБНЫЙ ПРИМЕР',p.status==='user_verified'?'good':'warning')+'</div><div class="profile-numbers"><div><small>Аккаунт</small><strong>'+esc(money(p.account_size))+'</strong></div><div><small>Цель</small><strong>'+esc(pct(p.profit_target_pct))+'</strong></div><div><small>Доля выплаты</small><strong>'+esc(pct(p.payout_split_pct))+'</strong></div></div><div class="profile-mini-row"><span>Лимиты: день / всего</span><strong>'+esc(pct(p.daily_loss_pct))+' / '+esc(pct(p.max_loss_pct))+'</strong></div><div class="profile-mini-row"><span>Отбор / минимальные дни</span><strong>'+esc(money(p.challenge_fee))+' / '+esc(num(p.min_trading_days,0))+'</strong></div><div class="profile-rules">'+[['news_allowed','Новости'],['overnight_allowed','Ночь'],['weekend_allowed','Выходные'],['ea_allowed','Алгоритмы']].map(([key,label])=>'<span class="'+(p[key]!==true?'restricted':'')+'">'+esc(label)+' '+(p[key]===true?'✓':p[key]===false?'×':'?')+'</span>').join('')+'</div><div class="profile-actions"><button class="button button-secondary" data-edit-profile="'+esc(p.id)+'">Редактировать ↗</button><button class="button '+(p.id===state.activeProfile?'button-secondary':'button-primary')+'" data-select-profile="'+esc(p.id)+'">'+(p.id===state.activeProfile?'Активный профиль':'Использовать →')+'</button></div><p class="profile-meta">'+esc(p.verified_at?'Сверено: '+timestamp(p.verified_at):'Условия реальной фирмы не подтверждены')+'</p></article>').join('');
 }
+const firmModelGaps={two_evaluation_phases:'Два самостоятельных этапа отбора',stage_specific_min_days:'Отдельные торговые дни по этапам',conditional_fee_refund:'Условный возврат вступительного взноса',configured_fee:'Точная цена выбранного аккаунта',actual_instrument_costs:'Реальные издержки инструмента',agreement_and_user_region:'Применимый договор и регион пользователя',positive_day_denominator:'Лучший день относительно суммы прибыльных дней',reward_reset:'Сброс условий после выплаты',funded_standard_news_weekend:'Новости и переносы на Standard Account',zero_based_xfa_balance:'Express Account начинается с нулевого баланса',trailing_balance_cap:'Trailing-граница и её остановка',DLL_session_stop_not_breach:'Дневной стоп сессии отдельно от нарушения аккаунта',subscription_activation:'Подписка и активация аккаунта',winning_day_threshold:'Требования к прибыльному дню',payout_caps_withdrawal_floor:'Лимит выплаты и граница после вывода',scaling_tier_image:'Непроверенные уровни масштабирования',remote_order_flow_prohibited:'Запрет передачи заявок с удалённого сервера',LFA_distinct_cost_conflict:'Противоречия в издержках Live Account'};
+function officialSourceLink(value,label) {
+try{const url=new URL(value);if(url.protocol==='https:'&&!url.username&&!url.password)return '<a href="'+esc(url.href)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+' ↗</a>';}catch{}
+return esc(label);
+}
+function renderFirmReview(data) {
+const products=data.draft_products||data.proposed_products||[],sources=data.sources||[],facts=data.facts||[],priority=data.research_priority||{},candidate=products.find(product=>product.id===(priority.product_id||data.decision?.candidate_product_id));
+if(data.review_status==='unavailable'||!products.length)throw new Error('Подготовленная сводка ещё не опубликована в этой версии.');
+let html='<div class="firm-review-status">'+badge('ПУБЛИЧНАЯ СВЕРКА · ПРАВИЛА НЕ ПОДТВЕРЖДЕНЫ','warning')+'<small>Сверено: '+esc(timestamp(data.reviewed_at))+' · '+esc(num(sources.length,0))+' источников · '+esc(num(facts.length,0))+' фактов</small></div>';
+if(candidate)html+='<div class="firm-review-priority"><span class="eyebrow">ПРИОРИТЕТ ИССЛЕДОВАНИЯ ДОГОВОРА</span><h3>'+esc(candidate.firm+' · '+candidate.product)+'</h3><p>Условные стратегии FX и металлов с переносом позиций: сначала проверяем статический общий лимит, отдельные этапы и разрешённый режим Swing.</p><div class="firm-review-facts">'+inlineMetric('Рабочий рынок','Не выбран')+inlineMetric('Подтверждённый профиль','Нет')+inlineMetric('Ожидаемая прибыль','Не установлена')+'</div><p class="field-help">Нужны устойчивый holdout и форвард-проверка, точная стоимость аккаунта, спецификация инструментов и модель каждого этапа. Текущие исследования могут отклонить все рынки.</p></div>';
+html+='<div class="firm-review-products">'+products.map(product=>{
+const topstep=Boolean(product.tc_mll),limits=[],terms=[];
+if(topstep){limits.push('Combine: цель '+money(product.tc_profit_target_usd)+' на '+money(product.tc_initial_balance_usd));limits.push('Trailing от максимума EOD balance: '+money(product.tc_mll.allowance_usd)+', граница до '+money(product.tc_mll.cap_floor_usd));limits.push('Лучший день: '+pct(product.tc_best_day_pct_total_net)+' общего net P&L');limits.push('XFA: стартовый баланс '+money(product.xfa_initial_balance_usd)+', начальная граница '+money(product.xfa_mll_initial_floor_usd));terms.push('Подписка '+money(product.tc_base_monthly_fee_usd)+'/месяц; активация XFA '+money(product.xfa_standard_activation_usd));if(product.payout)terms.push('Выплата: '+num(product.payout.winning_days,0)+' дней с net ≥ '+money(product.payout.minimum_daily_net_usd)+', доля '+pct(product.payout.split_pct)+', cap '+money(product.payout.standard_cap_usd));}
+else{if(product.stage_targets_pct)limits.push('Цели: Challenge '+pct(product.stage_targets_pct.challenge)+' → Verification '+pct(product.stage_targets_pct.verification));else if(product.id==='review-ftmo-1step-standard'){const target=facts.find(fact=>fact.id==='ftmo_1step_target')?.structured_value?.challenge_target_pct;if(target!==undefined)limits.push('Цель Challenge: '+pct(target));}limits.push('Дневной лимит: '+pct(product.daily_loss_pct_original)+' исходного капитала; сброс '+(product.daily_reset||'не установлен'));if(product.total_loss)limits.push('Общий лимит: '+pct(product.total_loss.pct_original)+' · '+(product.total_loss.type==='static'?'статический':'Trailing EOD balance'));if(product.min_opening_days)limits.push('Минимум '+num(product.min_opening_days.challenge,0)+' торговых дней на каждом этапе');if(product.best_day_rule)limits.push('Лучший день: '+pct(product.best_day_rule.pct)+' суммы net P&L прибыльных дней');terms.push('Точная цена аккаунта не установлена'+(product.advertised_entry_fee_from?'; рекламный минимум '+num(product.advertised_entry_fee_from.amount,0)+' '+product.advertised_entry_fee_from.currency:''));terms.push('Базовая доля выплаты: '+pct(product.payout_split_base_pct));}
+const productSources=sources.filter(source=>(product.source_ids||[]).includes(source.id));
+return '<article class="firm-review-product" data-review-product="'+esc(product.id)+'"><div>'+badge(product.id===candidate?.id?'ПРИОРИТЕТ ДОГОВОРА':'ДРУГОЙ СЦЕНАРИЙ','neutral')+'<h3>'+esc(product.firm)+'</h3><p>'+esc(product.product)+'</p></div><h4>Этапы и лимиты</h4><ul>'+limits.map(value=>'<li>'+esc(value)+'</li>').join('')+'</ul><h4>Стоимость и выплаты</h4><ul>'+terms.map(value=>'<li>'+esc(value)+'</li>').join('')+'</ul><details class="settings-details"><summary>Что не покрывает текущая модель ('+(product.model_gaps||[]).length+')</summary><ul class="reasons-list">'+(product.model_gaps||[]).map(gap=>'<li>'+esc(firmModelGaps[gap]||gap)+'</li>').join('')+'</ul></details><details class="settings-details"><summary>Источники продукта ('+productSources.length+')</summary><ul class="reasons-list">'+productSources.map(source=>'<li>'+officialSourceLink(source.final_url||source.requested_url,source.title||source.id)+'<small>'+esc(timestamp(source.retrieved_at))+' · SHA-256 '+esc(String(source.body_sha256||'').slice(0,12))+'</small></li>').join('')+'</ul></details></article>';
+}).join('')+'</div>';
+const important=['ftmo_swing_rules','ftmo_ea','ftmo_vps','topstep_automation_personal_device','topstep_automation_readonly_server'];
+const summaries={ftmo_swing_rules:'Swing: новости, ночь и выходные разрешены с сохранением запретов торговых практик; сменить Standard на Swing после покупки нельзя.',ftmo_ea:'FTMO: EA разрешены условно. Применяются требования к риску, нагрузке и допустимым торговым практикам.',ftmo_vps:'FTMO: VPS/VPN обычно разрешены, но есть исключение для геолокации США на отдельных платформах.',topstep_automation_personal_device:'Topstep: заявки должны исходить с личного устройства; удалённый VPS/VPN/сервер для заявок запрещён.',topstep_automation_readonly_server:'Topstep: сервер может исследовать историю и вести журналы. Размещение, изменение, отмена и передача заявок с него запрещены.'};
+html+='<details class="firm-review-evidence"><summary>Новости, алгоритмы и облачный запуск · выдержки источников</summary>'+facts.filter(fact=>important.includes(fact.id)).map(fact=>'<article><h4>'+esc(summaries[fact.id]||fact.claim)+'</h4><blockquote>'+esc(fact.supporting_quote)+'</blockquote><p>'+officialSourceLink(fact.source_url,'Официальный источник')+'</p></article>').join('')+'</details>';
+if(data.unknowns?.length)html+='<details class="firm-review-evidence"><summary>Неразрешённые вопросы и противоречия ('+data.unknowns.length+')</summary><ul class="reasons-list">'+data.unknowns.map(item=>'<li><strong>'+esc(item.firm)+' · '+esc(item.id.replaceAll('_',' '))+'</strong><p>'+esc(item.detail)+'</p></li>').join('')+'</ul></details>';
+html+='<p class="firm-review-footer">Документальная сводка не добавляет подтверждённые профили аккаунтов. <a href="/api/firms/review" target="_blank" rel="noopener noreferrer">Полный отчёт JSON ↗</a></p>';
+$('#firm-review-output').innerHTML=html;$('#firm-review-output').hidden=false;
+}
+async function loadFirmReview(manual=false) {
+const button=$('#load-firm-review');if(manual)busy(button,true,'Загружаем…');notice('firm-review-error','');
+try{const response=await api('/api/firms/review');renderFirmReview(response.review||response);}
+catch(e){notice('firm-review-error','Сводка официальных правил недоступна: '+e.message);}
+finally{if(manual)busy(button,false);}
+}
+$('#load-firm-review').addEventListener('click',()=>loadFirmReview(true));
 function selectProfile(id) {
 const profile=itemById(state.profiles,id);if(!profile)return;
 state.activeProfile=id;try{localStorage.setItem('prop-lab-profile',id);}catch{}
@@ -358,7 +389,7 @@ html+='<div class="setup-context-chips">'+badge(['long','short'].includes(plan.d
 html+='<div class="setup-time"><span>Свеча: '+esc(timestamp(plan.reference_time))+'</span><span>Срок плана: '+esc(timestamp(plan.expires_at))+'</span></div>';
 html+='<div class="price-zones">'+zoneCard('Зона входа',plan.entry_zone,'entry',triggerText)+zoneCard('Стоп-лосс',plan.stop_loss,'stop','Граница сценария; гэп может увеличить убыток')+zoneCard('Зона фиксации прибыли',plan.take_profit_zone,'target',plan.take_profit_zone?.target!==undefined?'Основная цель: '+price(plan.take_profit_zone.target):'Условная цель по модели')+zoneCard('Зона отмены идеи',plan.invalidation_zone,'cancel','При нарушении условия не открывайте сценарий')+'</div>';
 if(plan.rr!==null&&plan.rr!==undefined)html+='<p class="chart-caption">R:R по уровням: '+esc(num(plan.rr))+' · фактические издержки и риск проверьте отдельно.</p>';
-html+='<div class="setup-context-summary"><div><small>Настроение</small><strong>'+esc(sentimentLabel)+'</strong></div><div><small>Календарь</small><strong>'+esc({clear:'Нет событий в окне',checked_no_blackout:'Проверен · нет окна новостей',blackout:'Важное событие в окне',blocked:'Событие в опасном окне',unknown:'Не проверен',unconfirmed:'Не подтверждён'}[news]||news||'Не проверен')+'</strong></div></div>';
+html+='<div class="setup-context-summary"><div><small>Настроение</small><strong>'+esc(sentimentLabel)+'</strong></div><div><small>Календарь'+(context.news_generation==='provider'?' · публичный снимок':context.news_generation==='manual'?' · ручной':'')+'</small><strong>'+esc({clear:'Нет событий в окне',checked_no_blackout:'Проверен · нет окна новостей',blackout:'Важное событие в окне',blocked:'Событие в опасном окне',unknown:'Не проверен',unconfirmed:'Не подтверждён'}[news]||news||'Не проверен')+'</strong></div></div>';
 if(plan.reasons?.length)html+='<h3 class="mini-table-title">Почему это решение</h3><ul class="reasons-list">'+setupReasons(plan.reasons)+'</ul>';
 if(plan.invalidation_conditions?.length)html+='<h3 class="mini-table-title">Когда отменить идею</h3><ul class="reasons-list">'+setupReasons(plan.invalidation_conditions)+'</ul>';
 if(plan.warnings?.length)html+='<details class="settings-details" open><summary>Что учитывать перед проверкой</summary><ul class="reasons-list">'+setupReasons(plan.warnings)+'</ul></details>';
@@ -390,6 +421,7 @@ if(sentimentConfirmed&&(!source||!observed))throw new Error('Для подтве
 if(newsConfirmed&&(!newsSource||!newsObserved))throw new Error('Для подтверждённого календаря нужны источник и время проверки.');
 const score=numeric(form,'sentiment_score');if(!Number.isFinite(score)||score<-1||score>1)throw new Error('Оценка настроения должна быть от −1 до +1.');
 const context={macro_cycle:form.elements.namedItem('macro_cycle').value,sentiment:observed?{score,observed_at:new Date(observed).toISOString(),source,confirmed:sentimentConfirmed}:{},news:{confirmed:newsConfirmed,source:newsSource,observed_at:newsObserved?new Date(newsObserved).toISOString():null,events:$$('.news-event').map(row=>Object.fromEntries(['title','currency','impact','time','known_at'].map(key=>{const value=$('[data-event="'+key+'"]',row).value;return [key,['time','known_at'].includes(key)?new Date(value).toISOString():value.trim()];})))}};
+if(!newsConfirmed&&!newsSource&&!newsObserved&&!context.news.events.length)delete context.news;
 busy(button,true,'Проверяем контекст…');form.setAttribute('aria-busy','true');const response=await post('/api/setups',{context});renderSetup(response.setup||response);toast('Условный план рассчитан. Проверьте причины решения.');
 }catch(e){notice('setup-error',e instanceof RangeError?'Проверьте время новостей и оценки настроения.':e.message);}
 finally{busy(button,false);form.removeAttribute('aria-busy');}
@@ -446,9 +478,10 @@ form.setAttribute('aria-busy',String(active));
 $('#scanner-empty').hidden=Boolean(job)||state.scanStarting;
 $('#scanner-job-panel').hidden=!job&&!state.scanStarting;
 $('#scanner-output').hidden=active||!job?.result||job.state!=='completed';
+renderAutopilot();
 if(!job&&!state.scanStarting)return;
 const progress=job?.progress||{},details=progress.details||{},stage=progress.stage||'loading';
-const title=state.scanStarting?'Запускаем поиск':job?.state==='completed'?'Исследование завершено':job?.state==='failed'?'Поиск не завершён':job?.state==='interrupted'?'Поиск прерван':{starting:'Подготавливаем поиск',loading:'Загружаем историю',training:'Сравниваем на обучении',locking:'Фиксируем выбор обучения',training_locked:'Выбор обучения зафиксирован',holdout:'Проверяем отложенную историю',validation:'Проверяем устойчивость',completed:'Исследование завершено'}[stage]||'Исследуем рынки';
+const title=state.scanStarting?'Запускаем поиск':job?.state==='completed'?'Исследование завершено':job?.state==='failed'?'Поиск не завершён':job?.state==='interrupted'?'Поиск прерван':{starting:'Подготавливаем поиск',calendar:'Обновляем публичный календарь',loading:'Загружаем историю',training:'Сравниваем на обучении',locking:'Фиксируем выбор обучения',training_locked:'Выбор обучения зафиксирован',holdout:'Проверяем отложенную историю',validation:'Проверяем устойчивость',completed:'Исследование завершено'}[stage]||'Исследуем рынки';
 $('#scanner-stage').textContent=title;
 $('#scanner-job-badge').textContent=state.scanStarting||job?.state==='running'?'Выполняется':{completed:'Готово',failed:'Ошибка',interrupted:'Прерван'}[job?.state]||job?.state||'Подготовка';
 $('#scanner-job-badge').className='badge badge-'+(job?.state==='completed'?'good':['failed','interrupted'].includes(job?.state)?'warning':'neutral');
@@ -520,6 +553,87 @@ try{const response=await post('/api/scanner/use',{job_id:button.dataset.scanJob,
 catch(e){notice('scanner-error',e.message);toast(e.message);}
 finally{busy(button,false);}
 });
+
+function renderCalendarStatus(data) {
+const ready=data.state==='ready'&&data.confirmed===true;
+$('#calendar-feed-badge').textContent=ready?'Снимок готов':data.state==='stale'?'Устарел':'Нет данных';
+$('#calendar-feed-badge').className='badge badge-'+(ready?'good':'warning');
+const provider=data.provider||'Публичный недельный календарь';
+$('#calendar-feed-note').textContent=provider+'. '+(ready?'Получен '+timestamp(data.retrieved_at)+', событий: '+num(data.event_count,0)+'. Полноту расписания и торговые запреты проверьте по договору.':data.retrieved_at?'Последний снимок '+timestamp(data.retrieved_at)+'. Без свежей области календарь считается неизвестным.':'Свежего снимка нет; календарь считается неизвестным. Автопоиск обновляет его перед загрузкой рынков.');
+notice('calendar-feed-message',data.last_error||'', 'warning');
+}
+async function loadCalendarStatus(refresh=false) {
+const button=$('#refresh-calendar');if(refresh)busy(button,true,'Получаем календарь…');
+try{const data=refresh?await post('/api/news/refresh',{}):await api('/api/news/status');renderCalendarStatus(data);if(refresh)toast(data.confirmed?'Публичный снимок календаря обновлён.':'Свежий календарь пока недоступен; причина указана в статусе.');}
+catch(e){$('#calendar-feed-badge').textContent='Нет связи';$('#calendar-feed-badge').className='badge badge-warning';notice('calendar-feed-message','Календарь недоступен: '+e.message);}
+finally{if(refresh)busy(button,false);}
+}
+$('#refresh-calendar').addEventListener('click',()=>loadCalendarStatus(true));
+
+let autopilotPollTimer,autopilotRequestSerial=0,autopilotResearchJob=null,autopilotCalendarJob=null;
+function renderAutopilot() {
+const data=state.autopilot,toggle=$('#autopilot-toggle'),run=$('#autopilot-run');
+$('.autopilot-card').setAttribute('aria-busy',String(state.autopilotAction));
+toggle.setAttribute('aria-pressed',String(data?.enabled===true));
+toggle.disabled=state.autopilotAction||!data;
+run.disabled=state.autopilotAction||!data||data.running===true||scannerIsActive();
+$('#autopilot-refresh').disabled=state.autopilotAction;
+$('#autopilot-results').disabled=!(data?.job_id||state.scanJob?.id);
+if(!data){if(state.autopilotError){$('#autopilot-badge').textContent='Нет связи';$('#autopilot-description').textContent='Состояние автоматического поиска сейчас недоступно.';notice('autopilot-error',state.autopilotError);}return;}
+toggle.innerHTML=state.autopilotAction?'Сохраняем…':data.enabled?'Выключить автопилот <span>Ⅱ</span>':'Включить автопилот <span>→</span>';
+const label=data.running?(data.state==='stalled'?'Проверка задержана':data.enabled?'Проверяет рынки':'Завершает проверку'):data.enabled?(data.last_error?'Ожидает повтора':data.state==='waiting_for_idle'?'Ждёт свободного окна':'Включён'):'Выключен';
+$('#autopilot-badge').textContent=label;
+$('#autopilot-badge').className='badge badge-'+(data.last_error?'warning':data.enabled?'good':'neutral');
+$('#autopilot-description').textContent=data.running?(data.enabled?'Поиск выполняется в фоне. Результаты и причины решения появятся в «Автопоиске».':'Новые автоматические проверки остановлены. Текущая проверка завершится и сохранит результат.'):data.enabled?'Программа сама загружает историю, сравнивает рынки и повторяет исследование по расписанию.':'Автоматические проверки остановлены. Можно включить расписание или запустить одну проверку по кнопке.';
+$('#autopilot-last-attempt').textContent=data.last_attempt_at?timestamp(data.last_attempt_at):'Ещё не было';
+$('#autopilot-next-attempt').textContent=!data.enabled&&!data.running?'Остановлен':data.next_attempt_at?timestamp(data.next_attempt_at):data.running?'После завершения':'Ожидается расписание';
+$('#autopilot-result').textContent=data.running?'Проверка выполняется':data.result_ready?(data.selected_symbol?'Кандидат исследований: '+data.selected_symbol:'Устойчивый кандидат не найден'):data.last_error?'Нужна повторная проверка':data.job_id?'Результат пока не готов':'Результатов пока нет';
+const error=state.autopilotError||(data.last_error?(typeof data.last_error==='string'?data.last_error:JSON.stringify(data.last_error)):'');
+notice('autopilot-error',error,state.autopilotError?'error':'warning');
+if(state.autopilotError){$('#autopilot-badge').textContent='Требует внимания';$('#autopilot-badge').className='badge badge-warning';}
+}
+function scheduleAutopilotPoll() {
+clearTimeout(autopilotPollTimer);
+if(state.autopilot&&(state.autopilot.enabled||state.autopilot.running))autopilotPollTimer=setTimeout(()=>loadAutopilotStatus(),state.autopilot.running?5000:20000);
+}
+async function synchronizeAutopilotResearch(data) {
+if(data.running||!data.result_ready||!data.job_id||autopilotResearchJob===data.job_id)return;
+if(state.research?.autopilot_job_id===data.job_id){autopilotResearchJob=data.job_id;return;}
+const job=data.job_id,previous=state.research;
+try{
+const response=await api('/api/research/latest');
+if(state.autopilot?.job_id!==job||state.autopilot.running)return;
+autopilotResearchJob=job;
+if(response.research?.autopilot_job_id===job&&state.research===previous)renderResearch(response.research);
+}catch(e){if(state.autopilot?.job_id===job){state.autopilotError='Результат поиска сохранён, но исследование не удалось показать: '+e.message;renderAutopilot();}}
+}
+async function loadAutopilotStatus() {
+clearTimeout(autopilotPollTimer);if(state.autopilotAction)return;
+const serial=++autopilotRequestSerial;
+try{
+const response=await api('/api/autopilot');if(serial!==autopilotRequestSerial||state.autopilotAction)return;
+state.autopilot=response.autopilot||response;state.autopilotError='';renderAutopilot();
+if(state.autopilot.job_id&&state.autopilot.job_id!==state.scanJob?.id)await loadScannerLatest();
+await synchronizeAutopilotResearch(state.autopilot);
+if(state.autopilot.job_id&&!state.autopilot.running&&autopilotCalendarJob!==state.autopilot.job_id){autopilotCalendarJob=state.autopilot.job_id;await loadCalendarStatus();}
+}catch(e){if(serial!==autopilotRequestSerial)return;state.autopilotError='Состояние автопилота недоступно: '+e.message;renderAutopilot();}
+finally{if(serial===autopilotRequestSerial&&!state.autopilotAction)scheduleAutopilotPoll();}
+}
+async function changeAutopilot(payload) {
+if(state.autopilotAction)return;clearTimeout(autopilotPollTimer);++autopilotRequestSerial;state.autopilotAction=true;state.autopilotError='';renderAutopilot();notice('autopilot-error','');
+try{
+const response=await post('/api/autopilot',payload);state.autopilot=response.autopilot||response;state.autopilotError='';renderAutopilot();
+if(state.autopilot.job_id)await loadScannerLatest();
+await synchronizeAutopilotResearch(state.autopilot);
+if(state.autopilot.job_id&&!state.autopilot.running&&autopilotCalendarJob!==state.autopilot.job_id){autopilotCalendarJob=state.autopilot.job_id;await loadCalendarStatus();}
+toast(payload.action==='run'?(state.autopilot.running?'Проверка запущена. Результат появится в «Автопоиске».':'Запрос проверки обработан. Состояние показано в карточке.'):state.autopilot.enabled?'Автопилот включён. Проверки будут повторяться автоматически.':'Расписание автопилота выключено.');
+}catch(e){state.autopilotError='Изменение автопилота не выполнено: '+e.message;notice('autopilot-error',state.autopilotError);toast(e.message);}
+finally{state.autopilotAction=false;renderAutopilot();scheduleAutopilotPoll();}
+}
+$('#autopilot-toggle').addEventListener('click',()=>{if(state.autopilot)changeAutopilot({enabled:!state.autopilot.enabled});});
+$('#autopilot-run').addEventListener('click',()=>changeAutopilot({action:'run'}));
+$('#autopilot-refresh').addEventListener('click',loadAutopilotStatus);
+$('#autopilot-results').addEventListener('click',()=>{navigate('scanner');loadScannerLatest();});
 
 function renderUpdates() {
 const data=state.updates,apply=$('#apply-update'),check=$('#check-updates');
@@ -596,7 +710,7 @@ $('#open-updates').addEventListener('click',()=>{navigate('updates');checkUpdate
 
 window.addEventListener('hashchange',()=>navigate(location.hash.slice(1),false));
 async function initialize() {
-navigate(location.hash.slice(1),false);setJournalDates();editProfile(null);scannerCostControls();['sentiment_observed_at','news_observed_at'].forEach(name=>$('#setup-form').elements.namedItem(name).value=localDateInput(new Date()));
+navigate(location.hash.slice(1),false);setJournalDates();editProfile(null);scannerCostControls();$('#setup-form').elements.namedItem('sentiment_observed_at').value=localDateInput(new Date());
 try{
 const data=await api('/api/bootstrap');state.profiles=data.profiles||[];state.strategies=data.strategies||[];
 let saved;try{saved=localStorage.getItem('prop-lab-profile');}catch{}
@@ -605,7 +719,7 @@ renderProfiles();renderCatalog();renderJournal(data.journal||{trades:[],stats:{}
 if(state.activeProfile)selectProfile(state.activeProfile);
 if(data.symbols?.length)$('#research-symbol').innerHTML=data.symbols.map(symbol=>'<option>'+esc(symbol)+'</option>').join('');
 $('#webhook-status').textContent=data.webhook_configured?'Приём событий настроен. Заявки не исполняются.':'Приём webhook не настроен. Для подключения задайте WEBHOOK_TOKEN в окружении сервера; секрет не показывается в интерфейсе.';$('#app-version').textContent=data.version?'v'+data.version:'—';$('#connection-status').textContent='Локальный сервер';$('#connection-status').className='connection connected';
-if(data.latest_research){renderResearch(data.latest_research);}loadSignals();loadUpdateStatus();loadScannerLatest();
+if(data.latest_research){renderResearch(data.latest_research);}loadSignals();loadUpdateStatus();loadScannerLatest();loadAutopilotStatus();loadFirmReview();loadCalendarStatus();
 }catch(e){notice('global-error',e.message);$('#connection-status').textContent='Нет связи';$('#connection-status').className='connection disconnected';}
 }
 initialize();

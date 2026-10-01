@@ -1,0 +1,2011 @@
+{
+  "schema": 1,
+  "review_status": "public_source_documentary_draft",
+  "reviewed_at": "2026-10-01T09:29:03.818564Z",
+  "user_verified": false,
+  "current_public_sources_accessible": true,
+  "supersedes": "Earlier HTTP403 reports describe earlier network observations. These current public reads succeeded on 2026-10-01.",
+  "source_policy": "Read-only official public HTTPS. TLS certificate and hostname verification retained. No login, account action, purchase, broker connection or user attestation. Body SHA256 refers to exact retrieved response bytes. Published source excerpts are limited to one short excerpt of at most 20 words per URL; findings are reviewer paraphrases. Raw bodies remain local evidence, not public redistribution.",
+  "sources": [
+    {
+      "id": "ftmo-0",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/trading-objectives/",
+      "final_url": "https://ftmo.com/en/trading-objectives/",
+      "title": "Trading Objectives | FTMO.com",
+      "retrieved_at": "2026-10-01T09:21:07.183110Z",
+      "body_sha256": "8a5dc90f3517cfd7b0cc4239f86634ab6d62aacf44b3bb06762b2ee57363589d",
+      "body_bytes": 288090,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The Profit Target for the FTMO Challenge is calculated as 10% of the Initial Simulated Capital. This rule only applies…"
+    },
+    {
+      "id": "ftmo-3",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/forbidden-trading-practices/",
+      "final_url": "https://ftmo.com/en/forbidden-trading-practices/",
+      "title": "Forbidden Trading Practices | FTMO.com",
+      "retrieved_at": "2026-10-01T09:21:07.220521Z",
+      "body_sha256": "dd8410cf2766d7862b61ea221c589882477f67a5f81faafc05feb68ac9e1142d",
+      "body_bytes": 236958,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "knowingly or unknowingly use trading strategies that exploit errors in our Services, such as errors in the display of prices…"
+    },
+    {
+      "id": "ftmo-4",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/can-i-trade-news/",
+      "final_url": "https://ftmo.com/en/faq/can-i-trade-news/",
+      "title": "Can I trade news? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:21:07.443339Z",
+      "body_sha256": "7e5e6d1580e147336b8a4d5b53a25737b2f187395a7bbc428b82f24bf10cc5ec",
+      "body_bytes": 314600,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Restrictions for trading during selected news releases apply only to the Standard account type . The Swing account type have…"
+    },
+    {
+      "id": "ftmo-6",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/how-do-i-withdraw-my-profits/",
+      "final_url": "https://ftmo.com/en/faq/how-do-i-withdraw-my-profits/",
+      "title": "How do I withdraw my reward? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:21:07.660243Z",
+      "body_sha256": "50294c9c79e4b20c6faf8a01c7d6ae60f162bc4ea16149465b9b0d965d982490",
+      "body_bytes": 308634,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "You can request a Reward claim in the Account MetriX on the 14th or any following day after the first…"
+    },
+    {
+      "id": "ftmo-7",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/which-instruments-can-i-trade-and-what-strategies-am-i-allowed-to-use/",
+      "final_url": "https://ftmo.com/en/faq/which-instruments-can-i-trade-and-what-strategies-am-i-allowed-to-use/",
+      "title": "Which instruments can I trade and what strategies am I allowed to use? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:21:07.891300Z",
+      "body_sha256": "fe5df8f49e7376da9e28fb71c717f6fe88e5b69f7a3dc4c6b3c490d69c7971b4",
+      "body_bytes": 310760,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Your trading style is up to you. As long as your trading is legitimate (in line with proper risk management),…"
+    },
+    {
+      "id": "ftmo-8",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/do-i-have-to-close-my-positions-overnight-or-before-the-weekend/",
+      "final_url": "https://ftmo.com/en/faq/do-i-have-to-close-my-positions-overnight-or-before-the-weekend/",
+      "title": "Do I have to close my positions overnight or before the weekend? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:06.578405Z",
+      "body_sha256": "5cbc4712fd4ffc7ef6893e15a265cb084c6d6f100753b5aa082b8821481910bc",
+      "body_bytes": 309575,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Overnight and weekend position restrictions apply only to the Standard account type. The Swing account type does not have any…"
+    },
+    {
+      "id": "ftmo-9",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/ftmo-swing-account-type/",
+      "final_url": "https://ftmo.com/en/faq/ftmo-swing-account-type/",
+      "title": "FTMO Swing account type | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:06.592376Z",
+      "body_sha256": "1952f1d0e5096d22947392011e77b240186bf00f921e0927b324ff85721185c4",
+      "body_bytes": 309953,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The FTMO Swing account type does not have any restrictions on trading during news releases or on holding positions overnight…"
+    },
+    {
+      "id": "ftmo-10",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/is-the-swing-account-type-available-for-ftmo-challenge-1-step/",
+      "final_url": "https://ftmo.com/en/faq/is-the-swing-account-type-available-for-ftmo-challenge-1-step/",
+      "title": "Is the Swing account type available for FTMO Challenge: 1-Step? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:06.465156Z",
+      "body_sha256": "d32e3e3d5e74ea6972ebb812904b14edc4b40b6ea00a4f66949f85de7720fb30",
+      "body_bytes": 306078,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "No. The Swing account type is not available for FTMO Challenge: 1-Step. The Swing account type is offered exclusively within…"
+    },
+    {
+      "id": "ftmo-11",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/is-the-entry-fee-refunded/",
+      "final_url": "https://ftmo.com/en/faq/is-the-entry-fee-refunded/",
+      "title": "Is the entry fee refunded? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:08.518379Z",
+      "body_sha256": "4dfabc93626cb513f8db94f5b8876444f50cf68f6c3139b00ff9415716f6bad5",
+      "body_bytes": 306569,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "FTMO Challenge: 1-Step The entry fee is not refunded. FTMO Challenge: 2-Step The entry fee may be refunded with the…"
+    },
+    {
+      "id": "ftmo-12",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/are-the-fees-recurrent/",
+      "final_url": "https://ftmo.com/en/faq/are-the-fees-recurrent/",
+      "title": "Do we charge any other fees? Are the fees recurrent? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:06.707981Z",
+      "body_sha256": "c58dfdcd8d61075dd6bd970bbcd069f77485b25fe6352de61079da639f32471b",
+      "body_bytes": 307966,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "No, we do not charge any additional or hidden fees. The fee paid for an FTMO Challenge is a one-time…"
+    },
+    {
+      "id": "ftmo-13",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/what-are-the-account-specifications/",
+      "final_url": "https://ftmo.com/en/faq/what-are-the-account-specifications/",
+      "title": "What are the account specifications? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:06.877032Z",
+      "body_sha256": "c63198bc02d5a33c3610573601a59759315ae144df22f414a955333a03fb5d2d",
+      "body_bytes": 307917,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The account specification can be seen directly in the trading platform. To view the instrument specification in MetaTrader, open your…"
+    },
+    {
+      "id": "ftmo-14",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/#pricing",
+      "final_url": "https://ftmo.com/en/#pricing",
+      "title": "The Modern Prop Trading Firm since 2015 | FTMO",
+      "retrieved_at": "2026-10-01T09:22:06.930405Z",
+      "body_sha256": "443f5749beee132c9bedfbd0b6f041930c9a329eb93577030400028e3606c844",
+      "body_bytes": 458335,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "ftmo-15",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/symbols/",
+      "final_url": "https://ftmo.com/en/symbols/",
+      "title": "Symbols | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:06.944432Z",
+      "body_sha256": "57467fe77005291eeaf073f146a5a13eb0574e1f234e0ea867ba02a6713d0bdb",
+      "body_bytes": 233979,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "ftmo-16",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/futures/trading-objectives-and-rules/",
+      "final_url": "https://ftmo.com/en/futures/trading-objectives-and-rules/",
+      "title": "Futures Trading Objectives & Rules | FTMO.com",
+      "retrieved_at": "2026-10-01T09:22:07.367694Z",
+      "body_sha256": "60aab80b5eb23e9e5f8aa20b83f4d6579a502225e12cccf06b5a999351702fcc",
+      "body_bytes": 685231,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Futures Trading Objectives & Rules Every rule you need to meet on each account, from Evaluation to your first daily…"
+    },
+    {
+      "id": "ftmo-17",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/do-you-have-any-consistency-rules/",
+      "final_url": "https://ftmo.com/en/faq/do-you-have-any-consistency-rules/",
+      "title": "Do you have any consistency rules? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:23:29.670439Z",
+      "body_sha256": "dc9bc7330ae6addf2887d3fc24d53cf6c443897a0804ccc1ba8c1a05c8c7698b",
+      "body_bytes": 307518,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "ftmo-18",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/can-i-travel-or-use-vpn-vps/",
+      "final_url": "https://ftmo.com/en/faq/can-i-travel-or-use-vpn-vps/",
+      "title": "Can I travel or use VPN/VPS? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:23:29.637491Z",
+      "body_sha256": "ac7b25ed9c2cd437e46721aee3f84c326b6e39fb13330cce1c5142cb0aa6146b",
+      "body_bytes": 306993,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Trading with FTMO while travelling to a different country is generally allowed. The use of VPN/VPS is also generally allowed.…"
+    },
+    {
+      "id": "ftmo-19",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/how-do-ftmo-challenge-1-step-and-ftmo-challenge-2-step-differ/",
+      "final_url": "https://ftmo.com/en/faq/how-do-ftmo-challenge-1-step-and-ftmo-challenge-2-step-differ/",
+      "title": "How do FTMO Challenge: 1-Step and FTMO Challenge: 2-Step differ? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:23:29.695701Z",
+      "body_sha256": "3c66b383e0e18e4a66b437a76190400063fa2e1d4805afbdc8823386770990cd",
+      "body_bytes": 308519,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "FTMO Challenge: 1-Step is a simplified evaluation product that consists of a single evaluation phase called FTMO Challenge. FTMO Challenge:…"
+    },
+    {
+      "id": "ftmo-20",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/faq/who-can-join-ftmo/",
+      "final_url": "https://ftmo.com/en/faq/who-can-join-ftmo/",
+      "title": "Who can join FTMO? | FTMO.com",
+      "retrieved_at": "2026-10-01T09:23:29.653362Z",
+      "body_sha256": "4f3da9ba53eea4da45c5a42590587b129b471c6ec387f9c28d0f9baf0e9e2076",
+      "body_bytes": 309943,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Apart from the exceptions listed below, we accept clients globally, as depicted in the accompanying map. No specific qualifications are…"
+    },
+    {
+      "id": "ftmo-21",
+      "firm": "FTMO",
+      "requested_url": "https://ftmo.com/en/comparison-table/",
+      "final_url": "https://ftmo.com/en/comparison-table/",
+      "title": "Comparison Table | FTMO.com",
+      "retrieved_at": "2026-10-01T09:23:46.212687Z",
+      "body_sha256": "986001c91fe0aea9adb2e5a297854e5dccb0d74109427fa158cf1071472fd29f",
+      "body_bytes": 251707,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Trading Period Unlimited Unlimited Rewards Up to 90% 90% Best Day Rule – 50% Refund Yes 100% – Account type…"
+    },
+    {
+      "id": "topstep-0",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/10296582-prohibited-conduct",
+      "final_url": "https://help.topstep.com/en/articles/10296582-prohibited-conduct",
+      "retrieved_at": "2026-10-01T09:21:46.506096+00:00",
+      "body_sha256": "54ac0dde64b52d6af08820ebd13dc80d40e1f7f72519039b5ce44f2e339f5c10",
+      "body_bytes": 119792,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-1",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/10305426-prohibited-trading-strategies-at-topstep",
+      "final_url": "https://help.topstep.com/en/articles/10305426-prohibited-trading-strategies-at-topstep",
+      "retrieved_at": "2026-10-01T09:21:47.176357+00:00",
+      "body_sha256": "71745a66620b87d8e8b9ffa5c3d0dbfe577efc76f7dbbc1b4f221df50f077042",
+      "body_bytes": 105233,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Trading Maximum Position Size into Major News Events Purposefully trading your full Maximum Position Size directly into a scheduled major…"
+    },
+    {
+      "id": "topstep-2",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/10490293-daily-loss-limit-in-the-trading-combine-and-express-funded-account",
+      "final_url": "https://help.topstep.com/en/articles/10490293-daily-loss-limit-in-the-trading-combine-and-express-funded-account",
+      "retrieved_at": "2026-10-01T09:21:46.505652+00:00",
+      "body_sha256": "dd03d2ce13e963b9a7367b25a52bbe0c829e6c1fbcf6e83ac0acf490dd03367a",
+      "body_bytes": 127617,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The Daily Loss Limit (DLL) is optional in the Trading Combine® and Express Funded Account® (XFA). It’s automatic in the…"
+    },
+    {
+      "id": "topstep-3",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/10657969-live-funded-account-parameters",
+      "final_url": "https://help.topstep.com/en/articles/10657969-live-funded-account-parameters",
+      "retrieved_at": "2026-10-01T09:21:31.085305+00:00",
+      "body_sha256": "3a243a7418079b19ea06cdee522fe24349cb4405c76fdb11ae935ab3b50b534c",
+      "body_bytes": 142558,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Real capital. Real markets. The Live Funded Account® (LFA) is the big leagues — Topstep's money behind you, no Payout…"
+    },
+    {
+      "id": "topstep-4",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "final_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "retrieved_at": "2026-10-01T09:21:46.864111+00:00",
+      "body_sha256": "98fdb49b8de427befe191a4fc8889527e59f457e003a8f1d65fcd1f26118b9d7",
+      "body_bytes": 149451,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Yes. Custom automated strategies and bots are allowed via the TopstepX / ProjectX API, subject to standard platform rules and…"
+    },
+    {
+      "id": "topstep-5",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/11748475-dynamic-live-risk-expansion",
+      "final_url": "https://help.topstep.com/en/articles/11748475-dynamic-live-risk-expansion",
+      "retrieved_at": "2026-10-01T09:22:16.408341+00:00",
+      "body_sha256": "be98416cbc39cb7dcb05196f0de8c3603ab8361b4175a64f53427b530e59aacd",
+      "body_bytes": 134562,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-6",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/12060405-back2funded-rules-guidelines-and-how-it-works",
+      "final_url": "https://help.topstep.com/en/articles/12060405-back2funded-rules-guidelines-and-how-it-works",
+      "retrieved_at": "2026-10-01T09:22:16.443712+00:00",
+      "body_sha256": "dd52350ff66383b3ea8e9032c03851b22c2563327ccb9c95816dc3444edde870",
+      "body_bytes": 134477,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Back2Funded gives you up to 2 Reactivations per account if you lose your Express Funded Account® (XFA) before your first…"
+    },
+    {
+      "id": "topstep-7",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/13747047-understanding-hedging",
+      "final_url": "https://help.topstep.com/en/articles/13747047-understanding-hedging",
+      "retrieved_at": "2026-10-01T09:21:46.493965+00:00",
+      "body_sha256": "0a7e2312742396ac6281952312f85a507cdce1049efa819c364b23d4d5f5a0c5",
+      "body_bytes": 157581,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Cross-account hedging means simultaneously going long and short the same or correlated instrument across multiple accounts — such as MES/ES,…"
+    },
+    {
+      "id": "topstep-8",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/14289835-topstep-pricing-and-payment-questions",
+      "final_url": "https://help.topstep.com/en/articles/14289835-topstep-pricing-and-payment-questions",
+      "retrieved_at": "2026-10-01T09:21:46.980354+00:00",
+      "body_sha256": "9f48947e0d2c15eee0a223e33c5cd11b94da09ef4d317bc2f11b3fa14cbb6216",
+      "body_bytes": 159171,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Account Size Standard Path No Activation Fee Path 50K $49/month $95/month 100K $99/month $149/month 150K $199/month $229/month…"
+    },
+    {
+      "id": "topstep-9",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/14434175-topstepx",
+      "final_url": "https://help.topstep.com/en/articles/14434175-topstepx",
+      "retrieved_at": "2026-10-01T09:22:16.761790+00:00",
+      "body_sha256": "2eb1541583e1e7bdf55390363d28b5ff15e7cd0e97fbc74caa11dda0286137eb",
+      "body_bytes": 305934,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Trade copying is only available for Trading Combine® and Express Funded Account® accounts. Live Funded Account® accounts cannot use the…"
+    },
+    {
+      "id": "topstep-10",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/collections/19404054-topstepx",
+      "final_url": "https://help.topstep.com/en/collections/19404054-topstepx",
+      "retrieved_at": "2026-10-01T09:21:31.613883+00:00",
+      "body_sha256": "10dd46adbf3fd551b5c563368ac8524d9669e1dc23d22ee15bf41723d9277d61",
+      "body_bytes": 89150,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-11",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/collections/5836604-getting-started",
+      "final_url": "https://help.topstep.com/en/collections/5836604-getting-started",
+      "retrieved_at": "2026-10-01T09:21:31.775343+00:00",
+      "body_sha256": "d7187e1772fb705be93187501cf1b6b2707da90e5ba92a54b860274d7bdf2d8a",
+      "body_bytes": 101079,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-12",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/collections/5836605-topstep-faqs",
+      "final_url": "https://help.topstep.com/en/collections/5836605-topstep-faqs",
+      "retrieved_at": "2026-10-01T09:21:31.824375+00:00",
+      "body_sha256": "42e42d023587c41e94e3e6afcd3a8bb89e1dc28f7fcaf40426a11cf7db3b185b",
+      "body_bytes": 97213,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-13",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/collections/5836609-topstep-program",
+      "final_url": "https://help.topstep.com/en/collections/5836609-topstep-program",
+      "retrieved_at": "2026-10-01T09:21:31.906027+00:00",
+      "body_sha256": "e1699060a94b7ad7140f905979606a34576892c4112c49126f924ce929c9a0e6",
+      "body_bytes": 97038,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-14",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284099-topstep-program-overview",
+      "final_url": "https://help.topstep.com/en/articles/8284099-topstep-program-overview",
+      "retrieved_at": "2026-10-01T09:21:31.102121+00:00",
+      "body_sha256": "25d581b6e062c150cdbf64b1b063004874bcdf0c351199321c1e2e047c373d50",
+      "body_bytes": 111805,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    },
+    {
+      "id": "topstep-15",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284121-trading-combine-subscriptions",
+      "final_url": "https://help.topstep.com/en/articles/8284121-trading-combine-subscriptions",
+      "retrieved_at": "2026-10-01T09:21:47.204905+00:00",
+      "body_sha256": "8f2910950d70adb0c9226b9aacb501ce02f00e3bbadd78fe4541860a9b1ff6b5",
+      "body_bytes": 118867,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The Trading Combine® is a monthly subscription. It Rebills every 30 days from your original sign-up date. Active until you…"
+    },
+    {
+      "id": "topstep-16",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284128-what-is-a-reset",
+      "final_url": "https://help.topstep.com/en/articles/8284128-what-is-a-reset",
+      "retrieved_at": "2026-10-01T09:21:47.256261+00:00",
+      "body_sha256": "0f930af3e665304b9183e29b6b76dcab29b816e9a956d049caec36988c290235",
+      "body_bytes": 114827,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "A Reset returns your Trading Combine® to its original starting balance — Account Balance, Maximum Loss Limit (MLL), Consistency Target,…"
+    },
+    {
+      "id": "topstep-17",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284197-trading-combine-parameters",
+      "final_url": "https://help.topstep.com/en/articles/8284197-trading-combine-parameters",
+      "retrieved_at": "2026-10-01T09:21:31.177865+00:00",
+      "body_sha256": "da7ed90dc9cbed90ae0ab61d07bf3e7ac5eee3de9eb7a66b6353adab3809d367",
+      "body_bytes": 125985,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The Trading Combine® is how you prove your trading ability without risking your own capital. It's a simulated account with…"
+    },
+    {
+      "id": "topstep-18",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "final_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "retrieved_at": "2026-10-01T09:21:46.492941+00:00",
+      "body_sha256": "c80e67d88e2eb10f8565c655d0739908c0d82f7a12e9456648775d43ee5ce6bf",
+      "body_bytes": 123967,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Account Size Maximum Loss Limit $50K $2,000 $100K $3,000 $150K $4,500…"
+    },
+    {
+      "id": "topstep-19",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284206-when-and-what-products-can-i-trade",
+      "final_url": "https://help.topstep.com/en/articles/8284206-when-and-what-products-can-i-trade",
+      "retrieved_at": "2026-10-01T09:21:46.486109+00:00",
+      "body_sha256": "9ed0c075f76dbe013dd2975f62449c02e5e3ee0c67c8e36e915bbd316764bf06",
+      "body_bytes": 129555,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Know what you can trade and when. Topstep is a day trading program. All positions must be closed by 3:10…"
+    },
+    {
+      "id": "topstep-20",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284208-consistency-at-topstep",
+      "final_url": "https://help.topstep.com/en/articles/8284208-consistency-at-topstep",
+      "retrieved_at": "2026-10-01T09:21:31.373160+00:00",
+      "body_sha256": "087710d0bbcf5f4dc6f70dc50e1d9da44f492c7d11332fbc37b1b8959c13cd15",
+      "body_bytes": 118223,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Account Size Profit Target Best Day Recommendation $50K $3,000 Less than $1,650 $100K $6,000 Less than $3,300 $150K $9,000 Less…"
+    },
+    {
+      "id": "topstep-21",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284211-economic-releases",
+      "final_url": "https://help.topstep.com/en/articles/8284211-economic-releases",
+      "retrieved_at": "2026-10-01T09:21:46.794536+00:00",
+      "body_sha256": "542d69a3be9dc90eab4fa350d70f69a2d2c1e7204f8e1bac98860427e0378d80",
+      "body_bytes": 108505,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Topstep doesn't require you to flatten positions during economic releases — in SIM or Funded Accounts. But we highly recommend…"
+    },
+    {
+      "id": "topstep-22",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284213-topstepx-commissions-and-fees",
+      "final_url": "https://help.topstep.com/en/articles/8284213-topstepx-commissions-and-fees",
+      "retrieved_at": "2026-10-01T09:21:46.931642+00:00",
+      "body_sha256": "5cf4bf69332c14511d59259699bdd09d8cefa1c06a650e48df539aea6210aa8d",
+      "body_bytes": 130784,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "These fees apply when trading the Trading Combine, Express Funded Account, and Live Funded Account. Commissions and fees are automatically…"
+    },
+    {
+      "id": "topstep-23",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284215-express-funded-account-parameters",
+      "final_url": "https://help.topstep.com/en/articles/8284215-express-funded-account-parameters",
+      "retrieved_at": "2026-10-01T09:21:31.110361+00:00",
+      "body_sha256": "273505cd45ecf2b95bf91bca51644eff21271d1ab82ef66f87acafb86f410b2f",
+      "body_bytes": 139546,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "The Basics You passed the Trading Combine®. Now it's time to trade for real Payouts. The Express Funded Account® (XFA)…"
+    },
+    {
+      "id": "topstep-24",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284223-what-is-the-scaling-plan",
+      "final_url": "https://help.topstep.com/en/articles/8284223-what-is-the-scaling-plan",
+      "retrieved_at": "2026-10-01T09:22:16.377966+00:00",
+      "body_sha256": "ac7a8b0c60b6913e65c025a364aa11c6a108f0c655d5b4e7d64d05d08d5d26bc",
+      "body_bytes": 114402,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "→ Key rule: Your max contracts do not increase mid-session. Hit the threshold to release more buying power? Wait for…"
+    },
+    {
+      "id": "topstep-25",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284229-what-are-the-costs-in-the-live-funded-account",
+      "final_url": "https://help.topstep.com/en/articles/8284229-what-are-the-costs-in-the-live-funded-account",
+      "retrieved_at": "2026-10-01T09:22:16.430193+00:00",
+      "body_sha256": "0f4387aa0f095e41c0a59039440e52450fe457d8c4f732d16df183d4d7159f80",
+      "body_bytes": 112571,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "Fees for additional exchanges still apply and are billed on the 26th of each month Data fee: $133 per exchange,…"
+    },
+    {
+      "id": "topstep-26",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "final_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "retrieved_at": "2026-10-01T09:21:31.139147+00:00",
+      "body_sha256": "dd4b834aacfbc05622a4a9cacdef1af2229cdc79ccee79ecdc41e8ce66b6abae",
+      "body_bytes": 185616,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": "5 winning days of $150+ Net P&L. Days don't need to be consecutive. A day locks in at 4:00 PM…"
+    },
+    {
+      "id": "topstep-27",
+      "firm": "Topstep",
+      "requested_url": "https://help.topstep.com/en/",
+      "final_url": "https://help.topstep.com/en/",
+      "retrieved_at": "2026-10-01T09:21:05.926184+00:00",
+      "body_sha256": "8495005e17b42ee8c236b6ebb6f8d05436005e2d697a72fedd1a218d14555975",
+      "body_bytes": 90449,
+      "http_status": 200,
+      "tls_verified": true,
+      "evidence_excerpt": null
+    }
+  ],
+  "failed_urls": [
+    {
+      "id": 1,
+      "url": "https://ftmo.com/en/faq/what-is-the-maximum-daily-loss/",
+      "retrieved_at": "2026-10-01T09:21:06.938929Z",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": 2,
+      "url": "https://ftmo.com/en/faq/what-is-the-maximum-loss/",
+      "retrieved_at": "2026-10-01T09:21:06.939343Z",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": 5,
+      "url": "https://ftmo.com/en/faq/can-i-hold-positions-overnight-and-over-the-weekend/",
+      "retrieved_at": "2026-10-01T09:21:07.221108Z",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ],
+  "facts": [
+    {
+      "id": "ftmo_phase_distinction",
+      "firm": "FTMO",
+      "product_scope": "CFD 1-Step vs 2-Step",
+      "claim": "1-Step has one Challenge phase; 2-Step has Challenge and Verification. They are separate products.",
+      "source_id": "ftmo-19",
+      "source_url": "https://ftmo.com/en/faq/how-do-ftmo-challenge-1-step-and-ftmo-challenge-2-step-differ/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "one_step_evaluation_phases": 1,
+        "two_step_evaluation_phases": 2
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_1step_target",
+      "firm": "FTMO",
+      "product_scope": "CFD 1-Step Challenge",
+      "claim": "Challenge target is 10% with all positions closed; the subsequent FTMO Account has no profit target.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "challenge_target_pct": 10,
+        "funded_target_pct": null
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_1step_daily",
+      "firm": "FTMO",
+      "product_scope": "CFD 1-Step Challenge and FTMO Account",
+      "claim": "Daily floor is midnight balance minus 3% of original capital, reset at 00:00 CE(S)T. Equity includes floating P&L, swaps and commissions.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "allowance_pct_original": 3,
+        "reference": "balance_at_midnight",
+        "reset_time": "00:00",
+        "reset_timezone_label": "CE(S)T",
+        "measurement": "equity_including_open_pl_swaps_commissions"
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_1step_total",
+      "firm": "FTMO",
+      "product_scope": "CFD 1-Step Challenge and FTMO Account",
+      "claim": "EOD trailing floor uses the highest preceding midnight balance or original capital, minus 10% of original capital. Reward withdrawal and a new account reset the first floor to 90% of initial capital.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "type": "trailing_eod_balance",
+        "allowance_pct_original": 10,
+        "reference": "max_original_and_prior_midnight_balances",
+        "withdrawal_new_account_first_floor_pct": 90,
+        "cap_at_initial": null
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_1step_best_day",
+      "firm": "FTMO",
+      "product_scope": "CFD 1-Step Challenge and Reward eligibility",
+      "claim": "Best day must be no more than 50% of the sum of profitable trading-day net closed profits. This differs from total net profit. Exceeding the threshold delays passing or reward eligibility rather than creating a breach.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "maximum_pct": 50,
+        "denominator": "sum_net_closed_profit_of_profitable_days_only",
+        "exceeding_is_breach": false
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_2step_target",
+      "firm": "FTMO",
+      "product_scope": "CFD 2-Step Challenge / Verification / Account",
+      "claim": "Challenge target is 10%; Verification target is 5%, with all positions closed. The subsequent FTMO Account has no profit target.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "challenge_pct": 10,
+        "verification_pct": 5,
+        "funded_pct": null
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_2step_daily",
+      "firm": "FTMO",
+      "product_scope": "CFD 2-Step Challenge, Verification, FTMO Account",
+      "claim": "Daily floor is midnight balance minus 5% of original capital, reset at 00:00 CE(S)T. Equity including floating P&L, swaps and commissions is monitored.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "allowance_pct_original": 5,
+        "reference": "balance_at_midnight",
+        "reset_time": "00:00",
+        "reset_timezone_label": "CE(S)T"
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_2step_total",
+      "firm": "FTMO",
+      "product_scope": "CFD 2-Step Challenge,Verification,FTMO Account",
+      "claim": "Static floor is initial capital minus 10%; monitored equity includes open P&L, swaps and commissions.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "type": "static",
+        "allowance_pct_original": 10,
+        "floor_pct_original": 90
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_2step_days",
+      "firm": "FTMO",
+      "product_scope": "CFD 2-Step Challenge and Verification",
+      "claim": "Each evaluation phase requires four days when a position is opened, with days measured 00:00–23:59:59 CE(S)T. The FTMO Account has no minimum-day rule.",
+      "source_id": "ftmo-0",
+      "source_url": "https://ftmo.com/en/trading-objectives/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "challenge_opening_days": 4,
+        "verification_opening_days": 4,
+        "funded_minimum": null
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_product_table",
+      "firm": "FTMO",
+      "product_scope": "CFD comparison",
+      "claim": "The comparison lists unlimited periods, no Best Day rule for 2-Step and a 50% rule for 1-Step. 2-Step supports Standard and Swing; 1-Step supports Standard only.",
+      "source_id": "ftmo-21",
+      "source_url": "https://ftmo.com/en/comparison-table/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "period_limit": null,
+        "two_step_best_day_rule": null,
+        "one_step_best_day_pct": 50
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_fee_floor",
+      "firm": "FTMO",
+      "product_scope": "CFD advertised starting prices",
+      "claim": "Advertised starting fees are FROM EUR89 for 2-Step and FROM EUR79 for 1-Step. These are not quotes for a configured account, platform, currency or country.",
+      "source_id": "ftmo-21",
+      "source_url": "https://ftmo.com/en/comparison-table/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "currency": "EUR",
+        "two_step_from": 89,
+        "one_step_from": 79,
+        "configured_fee": null
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_fee_terms",
+      "firm": "FTMO",
+      "product_scope": "CFD products",
+      "claim": "Evaluation fees are one-time, with no recurring fees. The 2-Step fee covers both stages and is refunded with the first Reward under stated conditions; the 1-Step fee is not refunded.",
+      "source_id": "ftmo-12",
+      "source_url": "https://ftmo.com/en/faq/are-the-fees-recurrent/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "recurring": false,
+        "two_step_covered_phases": 2,
+        "one_step_refund": false,
+        "two_step_refund_condition": "first_Reward_withdrawal"
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_fee_refund",
+      "firm": "FTMO",
+      "product_scope": "CFD products",
+      "claim": "The 1-Step fee is not refunded. The 2-Step fee may be refunded with the first Reward using the original payment method.",
+      "source_id": "ftmo-11",
+      "source_url": "https://ftmo.com/en/faq/is-the-entry-fee-refunded/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_reward_timing",
+      "firm": "FTMO",
+      "product_scope": "CFD FTMO Account",
+      "claim": "A Reward can be requested on the 14th or later day after the first placed trade. Positions and pending orders must be closed. Account review and invoice approval precede payment.",
+      "source_id": "ftmo-6",
+      "source_url": "https://ftmo.com/en/faq/how-do-i-withdraw-my-profits/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "earliest_day_after_first_trade": 14,
+        "positions_pendingorders_closed": true
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_reward_split",
+      "firm": "FTMO",
+      "product_scope": "CFD FTMO Account",
+      "claim": "1-Step pays a 90% split without Reward rollover. 2-Step starts at 80%, with 90% conditional on scaling or premium requirements; rollover is available.",
+      "source_id": "ftmo-6",
+      "source_url": "https://ftmo.com/en/faq/how-do-i-withdraw-my-profits/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "one_step_pct": 90,
+        "two_step_base_pct": 80,
+        "two_step_conditional_pct": 90
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_reward_minimum",
+      "firm": "FTMO",
+      "product_scope": "CFD FTMO Account",
+      "claim": "Minimum closed profit is USD20 for bank wire and USD50 for cryptocurrency. FTMO states no additional withdrawal commission.",
+      "source_id": "ftmo-6",
+      "source_url": "https://ftmo.com/en/faq/how-do-i-withdraw-my-profits/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "wire_min_closed_profit_usd": 20,
+        "crypto_min_closed_profit_usd": 50
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_swing_availability",
+      "firm": "FTMO",
+      "product_scope": "CFD 2-Step Swing only",
+      "claim": "Swing is available exclusively for 2-Step and is unavailable for 1-Step.",
+      "source_id": "ftmo-10",
+      "source_url": "https://ftmo.com/en/faq/is-the-swing-account-type-available-for-ftmo-challenge-1-step/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "one_step_available": false,
+        "two_step_available": true
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_swing_rules",
+      "firm": "FTMO",
+      "product_scope": "CFD 2-Step Swing",
+      "claim": "Swing removes selected-news, overnight and weekend holding restrictions, while forbidden-practice rules still apply. Standard cannot be changed to Swing after purchase.",
+      "source_id": "ftmo-9",
+      "source_url": "https://ftmo.com/en/faq/ftmo-swing-account-type/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_standard_news",
+      "firm": "FTMO",
+      "product_scope": "CFD Standard Account vs evaluation",
+      "claim": "Funded Standard prohibits selected-news entries and exits, including pending SL/TP execution, from two minutes before until two minutes after the event. Evaluation and Swing are exempt from this window; forbidden practices remain prohibited.",
+      "source_id": "ftmo-4",
+      "source_url": "https://ftmo.com/en/faq/can-i-trade-news/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "minutes_before": 2,
+        "minutes_after": 2,
+        "evaluation_restricted_window": false,
+        "swing_restricted_window": false
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_standard_holds",
+      "firm": "FTMO",
+      "product_scope": "CFD Standard Account vs evaluation",
+      "claim": "Funded Standard must close before the weekend or a market break longer than two hours. Evaluation and Swing are exempt. This is not a universal overnight ban.",
+      "source_id": "ftmo-8",
+      "source_url": "https://ftmo.com/en/faq/do-i-have-to-close-my-positions-overnight-or-before-the-weekend/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "standard_weekend_hold": false,
+        "standard_close_break_over_hours": 2,
+        "swing_weekend_hold": true
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_ea",
+      "firm": "FTMO",
+      "product_scope": "CFD trading platforms",
+      "claim": "Algorithmic trading and EAs are permitted conditionally on legitimate, replicable and risk-managed trading. Allocation, hyperactivity and forbidden-practice constraints apply.",
+      "source_id": "ftmo-7",
+      "source_url": "https://ftmo.com/en/faq/which-instruments-can-i-trade-and-what-strategies-am-i-allowed-to-use/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "permission": "conditional"
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_forbidden_feed_hedging",
+      "firm": "FTMO",
+      "product_scope": "CFD evaluation/Account",
+      "claim": "Delay or erroneous-feed exploitation and manipulative opposite positions across connected or provider accounts are prohibited. The single-account exception does not permit cross-account payout arbitrage.",
+      "source_id": "ftmo-3",
+      "source_url": "https://ftmo.com/en/forbidden-trading-practices/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_forbidden_gap_requests_consistency",
+      "firm": "FTMO",
+      "product_scope": "CFD evaluation/Account",
+      "claim": "Prohibited practices include major-event gap strategies, entering within two hours before a closure of at least two hours, abusive tools, more than 2000 daily server requests and artificial Best Day profit distribution.",
+      "source_id": "ftmo-3",
+      "source_url": "https://ftmo.com/en/forbidden-trading-practices/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_personal_use",
+      "firm": "FTMO",
+      "product_scope": "CFD evaluation/Account",
+      "claim": "Third-party account access or third-party trading for the user is prohibited. A software tool is not authorization to operate a managed account.",
+      "source_id": "ftmo-3",
+      "source_url": "https://ftmo.com/en/forbidden-trading-practices/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_vps",
+      "firm": "FTMO",
+      "product_scope": "CFD platform access",
+      "claim": "VPN and VPS use is generally allowed, with a US-geolocation exception for MetaTrader, cTrader and TradingView. This review did not inspect the location of the current cloud host.",
+      "source_id": "ftmo-18",
+      "source_url": "https://ftmo.com/en/faq/can-i-travel-or-use-vpn-vps/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "generally_allowed": true,
+        "us_geolocation_exception": true
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_specs",
+      "firm": "FTMO",
+      "product_scope": "CFD Standard/Swing",
+      "claim": "Standard leverage is up to 1:100; Swing is up to 1:30. Exact instrument specifications must be checked in the platform. Server clock and account-rule reset clock are different.",
+      "source_id": "ftmo-13",
+      "source_url": "https://ftmo.com/en/faq/what-are-the-account-specifications/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "standard_leverage_up_to": 100,
+        "swing_leverage_up_to": 30,
+        "actual_execution_costs": null
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_eligibility",
+      "firm": "FTMO",
+      "product_scope": "CFD client eligibility",
+      "claim": "Age 18 or above and region or sanctions restrictions apply. User eligibility cannot be inferred from chat language or timezone.",
+      "source_id": "ftmo-20",
+      "source_url": "https://ftmo.com/en/faq/who-can-join-ftmo/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "minimum_age": 18,
+        "user_eligibility_confirmed": false
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "ftmo_futures_distinct",
+      "firm": "FTMO",
+      "product_scope": "FTMO Futures Growth/Pro",
+      "claim": "FTMO Futures Growth and Pro are separate products. CFD 1-Step and 2-Step rules do not describe them. Their configuration-dependent Futures rules are not fully reviewed here.",
+      "source_id": "ftmo-16",
+      "source_url": "https://ftmo.com/en/futures/trading-objectives-and-rules/",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "structured_value": {
+        "fully_reviewed": false
+      },
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_tc_simulated",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "Trading Combine is a simulated evaluation; one MLL rule and two objectives: target and consistency.",
+      "source_id": "topstep-17",
+      "source_url": "https://help.topstep.com/en/articles/8284197-trading-combine-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_tc_target_consistency",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "50K/100K/150K targets are $3,000/$6,000/$9,000. Best day cannot exceed 55% of total profit; no rounding or buffer; increased best day raises needed total to best day/0.55.",
+      "source_id": "topstep-20",
+      "source_url": "https://help.topstep.com/en/articles/8284208-consistency-at-topstep",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_tc_55_hard_limit",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "Passing can take at least two days and 55% is the hard consistency line, without old hidden buffer.",
+      "source_id": "topstep-20",
+      "source_url": "https://help.topstep.com/en/articles/8284208-consistency-at-topstep",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_tc_consistency_formula",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "Adjusted total profit needed is best day divided by 0.55; a losing day does not reset best day.",
+      "source_id": "topstep-20",
+      "source_url": "https://help.topstep.com/en/articles/8284208-consistency-at-topstep",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_tc_position_limits",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "Trading Combine maximum position: 5/10/15 minis, 50/100/150 micros for 50K/100K/150K. 10:1 micro:mini function applies to TC and XFA, not LFA.",
+      "source_id": "topstep-17",
+      "source_url": "https://help.topstep.com/en/articles/8284197-trading-combine-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mll_amounts",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "Maximum loss allowances are $2,000/$3,000/$4,500 for 50K/100K/150K TC and XFA.",
+      "source_id": "topstep-18",
+      "source_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mll_trailing_reference",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "MLL rises with end-of-day balance, never moves down, and locks at starting balance.",
+      "source_id": "topstep-18",
+      "source_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mll_realtime_monitoring",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "MLL calculation updates end-of-day; breach monitoring includes realized and unrealized Net P&L throughout session and triggers immediate liquidation on touch.",
+      "source_id": "topstep-18",
+      "source_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mll_xfa_zero",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "XFA begins at $0; 50K MLL starts -$2,000, trails and locks $0 at $2,000 balance.",
+      "source_id": "topstep-18",
+      "source_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mll_payout_zero",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "First XFA payout permanently sets MLL to $0 even if it had not reached zero by trailing.",
+      "source_id": "topstep-18",
+      "source_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mll_breach_consequences",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "TC breach means rest-of-day liquidation and funding ineligibility until Reset; XFA breach closes account, with Back2Funded only if eligible.",
+      "source_id": "topstep-18",
+      "source_url": "https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_dll_optional",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "TC/XFA DLL is optional; LFA DLL automatic. Hitting DLL is session stop, not MLL rule violation.",
+      "source_id": "topstep-2",
+      "source_url": "https://help.topstep.com/en/articles/10490293-daily-loss-limit-in-the-trading-combine-and-express-funded-account",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_dll_purchase_amounts",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "Checkout-fixed optional DLL is $1,000/$2,000/$3,000 for 50K/100K/150K, and carries from TC to XFA.",
+      "source_id": "topstep-2",
+      "source_url": "https://help.topstep.com/en/articles/10490293-daily-loss-limit-in-the-trading-combine-and-express-funded-account",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_dll_session_reset",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "DLL session runs 5 PM CT to 3:10 PM CT; trigger flattens positions, cancels pending orders, blocks trades until next session 5 PM CT.",
+      "source_id": "topstep-2",
+      "source_url": "https://help.topstep.com/en/articles/10490293-daily-loss-limit-in-the-trading-combine-and-express-funded-account",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_products_paths",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "XFA simulated funded level starts $0, maximum five active accounts, choose Standard or Consistency at activation.",
+      "source_id": "topstep-23",
+      "source_url": "https://help.topstep.com/en/articles/8284215-express-funded-account-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_standard_payout_days",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account Standard",
+      "claim": "Standard requires five nonconsecutive $150+ Net P&L winning days and $0.01+ net profit since previous payout (first payout exempt).",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_consistency_payout_days",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account Consistency",
+      "claim": "Consistency requires three trading days with at least one trade per day and largest net winning day <=40% of total net profit.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_consistency_payout_reset",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account Consistency",
+      "claim": "After requested payout, new consistency window starts next trading day and counts only newly earned profits; request-day trades excluded.",
+      "source_id": "topstep-20",
+      "source_url": "https://help.topstep.com/en/articles/8284208-consistency-at-topstep",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_payout_split_min",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account; Live Funded Account",
+      "claim": "Current base split 90% trader/10% firm, minimum payout $125; legacy pre-2026-01-12 new-dashboard users have first $10K exception.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_payout_legacy_exception",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account; Live Funded Account, grandfathered cohort",
+      "claim": "Users who joined new dashboard before Jan 12, 2026 receive 100% first $10K lifetime profits then 90/10; Legacy dashboard payouts excluded.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_payout_caps",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "XFA can request 50% balance up to size-specific cap: Standard $2K/$3K/$5K; Consistency $3K/$4K/$6K.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_temporary_dll_payout_caps",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account from eligible new Trading Combine",
+      "claim": "Limited-time offer doubles caps only for new TC purchase with DLL at checkout; adding at XFA activation/reactivation does not qualify; expiry unspecified.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_lfa_real_capital",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "LFA uses firm capital in real market; all XFAs close on call-up.",
+      "source_id": "topstep-3",
+      "source_url": "https://help.topstep.com/en/articles/10657969-live-funded-account-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_lfa_initial_capital",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "Transferred cumulative balances capped at LFA size split 20% tradable (min $10K) /80% reserve, reserve released in four 25% increments at thresholds.",
+      "source_id": "topstep-3",
+      "source_url": "https://help.topstep.com/en/articles/10657969-live-funded-account-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_lfa_liquidation_floor",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "Below $1,000 tradable balance LFA may immediately liquidate and close end-of-day, remainder final payout. This is distinct from TC/XFA trailing MLL.",
+      "source_id": "topstep-3",
+      "source_url": "https://help.topstep.com/en/articles/10657969-live-funded-account-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_lfa_dll",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "Standard LFA DLL is $2K/$3K/$4.5K by size; lower balance safeguards and discretionary/dynamic risk expansion apply.",
+      "source_id": "topstep-3",
+      "source_url": "https://help.topstep.com/en/articles/10657969-live-funded-account-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_lfa_payout",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "LFA requires five $150+ winning days per cycle, request <=50% balance without dollar cap. Thirty nonconsecutive $150+ LFA days unlock daily unlocked-balance payouts up to 100%; full withdrawal closes account.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_lfa_daily_payouts",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "After 30 LFA winning days of $150+, daily unlocked-balance withdrawal allowed (min $125), XFA days excluded.",
+      "source_id": "topstep-26",
+      "source_url": "https://help.topstep.com/en/articles/8284233-topstep-payout-policy",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_hours_flat",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "All positions close each weekday by 3:10 PM CT, reopen 5 PM CT, no swing/overnight carry between sessions. Products with earlier daily close exit earlier.",
+      "source_id": "topstep-19",
+      "source_url": "https://help.topstep.com/en/articles/8284206-when-and-what-products-can-i-trade",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_news_no_blanket_flat",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "No mandatory flatten at economic releases in SIM or funded accounts; losses get no exceptions/Reset credits. Separate prohibition covers deliberately full MPS into major news.",
+      "source_id": "topstep-21",
+      "source_url": "https://help.topstep.com/en/articles/8284211-economic-releases",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_news_full_mps_prohibited",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "Purposefully taking full maximum position size directly into scheduled major news is prohibited.",
+      "source_id": "topstep-1",
+      "source_url": "https://help.topstep.com/en/articles/10305426-prohibited-trading-strategies-at-topstep",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_automation_sim",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "Custom bots permitted through TopstepX/ProjectX API subject to platform rules and HFT prohibition; firm does not support implementations.",
+      "source_id": "topstep-4",
+      "source_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_automation_no_lfa_api",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "ProjectX API does not support and may not trade Live Funded Accounts.",
+      "source_id": "topstep-4",
+      "source_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_automation_personal_device",
+      "firm": "Topstep",
+      "product_scope": "API trading",
+      "claim": "Order activity must originate personal device; VPS/VPN/remote servers prohibited for orders, including cloud automation.",
+      "source_id": "topstep-4",
+      "source_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_automation_readonly_server",
+      "firm": "Topstep",
+      "product_scope": "API trading",
+      "claim": "Private server may store historical data/research/backtest/log/analyze/watch read-only. It cannot place, change, cancel, relay orders, or run trigger reaching order endpoint.",
+      "source_id": "topstep-4",
+      "source_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_automation_api_cost",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "API separate subscription $29/month; quoted topstep code recurring 50% reduction to $14.50/month.",
+      "source_id": "topstep-4",
+      "source_url": "https://help.topstep.com/en/articles/11187768-topstepx-api-access",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_copier_tc_xfa_only",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "Native Trade Copier supports TC and XFA, not LFA; lead must have lowest max position size.",
+      "source_id": "topstep-9",
+      "source_url": "https://help.topstep.com/en/articles/14434175-topstepx",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_hedging_prohibited",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "Cross-account hedging includes simultaneous opposite positions in same or correlated instruments (MES/ES, MNQ/NQ); prohibition applies TC/XFA/LFA.",
+      "source_id": "topstep-7",
+      "source_url": "https://help.topstep.com/en/articles/13747047-understanding-hedging",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_hedging_accidental_not_exempt",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "Brief/unintentional overlaps also prohibited; first warning may allow brief unhedge window; no exception for confirmed violations.",
+      "source_id": "topstep-7",
+      "source_url": "https://help.topstep.com/en/articles/13747047-understanding-hedging",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_tc_fees",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "Standard monthly fees 50K=$49,100K=$99,150K=$199; No Activation Fee monthly $95/$149/$229. Base prices, taxes extra.",
+      "source_id": "topstep-8",
+      "source_url": "https://help.topstep.com/en/articles/14289835-topstep-pricing-and-payment-questions",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_activation",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "Standard XFA activation $149 once per earned XFA; No Activation Fee path $0.",
+      "source_id": "topstep-8",
+      "source_url": "https://help.topstep.com/en/articles/14289835-topstep-pricing-and-payment-questions",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_no_monthly_fee",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "No monthly XFA subscription after pass; one activation fee depending on TC purchase path.",
+      "source_id": "topstep-23",
+      "source_url": "https://help.topstep.com/en/articles/8284215-express-funded-account-parameters",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_data_fees_sim",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine; Express Funded Account",
+      "claim": "SIM Level 1 included; optional Level 2 $38/month, billed day 28 and not prorated.",
+      "source_id": "topstep-8",
+      "source_url": "https://help.topstep.com/en/articles/14289835-topstep-pricing-and-payment-questions",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_live_data_fees",
+      "firm": "Topstep",
+      "product_scope": "Live Funded Account",
+      "claim": "LFA professional data page quotes $133 per exchange/month; Topstep covers one exchange (CME default); other totals on page inconsistent.",
+      "source_id": "topstep-25",
+      "source_url": "https://help.topstep.com/en/articles/8284229-what-are-the-costs-in-the-live-funded-account",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_net_commissions",
+      "firm": "Topstep",
+      "product_scope": "TopstepX Trading Combine; Express Funded Account; Live Funded Account",
+      "claim": "Current TopstepX commission table states applies to TC/XFA/LFA, auto deduction each trade. ES/NQ RT $3.78, MES/MNQ $1.22, CL $4.02, MCL $1.72, GC $4.32, MGC $1.92; older separate LFA cost page conflicts.",
+      "source_id": "topstep-22",
+      "source_url": "https://help.topstep.com/en/articles/8284213-topstepx-commissions-and-fees",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_mcl_effective_oct1",
+      "firm": "Topstep",
+      "product_scope": "TopstepX",
+      "claim": "CME exchange increase effective Oct 1 2026 trading day: MCL $0.60/side/$1.20 RT exchange component; MNG $0.70/side/$1.40 RT.",
+      "source_id": "topstep-22",
+      "source_url": "https://help.topstep.com/en/articles/8284213-topstepx-commissions-and-fees",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_reset_tc_only",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "Reset restores balance/MLL/consistency/days for active TC only, not XFA/LFA; resets defer rebill 30 days; at most two per account/day.",
+      "source_id": "topstep-16",
+      "source_url": "https://help.topstep.com/en/articles/8284128-what-is-a-reset",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_rebill_30days",
+      "firm": "Topstep",
+      "product_scope": "Trading Combine",
+      "claim": "TC recurs every 30 days until pass/cancel, no passing deadline; MLL breach does not cancel billing.",
+      "source_id": "topstep-15",
+      "source_url": "https://help.topstep.com/en/articles/8284121-trading-combine-subscriptions",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_back2funded",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "Eligible XFA before first payout may reactivate twice within 30 calendar days; fees $599/$699/$829 by size; compliance/plan/product exceptions apply.",
+      "source_id": "topstep-6",
+      "source_url": "https://help.topstep.com/en/articles/12060405-back2funded-rules-guidelines-and-how-it-works",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_xfa_scaling",
+      "firm": "Topstep",
+      "product_scope": "Express Funded Account",
+      "claim": "XFA max size based on balance; raises next session; micro ratio 10:1 except SIL 5:1 and crypto special caps. Numeric tiers reside in image not retrieved.",
+      "source_id": "topstep-24",
+      "source_url": "https://help.topstep.com/en/articles/8284223-what-is-the-scaling-plan",
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    },
+    {
+      "id": "topstep_micro_commission_table",
+      "firm": "Topstep",
+      "product_scope": "Current TopstepX table; stated TC/XFA/LFA scope,LFAconflict retained",
+      "claim": "The current TopstepX table quotes MES and MNQ round-trip USD1.22 before spread and slippage. The conflicting official LFA cost article is retained as an unresolved issue.",
+      "source_id": "topstep-22",
+      "source_url": "https://help.topstep.com/en/articles/8284213-topstepx-commissions-and-fees",
+      "structured_value": {
+        "MES_roundtrip_usd": 1.22,
+        "MNQ_roundtrip_usd": 1.22,
+        "equivalent_per_side_usd": 0.61
+      },
+      "review_status": "public_source_review_only",
+      "user_verified": false,
+      "evidence_kind": "reviewer_paraphrase_with_cited_source"
+    }
+  ],
+  "draft_products": [
+    {
+      "id": "review-ftmo-2step-swing",
+      "firm": "FTMO",
+      "product": "CFD FTMO Challenge:2-Step Swing",
+      "status": "public_document_draft",
+      "user_verified": false,
+      "source_ids": [
+        "ftmo-0",
+        "ftmo-6",
+        "ftmo-9",
+        "ftmo-10",
+        "ftmo-12",
+        "ftmo-21"
+      ],
+      "stage_targets_pct": {
+        "challenge": 10,
+        "verification": 5,
+        "funded": null
+      },
+      "daily_loss_pct_original": 5,
+      "daily_reference": "midnight_balance",
+      "daily_reset": "00:00 CE(S)T",
+      "total_loss": {
+        "type": "static",
+        "pct_original": 10
+      },
+      "min_opening_days": {
+        "challenge": 4,
+        "verification": 4,
+        "funded": null
+      },
+      "best_day_rule": null,
+      "payout_split_base_pct": 80,
+      "entry_fee_exact": null,
+      "advertised_entry_fee_from": {
+        "amount": 89,
+        "currency": "EUR"
+      },
+      "requires_separate_stage_model": true,
+      "model_gaps": [
+        "two_evaluation_phases",
+        "stage_specific_min_days",
+        "conditional_fee_refund",
+        "configured_fee",
+        "actual_instrument_costs",
+        "agreement_and_user_region"
+      ],
+      "name": "CFD FTMO Challenge:2-Step Swing"
+    },
+    {
+      "id": "review-ftmo-1step-standard",
+      "firm": "FTMO",
+      "product": "CFD FTMO Challenge:1-Step Standard",
+      "status": "public_document_draft",
+      "user_verified": false,
+      "source_ids": [
+        "ftmo-0",
+        "ftmo-6",
+        "ftmo-10",
+        "ftmo-12",
+        "ftmo-21"
+      ],
+      "daily_loss_pct_original": 3,
+      "daily_reference": "midnight_balance",
+      "daily_reset": "00:00 CE(S)T",
+      "total_loss": {
+        "type": "trailing_eod_balance",
+        "pct_original": 10,
+        "cap_at_initial": null
+      },
+      "best_day_rule": {
+        "pct": 50,
+        "denominator": "sum_of_profitable_day_net_closed_pnl"
+      },
+      "payout_split_base_pct": 90,
+      "entry_fee_exact": null,
+      "advertised_entry_fee_from": {
+        "amount": 79,
+        "currency": "EUR"
+      },
+      "requires_separate_stage_model": true,
+      "model_gaps": [
+        "positive_day_denominator",
+        "reward_reset",
+        "funded_standard_news_weekend",
+        "configured_fee",
+        "actual_instrument_costs"
+      ],
+      "name": "CFD FTMO Challenge:1-Step Standard"
+    },
+    {
+      "id": "review-topstep-50k-standard",
+      "firm": "Topstep",
+      "product": "50K Trading Combine Standard -> XFA Standard",
+      "status": "public_document_draft",
+      "user_verified": false,
+      "source_ids": [
+        "topstep-18",
+        "topstep-20",
+        "topstep-26",
+        "topstep-8",
+        "topstep-4"
+      ],
+      "tc_initial_balance_usd": 50000,
+      "tc_profit_target_usd": 3000,
+      "tc_best_day_pct_total_net": 55,
+      "tc_mll": {
+        "allowance_usd": 2000,
+        "reference": "highest_eod_balance",
+        "cap_floor_usd": 50000
+      },
+      "tc_optional_dll_usd": 1000,
+      "xfa_initial_balance_usd": 0,
+      "xfa_mll_initial_floor_usd": -2000,
+      "xfa_mll_cap_floor_usd": 0,
+      "payout": {
+        "winning_days": 5,
+        "minimum_daily_net_usd": 150,
+        "minimum_request_usd": 125,
+        "max_balance_fraction_pct": 50,
+        "standard_cap_usd": 2000,
+        "split_pct": 90
+      },
+      "tc_base_monthly_fee_usd": 49,
+      "xfa_standard_activation_usd": 149,
+      "api_base_monthly_fee_usd": 29,
+      "requires_separate_stage_model": true,
+      "model_gaps": [
+        "zero_based_xfa_balance",
+        "trailing_balance_cap",
+        "DLL_session_stop_not_breach",
+        "subscription_activation",
+        "winning_day_threshold",
+        "payout_caps_withdrawal_floor",
+        "scaling_tier_image",
+        "remote_order_flow_prohibited",
+        "LFA_distinct_cost_conflict"
+      ],
+      "name": "50K Trading Combine Standard -> XFA Standard"
+    }
+  ],
+  "unknowns": [
+    {
+      "firm": "FTMO",
+      "id": "configured_entry_fee",
+      "status": "not_obtained",
+      "detail": "From-prices verified, specific size/currency/platform/country/promotion checkout price unknown; do not put marketing floor into EV."
+    },
+    {
+      "firm": "FTMO",
+      "id": "actual_trading_costs",
+      "status": "not_obtained",
+      "detail": "Exact instrument commissions,spread distribution,swap and specifications require platformdata; static Symbols page not completecosttable."
+    },
+    {
+      "firm": "FTMO",
+      "id": "user_contract_eligibility",
+      "status": "unknown",
+      "detail": "No useraccount,region,age,platform,agreement inspected; no userattestation."
+    },
+    {
+      "firm": "FTMO",
+      "id": "boundary_equality",
+      "status": "source_wording_only",
+      "detail": "CFDobjectives say dropsbelow; localchecker treats touchasbreach conservatively. Exactplatform tolerance unknown."
+    },
+    {
+      "firm": "FTMO",
+      "id": "futures_growth_pro",
+      "status": "separate_product_not_fully_reviewed",
+      "detail": "Official Futuresrules fetched but full Growth/Pro configurationreview notcompleted."
+    },
+    {
+      "firm": "FTMO",
+      "id": "full_contract",
+      "status": "not_fetched",
+      "detail": "Public rules/FAQs reviewed; account-specific fullagreement notreviewed."
+    },
+    {
+      "firm": "Topstep",
+      "id": "scaling_numeric_tiers",
+      "status": "unverified",
+      "detail": "Scaling Plan numerical tier chart is an image at official linked downloads.intercomcdn.com; TLS request blocked by proxy 403. HTML explains mechanism but contains no full numeric tier table. Do not populate missing tier amounts from memory."
+    },
+    {
+      "firm": "Topstep",
+      "id": "live_commission_conflict",
+      "status": "conflicting_official_sources",
+      "detail": "Updated-today TopstepX commission table says TC/XFA/LFA and quotes ES/NQ $3.78,CL $4.02,GC $4.32 RT. June 16 2026 LFA Costs page quotes ES/NQ $3.80,CL $1.54,GC $4.24. Actual LFA/platform/product costs cannot be treated settled solely from these pages; preserve both and verify applicable platform agreement."
+    },
+    {
+      "firm": "Topstep",
+      "id": "professional_data_arithmetic",
+      "status": "conflicting_official_source",
+      "detail": "LFA Costs says $133 per exchange/month and 4 exchanges=$540 total, yet 4*133=$532; after one covered quotes $399 (=3*133). Preserve per-exchange quote and flag stated all-four total conflict."
+    },
+    {
+      "firm": "Topstep",
+      "id": "day_lock_times",
+      "status": "distinct_or_conflicting_official_times",
+      "detail": "Consistency page says best-day history locks 3:10 PM CT; payout page says winning/trading days lock 4:00 PM CT. Session closes 3:10 and reopens5PM CT. Treat 4PM as payout lock only; do not merge into daily loss/trailing timing."
+    },
+    {
+      "firm": "Topstep",
+      "id": "ct_dst",
+      "status": "not_explicitly_resolved",
+      "detail": "Official pages use CT and one incidental CST label; do not encode fixed UTC offset. America/Chicago is sensible calendar interpretation but not directly named in fetched source. Holidays/earlier product closes alter schedule; holiday article not reviewed."
+    },
+    {
+      "firm": "Topstep",
+      "id": "promo_expiry",
+      "status": "not_disclosed",
+      "detail": "Double payout cap DLL offer described as limited-time, start June2 3:30 PM CT; no fixed expiration given. Cannot guarantee eligibility/current checkout selection without account-specific confirmation."
+    },
+    {
+      "firm": "Topstep",
+      "id": "account_applicability",
+      "status": "unknown",
+      "detail": "No user product/account/cohort/plan/region/platform data inspected. Public pages cannot establish user attestation, user_verified rules, personalized suitability or actual payouts."
+    },
+    {
+      "firm": "Topstep",
+      "id": "full_tou",
+      "status": "not_fetched",
+      "detail": "Help articles link full Terms of Use; full legal terms not retrieved in this subtask. Prohibited conduct includes discretionary reviews; summary cannot replace agreement."
+    }
+  ],
+  "research_priority": {
+    "product_id": "review-ftmo-2step-swing",
+    "meaning": "First contract-fit research candidate for higher-timeframe/overnight conditional EA research, not purchase recommendation or proven EV winner.",
+    "market": null,
+    "selected_firm_for_live": null,
+    "expected_profit": null,
+    "conditions": [
+      "The strategy must pass untouched holdout and forward paper checks.",
+      "Exact configured fee and actual instrument or platform costs must be known.",
+      "The two-evaluation-phase and Reward model must match the actual product.",
+      "User eligibility and the applicable agreement must be established.",
+      "The EA must follow forbidden-practice and personal-use rules.",
+      "The VPS geolocation exception must be respected."
+    ],
+    "reasons": [
+      "Static overall floor and no 1-Step positive-day Best Day denominator simplify research.",
+      "Swing permits news, overnight and weekend holding, subject to forbidden-practice rules.",
+      "FTMO generally permits conditional VPS use; Topstep prohibits remote order flow."
+    ],
+    "Topstep_alternative": "Personal-device intraday futures research only. Cloud research, logs and read-only monitoring are permitted, but order transmission or relay is prohibited. A correct subscription, XFA, scaling and payout model is required."
+  },
+  "not_established": [
+    "Best current firm by expected real profit.",
+    "A current profitable qualified strategy.",
+    "Actual future payout probability.",
+    "Approved user rules.",
+    "Live trading permission."
+  ],
+  "products": [
+    {
+      "id": "review-ftmo-2step-swing",
+      "firm": "FTMO",
+      "product": "CFD FTMO Challenge:2-Step Swing",
+      "status": "public_document_draft",
+      "user_verified": false,
+      "source_ids": [
+        "ftmo-0",
+        "ftmo-6",
+        "ftmo-9",
+        "ftmo-10",
+        "ftmo-12",
+        "ftmo-21"
+      ],
+      "stage_targets_pct": {
+        "challenge": 10,
+        "verification": 5,
+        "funded": null
+      },
+      "daily_loss_pct_original": 5,
+      "daily_reference": "midnight_balance",
+      "daily_reset": "00:00 CE(S)T",
+      "total_loss": {
+        "type": "static",
+        "pct_original": 10
+      },
+      "min_opening_days": {
+        "challenge": 4,
+        "verification": 4,
+        "funded": null
+      },
+      "best_day_rule": null,
+      "payout_split_base_pct": 80,
+      "entry_fee_exact": null,
+      "advertised_entry_fee_from": {
+        "amount": 89,
+        "currency": "EUR"
+      },
+      "requires_separate_stage_model": true,
+      "model_gaps": [
+        "two_evaluation_phases",
+        "stage_specific_min_days",
+        "conditional_fee_refund",
+        "configured_fee",
+        "actual_instrument_costs",
+        "agreement_and_user_region"
+      ],
+      "name": "CFD FTMO Challenge:2-Step Swing"
+    },
+    {
+      "id": "review-ftmo-1step-standard",
+      "firm": "FTMO",
+      "product": "CFD FTMO Challenge:1-Step Standard",
+      "status": "public_document_draft",
+      "user_verified": false,
+      "source_ids": [
+        "ftmo-0",
+        "ftmo-6",
+        "ftmo-10",
+        "ftmo-12",
+        "ftmo-21"
+      ],
+      "daily_loss_pct_original": 3,
+      "daily_reference": "midnight_balance",
+      "daily_reset": "00:00 CE(S)T",
+      "total_loss": {
+        "type": "trailing_eod_balance",
+        "pct_original": 10,
+        "cap_at_initial": null
+      },
+      "best_day_rule": {
+        "pct": 50,
+        "denominator": "sum_of_profitable_day_net_closed_pnl"
+      },
+      "payout_split_base_pct": 90,
+      "entry_fee_exact": null,
+      "advertised_entry_fee_from": {
+        "amount": 79,
+        "currency": "EUR"
+      },
+      "requires_separate_stage_model": true,
+      "model_gaps": [
+        "positive_day_denominator",
+        "reward_reset",
+        "funded_standard_news_weekend",
+        "configured_fee",
+        "actual_instrument_costs"
+      ],
+      "name": "CFD FTMO Challenge:1-Step Standard"
+    },
+    {
+      "id": "review-topstep-50k-standard",
+      "firm": "Topstep",
+      "product": "50K Trading Combine Standard -> XFA Standard",
+      "status": "public_document_draft",
+      "user_verified": false,
+      "source_ids": [
+        "topstep-18",
+        "topstep-20",
+        "topstep-26",
+        "topstep-8",
+        "topstep-4"
+      ],
+      "tc_initial_balance_usd": 50000,
+      "tc_profit_target_usd": 3000,
+      "tc_best_day_pct_total_net": 55,
+      "tc_mll": {
+        "allowance_usd": 2000,
+        "reference": "highest_eod_balance",
+        "cap_floor_usd": 50000
+      },
+      "tc_optional_dll_usd": 1000,
+      "xfa_initial_balance_usd": 0,
+      "xfa_mll_initial_floor_usd": -2000,
+      "xfa_mll_cap_floor_usd": 0,
+      "payout": {
+        "winning_days": 5,
+        "minimum_daily_net_usd": 150,
+        "minimum_request_usd": 125,
+        "max_balance_fraction_pct": 50,
+        "standard_cap_usd": 2000,
+        "split_pct": 90
+      },
+      "tc_base_monthly_fee_usd": 49,
+      "xfa_standard_activation_usd": 149,
+      "api_base_monthly_fee_usd": 29,
+      "requires_separate_stage_model": true,
+      "model_gaps": [
+        "zero_based_xfa_balance",
+        "trailing_balance_cap",
+        "DLL_session_stop_not_breach",
+        "subscription_activation",
+        "winning_day_threshold",
+        "payout_caps_withdrawal_floor",
+        "scaling_tier_image",
+        "remote_order_flow_prohibited",
+        "LFA_distinct_cost_conflict"
+      ],
+      "name": "50K Trading Combine Standard -> XFA Standard"
+    }
+  ],
+  "decision": {
+    "status": "research_only_contract_candidate",
+    "candidate_product_id": "review-ftmo-2step-swing",
+    "selected_profile_id": null,
+    "market": null,
+    "expected_profit": null,
+    "live_orders": false,
+    "user_verified": false,
+    "can_buy": false,
+    "reason": "Contract-fit research priority only. A strategy must pass untouched holdout and forward paper; exact configured costs and full stage rules remain required."
+  }
+}

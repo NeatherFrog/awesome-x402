@@ -108,6 +108,7 @@ def main():
         environment["PYTHONPATH"] = os.pathsep.join((str(fixture), str(app)))
         # Do not inherit a user's external data directory in this isolated fixture.
         environment.pop("TRADING_DATA_DIR", None)
+        environment["TRADING_AUTOPILOT_DEFAULT"] = "0"
         log = work / "process.log"
         with log.open("wb") as output:
             try:

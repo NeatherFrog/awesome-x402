@@ -1,7 +1,7 @@
 """Causal, conditional paper plans built from a frozen research candidate.
 
-Manual context is a planning checklist, never a news feed, regime optimizer,
-execution service, or proof that a strategy is profitable.
+Manual hypotheses and an optional cached provider calendar are planning inputs,
+never a regime optimizer, execution service, or proof of a profitable strategy.
 """
 from __future__ import annotations
 
@@ -155,14 +155,18 @@ def _context(payload, decision, warnings):
     if news_state == "unknown":
         warnings.append("Новостной календарь неизвестен или не подтверждён; отсутствие события в списке не доказывает отсутствие новостей.")
     else:
-        warnings.append("Календарь подтверждён вручную; поток обновлений отсутствует. Общее окно -30/+15 минут не заменяет правила фирмы.")
+        if supplied_news.get("generation") == "provider":
+            warnings.append("Использован свежий снимок календаря поставщика; полнота событий не установлена. Общее окно -30/+15 минут не заменяет правила фирмы.")
+        else:
+            warnings.append("Календарь подтверждён вручную; поток обновлений отсутствует. Общее окно -30/+15 минут не заменяет правила фирмы.")
     return {"regime": "unknown", "macro_cycle": macro, "sentiment": sentiment,
             "news_state": news_state, "news_observed_at": _iso(observed_news) if observed_news else None,
+            "news_generation": "provider" if isinstance(supplied_news, dict) and supplied_news.get("generation") == "provider" else "manual" if supplied_news else "unknown",
             "news_events": known_events, "news_blackout_events": blackout,
             "sources": {"macro_cycle": macro_source or ("manual" if macro != "unknown" else None),
                         "sentiment": sentiment["source"], "news": news_source,
                         "prices": "research_snapshot"},
-            "policy": "Manual context is planning only; macro/sentiment/news filters are not a tested edge"}
+            "policy": "Context is planning only; macro/sentiment/news filters are not a tested edge"}
 
 
 def build_setup(research: dict, context: dict | None = None, now: datetime | None = None) -> dict:

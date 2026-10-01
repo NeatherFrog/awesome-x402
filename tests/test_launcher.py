@@ -217,7 +217,10 @@ class LauncherTests(unittest.TestCase):
                         browser.assert_called_once_with("http://127.0.0.1:8002/")
                         self.assertEqual(popen.call_count, 2)
                         arguments, options = popen.call_args
-                        self.assertEqual(arguments[0], [launch.sys.executable, "-m", "propdesk", "serve",
+                        interpreter = [launch.sys.executable]
+                        if launch.sys.platform == "win32":
+                            interpreter += ["-X", "utf8"]
+                        self.assertEqual(arguments[0], interpreter + ["-m", "propdesk", "serve",
                                                        "--host", "127.0.0.1", "--port", "8002",
                                                        "--data-dir", "/my journal"])
                         self.assertEqual(options["cwd"], "/distribution")
@@ -237,6 +240,17 @@ class LauncherTests(unittest.TestCase):
                         self.assertEqual(launch.supervise("/distribution", no_browser=True), 0)
                         popen.assert_not_called()
                         browser.assert_not_called()
+
+    def test_windows_child_keeps_utf8_when_embedded_runtime_ignores_environment(self):
+        child = Mock()
+        child.wait.return_value = 0
+        with patch.object(launch.sys, "platform", "win32"):
+            with patch.object(launch, "read_release", return_value=RELEASE):
+                with patch.object(launch, "select_port", return_value=(8000, False)):
+                    with patch.object(launch, "wait_ready"):
+                        with patch.object(launch.subprocess, "Popen", return_value=child) as popen:
+                            self.assertEqual(launch.supervise("/distribution", no_browser=True), 0)
+        self.assertEqual(popen.call_args.args[0][:5], [launch.sys.executable, "-X", "utf8", "-m", "propdesk"])
 
     def test_only_requested_restart_exit_code_restarts(self):
         for code in (0, 1, 43, -15):
@@ -302,15 +316,36 @@ class LauncherTests(unittest.TestCase):
         child.kill.assert_not_called()
 
     def test_main_installs_and_restores_termination_handler(self):
+        signals = [launch.signal.SIGTERM]
+        if hasattr(launch.signal, "SIGBREAK"):
+            signals.append(launch.signal.SIGBREAK)
         with patch.object(launch.signal, "signal", return_value="previous handler") as register:
             with patch.object(launch, "supervise", return_value=0) as supervisor:
                 self.assertEqual(launch.main(["--no-browser", "--port", "8101", "--data-dir", "my journal"]), 0)
-        self.assertEqual(register.call_count, 2)
-        termination_handler = register.call_args_list[0].args[1]
-        with self.assertRaises(KeyboardInterrupt):
-            termination_handler(launch.signal.SIGTERM, None)
-        self.assertEqual(register.call_args_list[1].args, (launch.signal.SIGTERM, "previous handler"))
+        self.assertEqual(register.call_count, 2 * len(signals))
+        for index, handled_signal in enumerate(signals):
+            registered_signal, termination_handler = register.call_args_list[index].args
+            self.assertEqual(registered_signal, handled_signal)
+            with self.assertRaises(KeyboardInterrupt):
+                termination_handler(handled_signal, None)
+            self.assertEqual(register.call_args_list[index + len(signals)].args,
+                             (handled_signal, "previous handler"))
         self.assertEqual(supervisor.call_args.args[1:], (8101, True, "my journal"))
+
+    def test_windows_break_handler_is_restored_when_supervisor_raises(self):
+        with patch.object(launch.signal, "SIGBREAK", 12345, create=True):
+            with patch.object(launch.signal, "signal", return_value="previous handler") as register:
+                with patch.object(launch, "supervise", side_effect=RuntimeError("child failed")):
+                    with self.assertRaisesRegex(RuntimeError, "child failed"):
+                        launch.main(["--no-browser"])
+        self.assertEqual(register.call_count, 4)
+        self.assertEqual(register.call_args_list[0].args[0], launch.signal.SIGTERM)
+        self.assertEqual(register.call_args_list[1].args[0], 12345)
+        break_handler = register.call_args_list[1].args[1]
+        with self.assertRaises(KeyboardInterrupt):
+            break_handler(12345, None)
+        self.assertEqual(register.call_args_list[2].args, (launch.signal.SIGTERM, "previous handler"))
+        self.assertEqual(register.call_args_list[3].args, (12345, "previous handler"))
 
     def test_old_python_gets_actionable_error_before_start(self):
         with patch.object(launch.sys, "version_info", (3, 10, 0)):

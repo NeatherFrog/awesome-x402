@@ -12,3 +12,8 @@ dist/
 *.sqlite3
 *.sqlite3-shm
 *.sqlite3-wal
+data/current-history/*/*.csv
+data/current-history/*/*.json
+!data/current-history/**/protocol.json
+!data/current-history/**/provenance.json
+!data/current-history/**/training-lock.json

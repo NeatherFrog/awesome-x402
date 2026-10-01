@@ -20,6 +20,8 @@ class ScannerAPITests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.app = Application(self.temp.name)
+        # Market transport fixtures must not trigger a real calendar request.
+        self.app.news.refresh = Mock(return_value=self.app.news.status())
         handler = make_handler(self.app)
         handler.log_message = lambda *_args: None
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), handler)

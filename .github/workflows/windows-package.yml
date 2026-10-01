@@ -1,0 +1,55 @@
+name: Windows portable package
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'propdesk/**'
+      - 'static/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'docs/**'
+      - 'launch.py'
+      - 'START-*'
+      - 'RELEASE.json'
+      - '.github/workflows/windows-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-package-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    env:
+      TRADING_AUTOPILOT_DEFAULT: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Test application
+        run: python -m unittest discover -s tests -q
+      - name: Check browser script
+        run: node --check static/app.js
+      - name: Build official Python portable package
+        run: python scripts/build_windows_distribution.py --commit ${{ github.sha }} --output-dir dist
+      - name: Run actual Windows package and update
+        run: python scripts/smoke_windows_package.py --archive (Get-ChildItem dist/PROP-LAB-Windows-x64-*.zip).FullName
+      - name: Retain tested package
+        uses: actions/upload-artifact@v4
+        with:
+          name: prop-lab-windows-x64
+          path: |
+            dist/PROP-LAB-Windows-x64-*.zip
+            dist/PROP-LAB-Windows-x64-*.zip.sha256
+            dist/windows-validation.json
+          retention-days: 30
+      - name: Publish tested package for direct download
+        shell: bash
+        run: python scripts/publish_windows_package.py --source-commit "${GITHUB_SHA}" --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"

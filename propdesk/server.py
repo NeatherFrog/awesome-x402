@@ -79,6 +79,52 @@ class Application:
         self.restart_requested = False
         from .jobs import ScannerJobs
         self.scanner = ScannerJobs(self.store.path.parent / "scanner", self.scan_markets)
+        from .news import CalendarFeed
+        self.news = CalendarFeed(self.store.path.parent)
+        from .autopilot import Autopilot
+        package = self.updater.status().get("mode") == "package"
+        enabled = package and os.environ.get("TRADING_SUPERVISED") == "1"
+        default = os.environ.get("TRADING_AUTOPILOT_DEFAULT", "").strip()
+        if default in ("0", "1"):
+            enabled = default == "1"
+        self.autopilot = Autopilot(
+            self.store.path.parent / "autopilot.json", self.start_auto_scan,
+            self.auto_scan_result, latest_scan=self.scanner.latest,
+            can_start=self.auto_scan_available, enabled=enabled)
+
+    def auto_scan_available(self):
+        if self.restart_requested or self.updater.status().get("busy"):
+            return {"allowed": False, "reason": "maintenance"}
+        if self.scanner.busy or RESEARCH_LOCK.locked():
+            return {"allowed": False, "reason": "research_busy"}
+        return {"allowed": True}
+
+    def start_auto_scan(self, payload):
+        from .autopilot import ResearchDeferred
+        request = self.scan_payload(payload)
+        if not RESEARCH_LOCK.acquire(blocking=False):
+            raise ResearchDeferred("Дождитесь завершения текущего исследования")
+        try:
+            if self.restart_requested or self.updater.status().get("busy") or self.scanner.busy:
+                raise ResearchDeferred("Исследование или обновление уже выполняется")
+            return self.scanner.start(request)
+        finally:
+            RESEARCH_LOCK.release()
+
+    def auto_scan_result(self, job_id):
+        job = self.scanner.get(job_id)
+        if job.get("state") == "completed" and isinstance(job.get("result"), dict):
+            primary = job["result"].get("primary_symbol")
+            market = next((item for item in job["result"].get("markets", [])
+                           if item.get("symbol") == primary and item.get("report")), None)
+            if market:
+                latest = self.store.latest_research()
+                if not latest or latest.get("autopilot_job_id") != job_id:
+                    report = copy.deepcopy(market["report"])
+                    report["autopilot_job_id"] = job_id
+                    report["automation"] = "research_only"
+                    self.store.save_research(report)
+        return job
 
     def reference_reports(self):
         file = ROOT / "docs" / "research-results.json"
@@ -129,9 +175,19 @@ class Application:
         context = payload.get("context")
         if context is None and context_file.exists():
             context = json.loads(context_file.read_text(encoding="utf-8"))
-        result = build_setup(research, context)
-        # Preserve the last explicitly supplied context; never treat it as an external feed.
-        if context is not None:
+        effective = copy.deepcopy(context) if isinstance(context, dict) else context
+        if effective is None:
+            effective = {}
+        if isinstance(effective, dict):
+            news = effective.get("news")
+            empty_manual = (isinstance(news, dict) and news.get("confirmed", False) is False
+                            and news.get("source", "") == "" and news.get("events", []) == []
+                            and news.get("observed_at") is None)
+            if news is None or empty_manual or isinstance(news, dict) and news.get("generation") == "provider":
+                effective["news"] = self.news.context()
+        result = build_setup(research, effective)
+        # Persist explicit manual context, while the provider cache refreshes independently.
+        if payload.get("context") is not None:
             with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=context_file.parent,
                                              prefix=".context-", delete=False) as file:
                 temporary = Path(file.name)
@@ -305,6 +361,9 @@ class Application:
             profile = self.profile(payload["profile_id"])
             datasets, errors = {}, []
             symbols = payload["symbols"]
+            if payload["source"] == "yahoo":
+                progress("calendar", {"source": "economic_calendar"})
+                self.news.refresh()
             progress("loading", {"finished": 0, "total": len(symbols)})
 
             def load(symbol):
@@ -484,6 +543,10 @@ def make_handler(app):
                                        "supervised": os.environ.get("TRADING_SUPERVISED") == "1"})
                 elif path == "/api/scanner/jobs/latest":
                     self.respond(200, {"job": app.scanner.latest()})
+                elif path == "/api/autopilot":
+                    self.respond(200, app.autopilot.status())
+                elif path == "/api/news/status":
+                    self.respond(200, app.news.status())
                 elif path.startswith("/api/scanner/jobs/"):
                     self.respond(200, app.scanner.get(path.removeprefix("/api/scanner/jobs/")))
                 elif path == "/api/bootstrap":
@@ -497,6 +560,20 @@ def make_handler(app):
                                        "latest_research": app.store.latest_research()})
                 elif path == "/api/profiles":
                     self.respond(200, {"profiles": app.profiles()})
+                elif path == "/api/firms/review":
+                    review = ROOT / "docs" / "prop-firm-review.json"
+                    self.respond(200, json.loads(review.read_text(encoding="utf-8")) if review.is_file() else
+                                 {"review_status": "unavailable", "products": [], "user_verified": False})
+                elif path == "/api/research/current":
+                    current = ROOT / "docs" / "current-research.json"
+                    if current.is_file():
+                        record = json.loads(current.read_text(encoding="utf-8"))
+                        self.respond(200, {key: record.get(key) for key in (
+                            "schema", "phase", "completed_at", "decision", "primary_symbol",
+                            "selected_symbol", "selected_profile_id", "protocol_sha256", "training_lock_sha256",
+                            "snapshots", "fetch_errors", "reports", "warnings")})
+                    else:
+                        self.respond(200, {"phase": "unavailable", "reports": []})
                 elif path == "/api/journal":
                     self.respond(200, app.store.journal())
                 elif path == "/api/journal/export":
@@ -571,11 +648,11 @@ def make_handler(app):
                         if app.scanner.busy:
                             raise ValueError("Дождитесь завершения автоматического исследования перед обновлением")
                         result = app.updater.apply()
+                        supervised = os.environ.get("TRADING_SUPERVISED") == "1"
+                        restarting = result.get("updated") is True and supervised
+                        app.restart_requested = restarting
                     finally:
                         RESEARCH_LOCK.release()
-                    supervised = os.environ.get("TRADING_SUPERVISED") == "1"
-                    restarting = result.get("updated") is True and supervised
-                    app.restart_requested = restarting
                     self.respond(200, {**result, "restarting": restarting})
                     if restarting:
                         timer = threading.Timer(1.0, self.server.shutdown)
@@ -600,6 +677,15 @@ def make_handler(app):
                     finally:
                         RESEARCH_LOCK.release()
                     self.respond(202, result)
+                elif path == "/api/autopilot":
+                    if payload.get("action") == "run" and set(payload) == {"action"}:
+                        self.respond(202, app.autopilot.run_now())
+                    else:
+                        self.respond(200, app.autopilot.configure(payload))
+                elif path == "/api/news/refresh":
+                    if payload:
+                        raise ValueError("Обновление календаря принимает пустой JSON объект")
+                    self.respond(200, app.news.refresh())
                 elif path == "/api/scanner/use":
                     if app.scanner.busy:
                         raise ValueError("Дождитесь завершения автоматического исследования")
@@ -698,9 +784,13 @@ def serve(host="127.0.0.1", port=8000, directory=None):
     httpd.daemon_threads = True
     print(f"PROP LAB {VERSION}: {host}:{httpd.server_port}, paper/research only", flush=True)
     try:
+        app.news.start(enabled=lambda: app.autopilot.status()["enabled"])
+        app.autopilot.start()
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
+        app.autopilot.stop()
+        app.news.stop()
         httpd.server_close()
     return 42 if app.restart_requested else 0

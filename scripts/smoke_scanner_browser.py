@@ -144,7 +144,8 @@ def main():
                 # A controlled provider denial verifies the fallback UI without
                 # querying a third party or treating a failed download as DEMO.
                 with patch("propdesk.feeds.get_history",
-                           side_effect=ValueError("Yahoo Finance HTTP 403: controlled browser-test denial")) as feed:
+                           side_effect=ValueError("Yahoo Finance HTTP 403: controlled browser-test denial")) as feed, \
+                     patch.object(app.news, "refresh", return_value=app.news.status()):
                     form = page.locator("#scanner-form")
                     form.locator(".segmented label").filter(
                         has=page.locator('[value="yahoo"]')).click()

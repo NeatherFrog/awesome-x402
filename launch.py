@@ -176,7 +176,12 @@ def supervise(root, port=8000, no_browser=False, data_dir=None):
 
         environment = os.environ.copy()
         environment["TRADING_SUPERVISED"] = "1"
-        command = [sys.executable, "-m", "propdesk", "serve", "--host", "127.0.0.1", "--port", str(port)]
+        command = [sys.executable]
+        if sys.platform == "win32":
+            # The embeddable runtime ignores PYTHONUTF8 environment settings;
+            # explicit flags preserve Cyrillic logs when redirected on Windows.
+            command.extend(["-X", "utf8"])
+        command.extend(["-m", "propdesk", "serve", "--host", "127.0.0.1", "--port", str(port)])
         if data_dir is not None:
             command.extend(["--data-dir", str(data_dir)])
         recent_restarts = []
@@ -230,11 +235,15 @@ def main(argv=None):
     def request_stop(_signum, _frame):
         raise KeyboardInterrupt
 
-    previous_handler = signal.signal(signal.SIGTERM, request_stop)
+    handled_signals = [signal.SIGTERM]
+    if hasattr(signal, "SIGBREAK"):
+        handled_signals.append(signal.SIGBREAK)
+    previous_handlers = {item: signal.signal(item, request_stop) for item in handled_signals}
     try:
         return supervise(root, args.port, args.no_browser, args.data_dir)
     finally:
-        signal.signal(signal.SIGTERM, previous_handler)
+        for item, handler in previous_handlers.items():
+            signal.signal(item, handler)
 
 
 if __name__ == "__main__":
