@@ -195,7 +195,15 @@ class UpdaterTests(unittest.TestCase):
                      f"awesome-x402-{NEW}/propdesk/../../outside", "C:/absolute",
                      f"awesome-x402-{NEW}/propdesk\\evil.py"):
             with self.subTest(name=name), self.assertRaisesRegex(UpdaterError, "недопустимый путь"):
-                self.apply(archive(extra=[(name, b"evil")]))
+                # ZipInfo normalizes the native separator while writing on
+                # Windows. Inject raw invalid bytes into both ZIP headers so
+                # the fixture exercises the archive reader on every platform.
+                written_name = name.replace("\\", "/")
+                package = archive(extra=[(written_name, b"evil")])
+                if "\\" in name:
+                    self.assertEqual(package.count(written_name.encode()), 2)
+                    package = package.replace(written_name.encode(), name.encode())
+                self.apply(package)
         self.assertEqual((self.root / "propdesk/server.py").read_bytes(), self.initial["propdesk/server.py"])
 
     def test_zip_symlinks_rejected_even_in_ignored_user_directory(self):
@@ -239,7 +247,9 @@ class UpdaterTests(unittest.TestCase):
         def interrupted(path, content, mode=0o644):
             nonlocal count
             # Backup manifest is allowed; fail after replacing two source files.
-            if self.root in path.parents and ".local" not in path.parts:
+            # Updater resolves paths; Windows may expand RUNNER~1 into its long
+            # name, so compare against the same canonical application root.
+            if path.is_relative_to(self.updater.root) and ".local" not in path.relative_to(self.updater.root).parts:
                 count += 1
                 if count == 3:
                     raise OSError("simulated disk failure")
@@ -248,6 +258,7 @@ class UpdaterTests(unittest.TestCase):
         with patch.object(self.updater, "_atomic_write", side_effect=interrupted):
             with self.assertRaisesRegex(UpdaterError, "автоматически восстановлены"):
                 self.apply(archive(incoming))
+        self.assertEqual(count, 3)
         for relative, content in self.initial.items():
             self.assertEqual((self.root / relative).read_bytes(), content)
         self.assertFalse((self.root / "propdesk/added.py").exists())

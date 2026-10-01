@@ -32,7 +32,10 @@ def sanitized(output):
             output = output.replace(secret, "[redacted]")
     output = re.sub(r"https?://[^\s<>\"']+", "[URL]", output)
     output = re.sub(r"(?i)\bBearer\s+\S+", "Bearer [redacted]", output)
-    return output.encode("utf-8")[-50000:].decode("utf-8", errors="replace")
+    encoded = output.encode("utf-8")
+    if len(encoded) > 50000:
+        encoded = encoded[:24000] + b"\n[Middle output truncated]\n" + encoded[-25000:]
+    return encoded.decode("utf-8", errors="replace")
 
 
 def report(stage, output, code, source):

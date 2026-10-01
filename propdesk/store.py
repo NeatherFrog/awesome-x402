@@ -1,6 +1,7 @@
 """Local SQLite persistence. Amounts are account-currency units, never pips."""
 from __future__ import annotations
 
+from contextlib import contextmanager
 import csv
 import io
 import json
@@ -55,10 +56,21 @@ class Store:
                 CREATE TABLE IF NOT EXISTS research (id TEXT PRIMARY KEY, created TEXT NOT NULL, payload TEXT NOT NULL);
             """)
 
+    @contextmanager
     def connect(self):
+        """Commit or roll back one operation, then release its file handles.
+
+        sqlite3.Connection's own context manager handles transactions but does
+        not close the connection. Keep closure explicit even if setup, the
+        operation, or the transaction's final commit raises.
+        """
         conn = sqlite3.connect(self.path, timeout=15)
-        conn.execute("PRAGMA journal_mode=WAL")
-        return conn
+        try:
+            conn.execute("PRAGMA journal_mode=WAL")
+            with conn:
+                yield conn
+        finally:
+            conn.close()
 
     def profiles(self, defaults):
         profiles = {p["id"]: dict(p) for p in defaults}
