@@ -1,9 +1,11 @@
 # Trading / PROP LAB downloads
 
-Version 0.3.0 source commit: `d820c14cc7c3585bfba110205f97d61d2e02a5b6`
+The Windows package is published only after a native Windows run and supervised update pass. Use its matching Windows-version-README.md and windows-validation.json for provenance.
 
-PROP-LAB-0.3.0.zip is the generic package for Python 3.11+. Extract it completely and use START-MAC.command, START-LINUX.sh, or START-WINDOWS.bat.
+The generic cross-platform source package is PROP-LAB-0.3.1.zip. It requires Python 3.11 or newer. Extract it completely and use START-WINDOWS.bat, START-LINUX.sh, or START-MAC.command.
 
-The separate Windows x64 ZIP is published by native Windows CI after verifying its bundled official Python runtime and real process update/restart. See Windows-0.3.0-README.md and windows-validation.json when present.
+Research and paper planning; no proven future profitability or live orders.
 
-Automatic research, economic calendar, rules review, conditional setups, journal and GitHub source updates are included. No qualified current profitable strategy has been established; this is research and paper planning.
+Source commit: `eeddc83a37c49e7c26278cfd6531418b70440918`
+
+Generic archive SHA-256: `98e3fd2ea3fddf704b836e747dd32aeeb7a6b174bdcfb81bb010d8872f2028c5`
