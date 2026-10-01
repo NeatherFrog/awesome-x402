@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "source_repository": "https://github.com/freqtrade/freqtrade",
+  "source_release": "2021.12",
+  "source_commit": "b530600718ddacf6234958917ef744ba1fc3bf18",
+  "source_path": "tests/testdata/ETH_BTC-5m.json",
+  "source_url": "https://github.com/freqtrade/freqtrade/blob/b530600718ddacf6234958917ef744ba1fc3bf18/tests/testdata/ETH_BTC-5m.json",
+  "source_sha256": "a5adc2e6df5e901febbba9a4a1a10775835b235dd69f35c340a17af9d5932c15",
+  "predeclared_pairs": [
+    "ETH/BTC"
+  ],
+  "symbol": "ETHBTC",
+  "file": "ETHBTC-5m.csv",
+  "base_currency": "ETH",
+  "quote_currency": "BTC",
+  "volume_unit": "ETH",
+  "nominal_account_currency": "BTC",
+  "nominal_account_size": 100000,
+  "timeframe": "5m",
+  "bars": 5760,
+  "start": "2018-01-10T04:55:00Z",
+  "end": "2018-01-30T04:50:00Z",
+  "sha256": "a91a72717a3ebcceb44c18aaffadfb449c293c862c0271a09125255c9ba24850",
+  "data_fingerprint": "a04a8cf731d8bea84d845cc61f4f1460bc20c5319a6b9ff8a6d59997849132b1",
+  "conversion": "Unix epoch milliseconds -> explicit UTC bar-open timestamp; direct copy of source OHLCV; no resampling, sorting, or invented highs/lows.",
+  "availability": "2021.12 tree has ETH_BTC-5m.json as its only BTC/ETH base-pair JSON fixture. Current head uses Feather and pyarrow was unavailable. UNITTEST_* synthetic fixtures were excluded.",
+  "license": "Upstream GPL-3.0 LICENSE included verbatim; only factual OHLCV data copied, no upstream application code.",
+  "historical_only": true,
+  "spot_execution_validated": false,
+  "prop_execution_validated": false,
+  "limitations": [
+    "Это архивный upstream testdata-снимок января 2018 года, не текущие котировки и не сегодняшний сигнал.",
+    "Источник — ETH_BTC fixture Freqtrade 2021.12. Оригинальный exchange/vendor и отсутствие ручных изменений тестовых данных независимо не подтверждены.",
+    "Цена ETH выражена в BTC; модельный счёт — номинальные 100 000 BTC quote units. Доходность в процентах/R нельзя выдавать за USD P&L или выплату проп-фирмы.",
+    "Движок моделирует long и short. Short в обычном spot без заёма невозможен; borrowing, funding, margin, ограничения площадки и ликвидность не включены. Результат не исполним как spot-бот.",
+    "Комиссия 10 bps на сторону — предположение, не подтверждённый тариф этого источника; slippage 2 bps и spread 2 bps дают 26 bps полного оборота.",
+    "Двадцатидневная выборка и один ETH/BTC рынок не устанавливают устойчивость на других эпохах, биржах, валютных котировках или проп-CFD.",
+    "Семь фиксированных семейств и варианты параметров создают множественный поиск. Описательный bootstrap не корректирует этот эффект; edge и выплаты не доказаны.",
+    "Стратегия/параметры выбираются только на train. После отказа этого победителя лучшая holdout-альтернатива не подставляется.",
+    "Replay проверяет лишь учебные 5% daily / 10% static loss floors на OHLC. Действующие правила фирмы, реальные исполнения и payout-пригодность не подтверждены."
+  ]
+}

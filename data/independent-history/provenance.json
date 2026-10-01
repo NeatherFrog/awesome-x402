@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "source_repository": "https://github.com/kernc/backtesting.py",
+  "source_commit": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
+  "source_blob_sha256": {
+    "backtesting/test/GOOG.csv": "60e961a567490b157f71888df9e6afb36190a34a40a6286aa38988e2343f1b1a",
+    "backtesting/test/EURUSD.csv": "81e977905a006cc8fbc034ebdb83c999a8ed6ba00191dc7ea5ef5b386fb74a82",
+    "LICENSE.md": "ad858d53cae05eed9531ecd4c467440803acffe34c69de7b88e03affc5b6a1bd",
+    "backtesting/test/__init__.py": "823c9e294b8a70a394350f4089f102a5bd3ddfecb4ac3e8fe41085f6970906e4"
+  },
+  "acquisition": "Read-only HTTPS Git proxy; pinned Git blobs, no external executable dependency",
+  "source_url": "https://github.com/kernc/backtesting.py/blob/ca2e2611621e472542ba90f7243a1fa06a7d7108/backtesting/test/GOOG.csv",
+  "license": "GNU Affero General Public License version 3, upstream LICENSE.md retained verbatim",
+  "conversion": "Daily session date -> dateT00:00:00Z. Copy source OHLCV unchanged; no sorting/resampling/imputation/adjustments.",
+  "datasets": [
+    {
+      "symbol": "GOOG",
+      "file": "GOOG-1d.csv",
+      "bars": 2148,
+      "start": "2004-08-19T00:00:00Z",
+      "end": "2013-03-01T00:00:00Z",
+      "timeframe": "1d",
+      "sha256": "eebd06257a66a7dac2a4eaa51420ef5eb9533b1463479e693af07e2311f288c0",
+      "data_fingerprint": "6d89304e707cf807c5ac1026b576ee03c512e5a4ce348ed31e796928cfd962de",
+      "quality": {
+        "status": "validated_with_source_limitations",
+        "gap_flag_threshold_pct": 25,
+        "maximum_absolute_open_gap_pct": 19.057259,
+        "maximum_gap_date": "2008-04-18T00:00:00Z",
+        "flagged_gaps": [],
+        "prices_adjusted_or_cleaned": false,
+        "reason": null
+      }
+    }
+  ],
+  "excluded": [
+    {
+      "symbol": "EURUSD",
+      "source_file": "original/EURUSD.csv",
+      "bars": 5000,
+      "source_first_time": "2017-04-19 09:00:00",
+      "source_last_time": "2018-02-07 15:00:00",
+      "status": "unsupported",
+      "reason": "Hourly timestamps are timezone-naive; upstream loader and source descriptions do not establish their timezone. No UTC assumption or intraday research."
+    }
+  ],
+  "limitations": [
+    "GOOG — подлинный публичный OHLCV fixture 2004–2013 годов; это не актуальные цены, исполнимые котировки или сегодняшние сетапы.",
+    "Source commit и байты файлов закреплены и проверяются; первоначальный market vendor и adjustment policy независимо не подтверждены.",
+    "Дата GOOG — дневная биржевая сессия. Метка dateT00:00:00Z сохраняет дату, но не обозначает фактическое время открытия NASDAQ.",
+    "Весь доступный GOOG fixture выбран до результатов: нет вырезания неудачных режимов или корректировки OHLC. Аудит gap >25% помечает данные unsupported, а не исправляет цену.",
+    "Ни один split/дивиденд/rollover не корректируется дополнительно. Отсутствие крупного gap не доказывает полноту корпоративных действий.",
+    "EURUSD имеет 5000 timezone-naive hourly bars без подтверждённой зоны: он исключён, UTC не придуман. Никаких intraday FX выводов по нему не сделано.",
+    "Фиксированы семь семейств и их существующий grid, риск 0.25%, плечо 2, 60% train/40% untouched holdout. Holdout не выбирает замену победителю train.",
+    "Условные издержки: fee 2 bps/сторона, slippage 1 bps/сторона, полный spread 1 bps; примерно 7 bps за оборот. Borrow, финансирование, дивиденды и ликвидность не моделируются.",
+    "Дневной OHLC не восстанавливает порядок ticks, реальное исполнение и переносы. Учебный 5% daily/10% static replay проверяет только описанные loss floors.",
+    "Положительный исторический P&L и описательный bootstrap не доказывают будущее преимущество, действующие правила или выплаты проп-фирмы. Multiple testing и survivorship bias сохраняются.",
+    "Upstream AGPL-3.0 license сохранён рядом с неизменёнными fixtures; код backtesting.py не импортирован и не скопирован в наш движок."
+  ]
+}

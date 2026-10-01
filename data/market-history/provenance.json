@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "source_repository": "https://github.com/plotly/datasets",
+  "source_commit": "0c447c47b757ad74edecab31f0d72f849d2e67c2",
+  "source_path": "all_stocks_5yr.csv",
+  "source_sha256": "6aea253cd19de60b568143991aaf1fa482456565c389205658d236e595e716cf",
+  "source_url": "https://github.com/plotly/datasets/blob/0c447c47b757ad74edecab31f0d72f849d2e67c2/all_stocks_5yr.csv",
+  "timeframe": "daily exchange sessions",
+  "predeclared_symbols": [
+    "AAPL",
+    "MSFT",
+    "JPM",
+    "XOM"
+  ],
+  "requested_window": {
+    "start": "2015-01-01",
+    "end": "2018-02-07"
+  },
+  "conversion": "Name filters fixed symbols; date -> dateT00:00:00Z; copy source open/high/low/close/volume. No sorting, resampling, invented OHLC or extra adjustments.",
+  "corporate_actions": "Post-2014 fixed window; original vendor adjustment policy is unknown. A >25% close-to-next-open gap is rejected pending investigation; absence of a gap does not certify split handling.",
+  "license": "Included MIT license from the pinned Plotly repository; original market-vendor provenance remains incomplete.",
+  "unavailable": [
+    {
+      "symbol": "SPY",
+      "reason": "No SPY rows in the pinned all_stocks_5yr snapshot."
+    },
+    {
+      "symbol": "BTCUSD",
+      "reason": "Mining-BTC-180.csv lacks genuine OHLCV; Market-price alone cannot reconstruct bars."
+    },
+    {
+      "symbol": "EURUSD",
+      "reason": "Web-trader sample is timezone-naive bid/ask ticks, not a validated historical OHLCV feed."
+    }
+  ],
+  "datasets": [
+    {
+      "symbol": "AAPL",
+      "file": "AAPL-1d.csv",
+      "asset_class": "equity",
+      "timeframe": "1d",
+      "currency": "USD",
+      "bars": 781,
+      "start": "2015-01-02T00:00:00Z",
+      "end": "2018-02-07T00:00:00Z",
+      "sha256": "b3736577a8f331458531685a619908f8f12a865348fbd298cfe51bbc156afd41",
+      "data_fingerprint": "b7f6700388a410b9c0a8cb89cec84899c9244370b29a92d1459f412e438b60f4",
+      "maximum_absolute_open_gap_pct": 10.296899
+    },
+    {
+      "symbol": "MSFT",
+      "file": "MSFT-1d.csv",
+      "asset_class": "equity",
+      "timeframe": "1d",
+      "currency": "USD",
+      "bars": 781,
+      "start": "2015-01-02T00:00:00Z",
+      "end": "2018-02-07T00:00:00Z",
+      "sha256": "842d38ccc3036e5e93441c02d6f087dfb252923c99fc0e09b8502863b85df4b8",
+      "data_fingerprint": "c73bf65f6d2baa37a3639ed7711181a3683164cda5534ab77b2be87e4b4cebec",
+      "maximum_absolute_open_gap_pct": 8.890277
+    },
+    {
+      "symbol": "JPM",
+      "file": "JPM-1d.csv",
+      "asset_class": "equity",
+      "timeframe": "1d",
+      "currency": "USD",
+      "bars": 781,
+      "start": "2015-01-02T00:00:00Z",
+      "end": "2018-02-07T00:00:00Z",
+      "sha256": "56e2b220e394dd6d362b981b95daf24f7de902071ca57b7d3bda08772b107067",
+      "data_fingerprint": "feced414f63884c4963ffa81c911e93953e8864de7e182c8c262c3524b4a74f8",
+      "maximum_absolute_open_gap_pct": 6.77673
+    },
+    {
+      "symbol": "XOM",
+      "file": "XOM-1d.csv",
+      "asset_class": "equity",
+      "timeframe": "1d",
+      "currency": "USD",
+      "bars": 781,
+      "start": "2015-01-02T00:00:00Z",
+      "end": "2018-02-07T00:00:00Z",
+      "sha256": "ba6c95573d1f278e6d3780d009b968191cf7a8d87bdce42ea3100beb161355f4",
+      "data_fingerprint": "2b93eb12ffc59d6a2e48ae87148b6552028d6a2491bb2fbf18ff0a23f2f70c22",
+      "maximum_absolute_open_gap_pct": 5.739637
+    }
+  ],
+  "limitations": [
+    "Это архив дневных акций США 2015–2018 годов: текущих котировок и сегодняшних сетапов здесь нет.",
+    "Plotly — публичное зеркало набора данных. Исходный поставщик и полный порядок обработки корпоративных событий независимо не подтверждены.",
+    "Общее окно зафиксировано до просмотра результатов и исключает split AAPL 2014 года. Новые корректировки цены и дивидендов не применялись.",
+    "Выборка содержит сохранившиеся компании: survivorship bias не устранён. Четыре тикера не означают охват всех активов.",
+    "Дата источника обозначает биржевую сессию. 00:00:00Z — каноническая метка дневной даты, а не фактическое открытие биржи США.",
+    "Дневные OHLC не устанавливают внутридневную последовательность, реальные исполнения, соблюдение всех правил проп-фирмы, разрешение переносов и выплату.",
+    "Издержки предполагаются: комиссия 2 bps, проскальзывание 1 bps и половина спреда 1 bps на сторону, около 7 bps за оборот. Заём акций, дивиденды и финансирование не учитываются.",
+    "Выбирается только победитель train каждого актива. Положительные альтернативы на holdout показаны полностью, но не подменяют исходный выбор.",
+    "Описательный bootstrap не скорректирован за множественный поиск стратегий и активов. Пройденный фильтр означает кандидата для paper-review, а не доказательство будущей прибыли.",
+    "Включён только учебный replay лимитов 5% daily и 10% static; действующие официальные правила фирм не проверены. Реальные ордера и challenge/funded выплаты не подтверждены."
+  ]
+}

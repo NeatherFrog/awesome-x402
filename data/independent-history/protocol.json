@@ -1,0 +1,212 @@
+{
+  "study_id": "independent-goog-2004-2013-fixed-v1",
+  "source_commit": "ca2e2611621e472542ba90f7243a1fa06a7d7108",
+  "predeclared_analyzed_symbols": [
+    "GOOG"
+  ],
+  "examined_source_symbols": [
+    "GOOG",
+    "EURUSD"
+  ],
+  "full_source_window": "all 2148 GOOG daily source rows; no cuts",
+  "minimum_bars": 300,
+  "fixed_config": {
+    "source": "csv",
+    "symbol": "GOOG",
+    "account_size": 100000,
+    "risk_pct": 0.25,
+    "train_fraction": 0.6,
+    "max_leverage": 2,
+    "fee_bps": 2,
+    "slippage_bps": 1,
+    "spread_bps": 1,
+    "fee_per_unit": 0,
+    "contract_multiplier": 1,
+    "quantity_step": 1,
+    "max_drawdown_pct": 8,
+    "strategy_ids": [
+      "ema_pullback",
+      "donchian_breakout",
+      "rsi_reversion",
+      "bollinger_reversion",
+      "trend_momentum",
+      "inside_bar_breakout",
+      "volatility_expansion",
+      "buy_hold"
+    ],
+    "prop_profile": {
+      "id": "independent-static-illustrative",
+      "name": "Независимый архив: учебные static limits",
+      "account_size": 100000.0,
+      "challenge_fee": 0.0,
+      "profit_target_pct": 8.0,
+      "daily_loss_pct": 5.0,
+      "max_loss_pct": 10.0,
+      "drawdown_type": "static",
+      "payout_split_pct": 80.0,
+      "min_trading_days": 5,
+      "max_calendar_days": null,
+      "best_day_pct": null,
+      "daily_reset_timezone": "UTC",
+      "verified_at": null,
+      "source_url": "",
+      "status": "illustrative",
+      "risk_buffer_amount": 1.0,
+      "max_risk_pct": 1.0,
+      "quantity_step": 0.01,
+      "challenge_required": true,
+      "daily_reference_basis": "max_balance_equity",
+      "trailing_cap_at_initial": false,
+      "news_allowed": null,
+      "overnight_allowed": null,
+      "weekend_allowed": null,
+      "ea_allowed": null
+    }
+  },
+  "parameter_grid": {
+    "ema_pullback": [
+      {
+        "fast": 12,
+        "slow": 48,
+        "atr_period": 14,
+        "stop_atr": 1.7,
+        "reward_risk": 1.8,
+        "max_hold_bars": 36
+      },
+      {
+        "fast": 20,
+        "slow": 60,
+        "atr_period": 14,
+        "stop_atr": 1.7,
+        "reward_risk": 1.8,
+        "max_hold_bars": 36
+      }
+    ],
+    "donchian_breakout": [
+      {
+        "lookback": 20,
+        "atr_period": 14,
+        "stop_atr": 2.0,
+        "reward_risk": 2.0,
+        "max_hold_bars": 72
+      },
+      {
+        "lookback": 40,
+        "atr_period": 14,
+        "stop_atr": 2.0,
+        "reward_risk": 2.0,
+        "max_hold_bars": 72
+      }
+    ],
+    "rsi_reversion": [
+      {
+        "rsi_period": 14,
+        "lower": 30,
+        "upper": 70,
+        "efficiency_period": 20,
+        "max_efficiency": 0.4,
+        "atr_period": 14,
+        "stop_atr": 1.4,
+        "reward_risk": 1.4,
+        "max_hold_bars": 24
+      },
+      {
+        "rsi_period": 14,
+        "lower": 25,
+        "upper": 75,
+        "efficiency_period": 20,
+        "max_efficiency": 0.4,
+        "atr_period": 14,
+        "stop_atr": 1.4,
+        "reward_risk": 1.4,
+        "max_hold_bars": 24
+      }
+    ],
+    "bollinger_reversion": [
+      {
+        "lookback": 20,
+        "deviation": 2.0,
+        "efficiency_period": 20,
+        "max_efficiency": 0.4,
+        "atr_period": 14,
+        "stop_atr": 1.5,
+        "reward_risk": 1.5,
+        "max_hold_bars": 24
+      },
+      {
+        "lookback": 20,
+        "deviation": 2.5,
+        "efficiency_period": 20,
+        "max_efficiency": 0.4,
+        "atr_period": 14,
+        "stop_atr": 1.5,
+        "reward_risk": 1.5,
+        "max_hold_bars": 24
+      }
+    ],
+    "trend_momentum": [
+      {
+        "lookback": 12,
+        "momentum_atr": 2.0,
+        "trend_period": 50,
+        "atr_period": 14,
+        "stop_atr": 2.0,
+        "reward_risk": 2.0,
+        "max_hold_bars": 48
+      },
+      {
+        "lookback": 24,
+        "momentum_atr": 2.0,
+        "trend_period": 50,
+        "atr_period": 14,
+        "stop_atr": 2.0,
+        "reward_risk": 2.0,
+        "max_hold_bars": 48
+      }
+    ],
+    "inside_bar_breakout": [
+      {
+        "trend_period": 50,
+        "atr_period": 14,
+        "stop_atr": 1.4,
+        "reward_risk": 1.8,
+        "max_hold_bars": 24
+      },
+      {
+        "trend_period": 50,
+        "atr_period": 14,
+        "stop_atr": 1.8,
+        "reward_risk": 1.8,
+        "max_hold_bars": 24
+      }
+    ],
+    "volatility_expansion": [
+      {
+        "lookback": 10,
+        "body_atr": 1.4,
+        "trend_period": 50,
+        "atr_period": 14,
+        "stop_atr": 2.0,
+        "reward_risk": 1.8,
+        "max_hold_bars": 36
+      },
+      {
+        "lookback": 10,
+        "body_atr": 1.8,
+        "trend_period": 50,
+        "atr_period": 14,
+        "stop_atr": 2.0,
+        "reward_risk": 1.8,
+        "max_hold_bars": 36
+      }
+    ],
+    "buy_hold": [
+      {
+        "baseline": true
+      }
+    ]
+  },
+  "selection": "Train alone chooses params and strategy; untouched holdout gates winner; no substitution.",
+  "registered_before_holdout_evaluation": true,
+  "post_result_grid_changes": false
+}
