@@ -1,10 +1,13 @@
 """Synthetic portable-package tests; no claim of native Windows execution."""
+import base64
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import stat
 import struct
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -140,6 +143,48 @@ class WindowsPackageTests(unittest.TestCase):
                 with self.assertRaises(windows.WindowsBuildError):
                     windows._validate_signatures({**observed, "python_version": version,
                                                   "python_resource_version": resource}, files)
+
+    def test_signature_script_is_executed_whole_without_interactive_stdin(self):
+        observed = signature_records(runtime_members())
+        completed = subprocess.CompletedProcess([], 0, "\ufeff" + json.dumps(observed), "")
+        with patch.object(windows.subprocess, "run", return_value=completed) as run:
+            self.assertEqual(windows._authenticode("C:/path with spaces/runtime"), observed)
+        command = run.call_args.args[0]
+        self.assertEqual(command[:-1], ["powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-EncodedCommand"])
+        script = base64.b64decode(command[-1], validate=True).decode("utf-16-le")
+        self.assertIn("Get-AuthenticodeSignature -LiteralPath", script)
+        self.assertIn("python_version=$version.FileVersion", script)
+        self.assertIn("$version.FileBuildPart", script)
+        self.assertIn("[Console]::OutputEncoding", script)
+        self.assertNotIn("input", run.call_args.kwargs)
+        self.assertEqual(run.call_args.kwargs["encoding"], "utf-8")
+        self.assertEqual(run.call_args.kwargs["env"]["TRADING_RUNTIME_VERIFY_DIR"], "C:/path with spaces/runtime")
+
+    def test_empty_or_malformed_signature_response_has_bounded_safe_diagnostics(self):
+        secret = "fixture-ci-secret"
+        with patch.dict(os.environ, {"TRADING_CI_TOKEN": secret}):
+            for response in ("", "not JSON " + secret + " https://example.invalid/log?sig=fixture " + "x" * 3000):
+                with self.subTest(empty=not response):
+                    completed = subprocess.CompletedProcess([], 0, response, "")
+                    with patch.object(windows.subprocess, "run", return_value=completed):
+                        with self.assertRaisesRegex(windows.WindowsBuildError, "did not return valid JSON") as error:
+                            windows._authenticode("C:/runtime")
+                    message = str(error.exception)
+                    self.assertNotIn(secret, message)
+                    self.assertNotIn("sig=fixture", message)
+                    self.assertLessEqual(len(message), 2100)
+
+    def test_signature_process_failure_redacts_secrets_and_signed_urls(self):
+        secret = "fixture-ci-secret"
+        completed = subprocess.CompletedProcess([], 1, "", "Bearer " + secret + " https://example.invalid/log?sig=fixture")
+        with patch.dict(os.environ, {"TRADING_CI_TOKEN": secret}):
+            with patch.object(windows.subprocess, "run", return_value=completed):
+                with self.assertRaisesRegex(windows.WindowsBuildError, "failed \\(exit 1\\)") as error:
+                    windows._authenticode("C:/runtime")
+        self.assertIn("[redacted]", str(error.exception))
+        self.assertIn("[URL]", str(error.exception))
+        self.assertNotIn(secret, str(error.exception))
+        self.assertNotIn("sig=fixture", str(error.exception))
 
     def test_linux_cannot_claim_verified_windows_publication(self):
         with patch.object(windows.sys, "platform", "linux"):

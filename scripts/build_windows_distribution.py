@@ -8,6 +8,7 @@ There is no caller-supplied checksum or verification-bypass switch.
 from __future__ import annotations
 
 import argparse
+import base64
 from datetime import datetime, timezone
 import hashlib
 import io
@@ -145,10 +146,38 @@ $version = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $runtimePath
            python_resource_version=@($version.FileMajorPart,$version.FileMinorPart,$version.FileBuildPart,$version.FilePrivatePart);
            records=$records} | ConvertTo-Json -Depth 5 -Compress
 '''
-    completed = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "-"],
-                               input=script, capture_output=True, text=True, encoding="utf-8",
-                               check=True, env=environment, timeout=120)
-    return json.loads(completed.stdout.lstrip("\ufeff"))
+    # -Command - parses stdin as interactive command input on Windows; a
+    # multiline block can yield an empty response. EncodedCommand executes the
+    # complete script, with PowerShell's required UTF-16LE command encoding.
+    encoded = base64.b64encode(script.encode("utf-16-le")).decode("ascii")
+    try:
+        completed = subprocess.run(
+            ["powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            env=environment, timeout=120)
+    except subprocess.TimeoutExpired as exc:
+        raise WindowsBuildError("PowerShell signature inventory timed out: " +
+                                _safe_process_output(exc.stderr or exc.stdout or "")) from None
+    if completed.returncode:
+        raise WindowsBuildError("PowerShell signature inventory failed (exit " + str(completed.returncode) +
+                                "): " + _safe_process_output(completed.stderr + completed.stdout))
+    try:
+        return json.loads(completed.stdout.lstrip("\ufeff").strip())
+    except (ValueError, TypeError):
+        raise WindowsBuildError("PowerShell signature inventory did not return valid JSON: " +
+                                _safe_process_output(completed.stderr + completed.stdout)) from None
+
+
+def _safe_process_output(output):
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", errors="replace")
+    for name in ("TRADING_CI_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "TRADING_GITHUB_TOKEN", "TRADING_WEBHOOK_TOKEN"):
+        secret = os.environ.get(name)
+        if secret:
+            output = output.replace(secret, "[redacted]")
+    output = re.sub(r"https?://[^\s<>\"']+", "[URL]", output)
+    output = re.sub(r"(?i)\bBearer\s+\S+", "Bearer [redacted]", output)
+    return output[-2000:] if output.strip() else "no stdout/stderr output"
 
 
 def _validate_signatures(observed, files):
