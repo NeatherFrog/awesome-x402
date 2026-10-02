@@ -1,0 +1,26 @@
+name: Public pattern-source receipts
+on:
+  push:
+    branches: [prop-source-acquisition]
+    paths: ['scripts/fetch_pattern_sources.py', '.github/workflows/pattern-sources.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned PDF reader for ephemeral research
+        run: python -m pip install pypdf==6.1.1
+      - name: Retrieve original public sources and publish limited receipts
+        run: python scripts/fetch_pattern_sources.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pattern-source-receipts
+          path: pattern-source-receipts.json

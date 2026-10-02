@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "id": "prop-eight-percent-2026-10-02-v1",
+  "registered_at": "2026-10-02T10:39:06.714483+00:00",
+  "user_target": {
+    "monthly_account_return": 0.08,
+    "compound_annual_equivalent": 1.5181701168189803,
+    "fixed_nominal_withdrawal_annual_sum": 0.96,
+    "cash_payout_target_distinct": true
+  },
+  "scope": [
+    "index-futures-session patterns",
+    "BTC_ETH relative-value residual patterns",
+    "London/Asian-range FX patterns"
+  ],
+  "prior_disclosure": "All broad2024/2025/2026 markets and previous292 configurations remain selection history. No globally blind claim. New hypotheses and sizing grids frozen before this study outcomes; old producers/outcomes remain byte-identical.",
+  "windows": {
+    "crypto_train": [
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "yahoo_train": [
+      "2024-10-01",
+      "2025-01-01"
+    ],
+    "validation": [
+      "2025-01-01",
+      "2026-01-01"
+    ],
+    "final": [
+      "2026-01-01",
+      "2026-10-01"
+    ]
+  },
+  "training_gates": {
+    "positive_net": true,
+    "positive_double_costs": true,
+    "completed_episodes_min": 30,
+    "calendar_days_min": 60,
+    "adverse_peak_drawdown_max": 0.1,
+    "reference_daily_loss_initial_fraction_max": 0.05
+  },
+  "out_of_sample_gates": {
+    "geometric_calendar_month_equivalent_min": 0.08,
+    "full_calendar_months_min": 6,
+    "completed_episodes_min": 60,
+    "daily_mean_block_ci99_lower_positive": true,
+    "double_cost_monthly_equivalent_positive": true,
+    "median_full_month_positive": true,
+    "positive_full_month_fraction_min": 0.6666666666666666,
+    "both_chronological_halves_positive": true,
+    "adverse_peak_drawdown_max": 0.1,
+    "reference_daily_loss_initial_fraction_max": 0.05
+  },
+  "selection": "One primary per economically distinct study, maximize TRAIN netreturn/max(adverseDD,0.25%) among passing training candidates; deterministic ID tie. Persist selection before validation. Failed primary cannot be replaced by diagnostic alternatives. If validation fails stop without new final performance. If passes persist confirmation before one final run.",
+  "risk": "Sizing choices are preregistered TRAIN parameters, never multiply failed held-out PnL afterwards. Per-position and aggregate physical exposure/margin, fees, gaps, spread, funding and adverse intrabar marks required. ExactFTMO/Topstep rules replay separately; generic5%day/10%DD screen is not their contract certification.",
+  "interpretation": "8%monthly equivalent is a period average, not every-month promise. Report worstmonth and concentrations. Source/contract/mark/fee uncertainty blocks live qualification even a passing historical proxy. Later prospective paper and permitted executable data required.",
+  "telegram": "Deferred until a strategy satisfies target and independent execution/rule evidence; no messages or orders."
+}
