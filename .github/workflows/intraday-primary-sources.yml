@@ -1,0 +1,40 @@
+name: Original intraday research sources
+on:
+  push:
+    branches: [intraday-source-acquisition]
+    paths:
+      - scripts/fetch_intraday_primary_sources.py
+      - tests/test_intraday_primary_sources.py
+      - .github/workflows/intraday-primary-sources.yml
+  workflow_dispatch:
+    inputs:
+      producer_sha256:
+        description: Exact reviewed fetch-producer SHA-256
+        type: string
+        required: true
+permissions:
+  contents: read
+jobs:
+  original-sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original-PDF parser
+        run: python -m pip install pypdf==6.1.1
+      - name: Test source identity and citation bounds
+        run: python -m unittest discover -s tests -p 'test_intraday_primary_sources.py' -v
+      - name: Retrieve exact official original research PDFs
+        env:
+          EXPECTED_PRODUCER_SHA256: ${{ inputs.producer_sha256 }}
+        run: python scripts/fetch_intraday_primary_sources.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-intraday-sources-${{ github.sha }}
+          path: intraday-primary-artifact/
+          retention-days: 7
+          if-no-files-found: error
