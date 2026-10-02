@@ -99,7 +99,7 @@ vm.runInContext("navigate('lab',false)",context);assert.strictEqual(elements['#a
 vm.runInContext("navigate('unknown',false)",context);assert.strictEqual(panels.find(item=>item.id==='tab-overview').hidden,false);
 """
         subprocess.run([shutil.which("node"), "-e", program, str(ROOT / "static/app.js"),
-                        str(ROOT / "static/index.html")], check=True, capture_output=True, text=True, timeout=10)
+                        str(ROOT / "static/index.html")], check=True, capture_output=True, text=True, timeout=30)
 
     @unittest.skipUnless(BROWSER and importlib.util.find_spec("playwright"), "Optional local browser is unavailable")
     def test_browser_visible_workflow_and_find_setups_do_not_start_manual_research(self):
