@@ -1,0 +1,42 @@
+name: Official historical research inputs
+
+on:
+  push:
+    branches: [research-data-acquisition]
+    paths:
+      - '.github/workflows/research-data.yml'
+      - 'propdesk/exchange.py'
+      - 'scripts/research_liquidity.py'
+      - 'scripts/publish_research_data.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-research-data
+  cancel-in-progress: false
+
+jobs:
+  archives:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify exchange parser and checksum failures
+        run: python -X utf8 -m unittest discover -s tests -p test_exchange.py -q
+      - name: Acquire official checksum-verified archives
+        run: python -X utf8 scripts/research_liquidity.py --download-only --intervals both --5m-start-month 2026-07 --workers 6 --data-dir .local/exchange-history
+      - name: Retain source manifests even when coverage fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: historical-research-manifests
+          path: |
+            .local/exchange-history/manifest.json
+            .local/exchange-history/protocol.json
+          retention-days: 30
+      - name: Publish attributed research-only inputs
+        run: python -X utf8 scripts/publish_research_data.py
