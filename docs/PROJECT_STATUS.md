@@ -85,3 +85,12 @@ user's priority. No prop firm or live connection is certified by crypto carry.
 Release validation and exact native package evidence are tracked in
 [VALIDATION.md](VALIDATION.md). A saved cloud draft does not apply network changes,
 publish a snapshot or prove fresh-task restoration.
+
+## Portable timezone correction
+
+The first native0.5.0 run36994215927 found a missing host IANA database before
+package publication. Existing bundled IANA2026b files are now appended to stdlib
+TZPATH only if the normal New York lookup fails. No frozen engine/producer/data
+bytes changed. Six additional regression tests cover Windows-style import,
+2024–2026 DST and lunch boundaries; independent full5m clock comparison matches
+all289,152 observations. Native package smoke includes actual isolated NY lookup.

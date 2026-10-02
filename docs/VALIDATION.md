@@ -1,7 +1,7 @@
 # Validation — 0.5.0 research release
 
-2026-10-02: `python3 -m unittest discover -s tests -q` passed **610 tests**
-in Linux in27.13 seconds; `node --check static/app.js` and `git diff --check`
+2026-10-02: `python3 -m unittest discover -s tests -q` passed **616 tests**
+in Linux in27.39 seconds; `node --check static/app.js` and `git diff --check`
 passed. Tests use isolated synthetic fixtures for causality/accounting/queue
 behavior; they are not trading-profit evidence. Actual market outcomes are
 preserved separately with protocol, source, input and stage hashes.
@@ -35,6 +35,17 @@ The fixed funding hedge earned+1.823768% /+0.483292% /+0.114545% in2024/2025/Jan
 qualified stable strategy, live exchange execution or Telegram trading bot**.
 Subscription CLI actual startup failed before a model call because the existing
 Codex home is immutable; queue paused`runtime_unavailable`, tokens unknown.
+
+The first native0.5.0 run[36994215927](https://github.com/NeatherFrog/awesome-x402/actions/runs/36994215927)
+passed official runtime build, then failed importing the frozen liquidity module:
+Windows had no system/PyPI IANA database. No package was published from that run.
+The package now registers its already bundled IANA2026b TZif directory only when
+ordinary New York lookup fails; host paths remain preferred. Strategy/data/
+protocol producer bytes are unchanged. Six new regression tests cover empty host,
+fresh-process import, idempotence and2024–2026 DST/lunch boundaries. Independently
+comparing the existing bundle with the research host at every289,1525m timestamp
+reproduced local clock, UTC offset and fold exactly. Native smoke now imports the
+frozen engine in the isolated embedded runtime and checks both seasonal offsets.
 
 Native Windows0.5.0 evidence must match its exact source/package; publication is
 performed only after the workflow passes native tests, package launch, evidence

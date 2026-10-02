@@ -81,15 +81,20 @@ def main():
         record.update(version=version, source_commit=commit)
         interpreter = app / "runtime" / "python.exe"
         runtime_check = subprocess.run([str(interpreter), "-X", "utf8", "-c",
-            "import json,ssl,sqlite3,zoneinfo,propdesk,sys; "
+            "import json,ssl,sqlite3,zoneinfo,propdesk,propdesk.liquidity,sys; "
+            "from datetime import datetime; "
+            "ny=zoneinfo.ZoneInfo('America/New_York'); "
             "print(json.dumps({'python':sys.version.split()[0], 'isolated':sys.flags.isolated, "
-            "'sqlite':sqlite3.sqlite_version,'ssl':ssl.OPENSSL_VERSION}))"],
+            "'sqlite':sqlite3.sqlite_version,'ssl':ssl.OPENSSL_VERSION, "
+            "'ny_winter_hours':datetime(2026,1,15,tzinfo=ny).utcoffset().total_seconds()/3600, "
+            "'ny_summer_hours':datetime(2026,7,15,tzinfo=ny).utcoffset().total_seconds()/3600}))"],
             cwd=app, capture_output=True, text=True, encoding="utf-8", errors="replace")
         if runtime_check.returncode:
             detail = (runtime_check.stdout + runtime_check.stderr)[-8000:]
             raise RuntimeError(f"Bundled runtime import check failed ({runtime_check.returncode}):\n{detail}")
         record["runtime"] = json.loads(runtime_check.stdout)
         assert record["runtime"]["isolated"] == 1
+        assert record["runtime"]["ny_winter_hours"] == -5 and record["runtime"]["ny_summer_hours"] == -4
         match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", version)
         assert match is not None
         future_version = f"{match[1]}.{match[2]}.{int(match[3]) + 1}"
@@ -186,7 +191,7 @@ def main():
                                  for p in (app / "runtime").rglob("*") if p.is_file()}
                 assert runtime_before == runtime_after
                 record.update(status="passed", checks=["clean_extraction", "isolated_runtime_imports", "path_with_spaces",
-                    "health_exact_commit", "bootstrap", "setup_board", "fixed_evidence_reports", "crypto_research_evidence", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
+                    "health_exact_commit", "bootstrap", "iana_new_york_timezone", "setup_board", "fixed_evidence_reports", "crypto_research_evidence", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
                     "journal_preserved", "settings_preserved", "runtime_preserved", "update_noop"])
             except Exception as exc:
                 detail = (work / "server.log").read_text(encoding="utf-8", errors="replace")[-8000:]
