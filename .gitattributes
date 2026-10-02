@@ -15,3 +15,7 @@ propdesk/tzdata/UTC -text
 # upgrade within their original 50 MiB extracted-archive limit.
 docs/edge-search.json export-ignore
 docs/current-research.json export-ignore
+# Updates never manage data. Portable public locks are in docs/research-receipts;
+# installed user data and bundled fixtures remain in place. Full Git checkouts
+# retain the original research artifacts and the builder's fixture sources.
+/data export-ignore
