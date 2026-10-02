@@ -1,3 +1,48 @@
+# Validation — 0.5.0 research release
+
+2026-10-02: `python3 -m unittest discover -s tests -q` passed **610 tests**
+in Linux in27.13 seconds; `node --check static/app.js` and `git diff --check`
+passed. Tests use isolated synthetic fixtures for causality/accounting/queue
+behavior; they are not trading-profit evidence. Actual market outcomes are
+preserved separately with protocol, source, input and stage hashes.
+
+The new causal liquidity engine, spot/perpetual/funding readers,208-config hourly
+matrix,64-config portfolio matrix, statistical toolkit, four funding constructions
+and durable official-CLI research queue are tested. The evidence API admits a
+paper candidate only when the fixed passing phase and every required validation
+AND final check agree. Independent audit recomputed nine actual ledger/CI runs
+and tested109 invalid promotion states; no critical finding remains in that
+reviewed scope. [Audit receipt](FINAL_RESEARCH_AUDIT.md).
+
+Actual browser checks passed the new evidence/status card, read-only report links,
+no startup POST, mobile navigation, XSS/same-origin restrictions and HTTP failure
+handling. Legacy SMA/RSI/WATCH models are collapsed by default and recoverable.
+Cloud server0.5.0 started and `scripts/check_ready.py` passed, including the new
+evidence endpoint. All seven protocol/producer hashes verify;292 configurations
+are completed, primary=null, orders/Telegram disabled. Manual journal remains0
+rows with unchanged SHA256
+`4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`.
+
+Three official public-data acquisition runs passed on GitHub. Local decoded data
+and canonical CSV hashes match the original checksum-verified manifests. Full
+BTC/ETH5m has289,152 contiguous bars each; hourly24,096; funding3,012 events each.
+Archive use is personal non-production CC-BY-NC-SA; raw snapshots stay outside
+application distributions. Correlations, risk, costs, confidence and failures are
+in [EXPERIMENT_REGISTRY.md](EXPERIMENT_REGISTRY.md).
+
+The fixed funding hedge earned+1.823768% /+0.483292% /+0.114545% in2024/2025/Jan–Sep2026.
+2026 failed99% interval and half-period stability. This release contains **no
+qualified stable strategy, live exchange execution or Telegram trading bot**.
+Subscription CLI actual startup failed before a model call because the existing
+Codex home is immutable; queue paused`runtime_unavailable`, tokens unknown.
+
+Native Windows0.5.0 evidence must match its exact source/package; publication is
+performed only after the workflow passes native tests, package launch, evidence
+API, updater/restart and preservation. The former0.4.0 evidence below applies
+only to that release, not to this code.
+
+---
+
 # Проверка версии 0.4.0
 
 Проверено 1 октября 2026 года в облачной машине: Python 3.12.14, Node 24.19.0 и Chromium. Проверки приложения используют отдельные временные базы и не меняют личный дневник.

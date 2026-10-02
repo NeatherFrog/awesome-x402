@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "study_id": "binance-spot-btceth-liquidity-quarter-v1",
+  "declared_at": "2026-10-02",
+  "provider": "Binance Spot official archive",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT"
+  ],
+  "interval": "5m",
+  "start": "2026-07-01T00:00:00Z",
+  "end_exclusive": "2026-10-01T00:00:00Z",
+  "variants": [
+    "sweep_all",
+    "mss_all",
+    "sweep_lunch",
+    "mss_lunch"
+  ],
+  "trials_count": 8,
+  "selection": "None; report all eight fixed trials descriptively.",
+  "costs": {
+    "fee_bps": 10,
+    "slippage_bps": 2,
+    "spread_bps": 1
+  },
+  "config": {
+    "interval_seconds": 300,
+    "initial_balance": 100000,
+    "risk_pct": 0.25,
+    "max_gross_leverage": 1,
+    "expiry_bars": 6
+  },
+  "uncertainty": "Deterministic circular seven-calendar-day block bootstrap of realized daily net PnL, including zero-trade days; 4,000 replications; Bonferroni familywise 95% across eight fixed trials => individual two-sided 99.375% CI. No claim of an independent forward test.",
+  "execution": "Theoretical long/short OHLC replay. Funding/borrowing/spot shorts, instrument precision, queue and account eligibility unverified.",
+  "selected": null,
+  "qualified": false,
+  "live_orders_enabled": false,
+  "limitations": [
+    "Three-month descriptive sample only; no 2024 training or 2025 validation in this replay.",
+    "Inspected quarters cannot later be described as blind data.",
+    "Bootstrap does not recover omitted market regimes, unknown trial counts or missing execution costs.",
+    "Positive results do not qualify a live strategy or establish stable future profit."
+  ]
+}

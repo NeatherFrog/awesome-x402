@@ -25,4 +25,6 @@ In this cloud session, Binance REST/data archives, Coinbase Exchange candles and
 
 The reproducible downloader can run on a GitHub Actions worker with normal venue access, then export checksum-verified snapshots. The development worker verifies snapshot hashes after download; a GitHub worker is a different acquisition environment and does not establish local API availability. Any missing monthly/daily exposure blocks the frozen full-calendar study. September 2026's not-yet-published monthly file may be replaced only by all official daily files for that same month, interval, symbol and venue.
 
+Acquisition subsequently succeeded on [Actions run 36990296162](https://github.com/NeatherFrog/awesome-x402/actions/runs/36990296162), pinned downloader source commit `5c9d14d21a38b9745863e9e12c860c5af9c13867`. Each BTC/ETH hourly dataset has 24,096 bars (full January 2024–September 2026); each intentionally limited five-minute dataset has 26,496 bars (July–September 2026). Snapshot manifest hashes and actual strategy-study results remain distinct.
+
 The read-only `propdesk.exchange` adapter never accepts account credentials and never sends order requests.

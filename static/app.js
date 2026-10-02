@@ -2,7 +2,7 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const state = {profiles: [], strategies: [], journal: {trades: [], stats: {}}, research: null, activeProfile: null, detailId: null, accountDirty: false, updates: null, updateAction: false, setup: null, scanJob: null, scanStarting: false, autopilot: null, autopilotAction: false, autopilotError: ''};
-Object.assign(state,{trader:null,traderAction:false,traderError:'',replayDiary:null});
+Object.assign(state,{trader:null,traderAction:false,traderError:'',replayDiary:null,strategyEvidence:null,strategyEvidenceError:''});
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const num = (value, digits = 2) => value === null || value === undefined || !Number.isFinite(Number(value)) ? '—' : Number(value).toLocaleString('ru-RU', {minimumFractionDigits: digits, maximumFractionDigits: digits});
 const money = value => value === null || value === undefined ? '—' : '$' + num(value);
@@ -565,7 +565,7 @@ return '<article><div class="panel-header"><h4>'+esc(title)+'</h4>'+badge(primar
 }
 function renderTraderEvidence(board) {
 const evidence=board?.evidence,primary=evidence?.primary;
-$('#today-evidence').hidden=!primary;if(!primary)return;
+$('#legacy-history').hidden=!primary;$('#today-evidence').hidden=!primary;if(!primary)return;
 $('#today-evidence-title').textContent=historicalStrategyLabel(primary);
 $('#today-evidence-status').textContent=primary.status==='historically_positive_watch'?'WATCH · НЕТ ДОПУСКА':'ОТБОР НЕ ПРОЙДЕН';
 const reasons=(primary.reasons||[]).map(traderEvidenceReason);
@@ -602,11 +602,45 @@ $('#today-next-check').textContent=searching?'После завершения п
 $('#today-source').textContent=error?'Данные не подтверждены':board?.generated_at?'Состояние на '+localTimestamp(board.generated_at):'Сохранённое состояние ещё не получено';
 $('#today-market-statuses').innerHTML=markets.length?markets.map(market=>'<article class="today-market"><div><strong>'+esc(market.symbol)+'</strong>'+badge(market.status==='qualified'?'История прошла отбор':market.status==='unavailable'?'Нет котировок':'Отбор не пройден',market.status==='qualified'?'neutral':'warning')+'</div><p>'+esc({fresh:'Свежие закрытые бары',stale:'Котировки устарели',future_unclosed:'Свеча ещё не закрыта',expired_next_bar:'План истёк',unknown:'Свежесть не подтверждена'}[market.price_state]||'Свежесть не подтверждена')+'</p>'+(market.blockers?.length?'<ul class="reasons-list">'+setupReasons(market.blockers)+'</ul>':'')+'</article>').join(''):'<p class="field-help">Состояние отдельных рынков появится после проверки.</p>';
 }
+let strategyEvidenceLoading=false,strategyEvidenceLastRequest=0;
+function strategyReportUrl(value) {
+if(typeof value!=='string'||!value.startsWith('/api/trader/evidence?'))return null;
+try{
+const url=new URL(value,window.location.origin),knownStudies=['broad','low_turnover','liquidity','funding','funding_sized','funding_static'];
+if(url.origin!==window.location.origin||url.pathname!=='/api/trader/evidence'||url.hash||url.searchParams.size!==1||!knownStudies.includes(url.searchParams.get('study')))return null;
+return url.pathname+url.search;
+}catch{return null;}
+}
+function renderStrategyEvidence() {
+const data=state.strategyEvidence,error=state.strategyEvidenceError,status=$('#strategy-evidence-status'),summary=$('#strategy-evidence-summary'),count=$('#strategy-evidence-count'),note=$('#strategy-evidence-note'),details=$('#strategy-evidence-details');
+$('#strategy-evidence-card').setAttribute('aria-busy',String(strategyEvidenceLoading));
+if(error){status.textContent='Нет связи';status.className='badge badge-warning';summary.textContent='Не удалось загрузить результаты проверки.';count.hidden=true;note.hidden=false;note.textContent=error;details.hidden=true;return;}
+if(!data){status.textContent='Загрузка…';status.className='badge badge-neutral';return;}
+const candidate=data.phase==='candidate_needs_forward_test'&&data.primary?.mode==='paper_candidate';
+status.textContent=candidate?'БУМАЖНЫЙ КАНДИДАТ':'НЕТ ДОПУСКА';status.className='badge badge-'+(candidate?'warning':'neutral');
+summary.textContent=candidate?'Кандидат для форвард-проверки: '+String(data.primary.title||'стратегия')+'.':'Проверенной стратегии пока нет';
+const variants=data.variant_count;count.hidden=!Number.isInteger(variants)||variants<0;count.textContent=count.hidden?'':'Проверено конфигураций: '+num(variants,0)+'.';
+note.hidden=false;note.textContent=candidate?'Нужна проверка на будущих данных. Реальная торговля и Telegram не включены.':'Реальная торговля и Telegram не включены.';
+const reports=(Array.isArray(data.studies)?data.studies:[]).filter(study=>study&&study.phase!=='unavailable').map(study=>{const url=strategyReportUrl(study.report_url);return url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(study.title||'Отчёт')+' <span>JSON ↗</span></a>':'';}).filter(Boolean);
+details.hidden=reports.length===0;
+$('#strategy-evidence-reports').innerHTML=reports.join('')+'<p class="field-help">Исторические результаты требуют отдельной проверки на будущих данных.</p>';
+}
+async function loadStrategyEvidence(force=false) {
+if(strategyEvidenceLoading||(!force&&Date.now()-strategyEvidenceLastRequest<10000))return;
+strategyEvidenceLoading=true;strategyEvidenceLastRequest=Date.now();renderStrategyEvidence();
+try{
+const data=await api('/api/trader/evidence');
+if(!data||!['no_qualified_strategy','candidate_needs_forward_test'].includes(data.phase)||!Number.isInteger(data.variant_count)||data.variant_count<0||data.live_orders!==false||data.telegram_enabled!==false||data.forward_test_required!==true||(data.phase==='candidate_needs_forward_test'&&data.primary?.mode!=='paper_candidate'))throw new Error('Сервер вернул неподтверждённое состояние стратегии.');
+state.strategyEvidence=data;state.strategyEvidenceError='';
+}catch(e){state.strategyEvidenceError=e.message;}
+finally{strategyEvidenceLoading=false;renderStrategyEvidence();}
+}
 function scheduleTraderPoll() {
 clearTimeout(traderPollTimer);traderPollTimer=setTimeout(()=>loadTraderBoard(),state.traderError?5000:state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state)?1500:15000);
 }
 async function loadTraderBoard(force=false) {
 clearTimeout(traderPollTimer);if(state.traderAction&&!force)return;
+loadStrategyEvidence(force);
 const serial=++traderRequestSerial;
 try{const response=await api('/api/trader/board');if(serial!==traderRequestSerial)return;state.trader=response.board||response;state.traderError='';renderTraderBoard();}
 catch(e){if(serial!==traderRequestSerial)return;state.traderError='Связь с помощником недоступна: '+e.message;renderTraderBoard();}

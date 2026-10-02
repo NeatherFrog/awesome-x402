@@ -140,7 +140,11 @@ def convert_klines(rows, interval="5m", *, timestamp_unit="milliseconds", now=No
         bars.append({"time": stamp, **dict(zip(("open", "high", "low", "close", "volume"), row[1:6]))})
     if not bars:
         raise ExchangeDataError("The exchange returned no fully closed bars")
-    return validate_bars(bars, max_bars=400_000), skipped
+    try:
+        canonical = validate_bars(bars, max_bars=400_000)
+    except ValueError as exc:
+        raise ExchangeDataError("Exchange OHLCV is malformed; prices are not repaired") from exc
+    return canonical, skipped
 
 
 def fetch_closed_bars(symbol, interval="5m", limit=1000, *, now=None):

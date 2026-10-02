@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import random
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +36,27 @@ PLAN = {
     "missing_data_policy": "No imputation or deletion of unavailable exposure; any missing calendar chunk makes that symbol/timeframe ineligible. For September2026 only, missing monthly HTTP404 may be replaced by all official daily ZIPs for same venue.",
     "rejected": "Retain every variant and period; final inspection never makes a failed variant a new winner.",
     "live_orders_enabled": False,
+}
+
+# Registered before the first acquired-data outcome is inspected. This is a
+# separate finite descriptive replay, never a replacement training/holdout.
+QUARTER_PLAN = {
+    "schema": 1, "study_id": "binance-spot-btceth-liquidity-quarter-v1",
+    "declared_at": "2026-10-02", "provider": "Binance Spot official archive",
+    "symbols": ["BTCUSDT", "ETHUSDT"], "interval": "5m",
+    "start": "2026-07-01T00:00:00Z", "end_exclusive": "2026-10-01T00:00:00Z",
+    "variants": ["sweep_all", "mss_all", "sweep_lunch", "mss_lunch"],
+    "trials_count": 8, "selection": "None; report all eight fixed trials descriptively.",
+    "costs": {"fee_bps": 10, "slippage_bps": 2, "spread_bps": 1},
+    "config": {"interval_seconds": 300, "initial_balance": 100_000, "risk_pct": .25,
+               "max_gross_leverage": 1, "expiry_bars": 6},
+    "uncertainty": "Deterministic circular seven-calendar-day block bootstrap of realized daily net PnL, including zero-trade days; 4,000 replications; Bonferroni familywise 95% across eight fixed trials => individual two-sided 99.375% CI. No claim of an independent forward test.",
+    "execution": "Theoretical long/short OHLC replay. Funding/borrowing/spot shorts, instrument precision, queue and account eligibility unverified.",
+    "selected": None, "qualified": False, "live_orders_enabled": False,
+    "limitations": ["Three-month descriptive sample only; no 2024 training or 2025 validation in this replay.",
+                    "Inspected quarters cannot later be described as blind data.",
+                    "Bootstrap does not recover omitted market regimes, unknown trial counts or missing execution costs.",
+                    "Positive results do not qualify a live strategy or establish stable future profit."],
 }
 
 
@@ -164,6 +186,8 @@ def research(data_dir, output):
             "engine_sha256": digest(ROOT / "propdesk" / "liquidity.py"),
             "producer_sha256": digest(__file__), "selected": None,
             "qualified": False, "live_orders_enabled": False, "trials": []}
+    base.update(data_license="CC-BY-NC-SA-4.0", data_attribution="Binance Vision: https://data.binance.vision/",
+                data_use="Personal non-production historical research; production permissions unverified.")
     if len(entries) != 2 or any(not item["complete_calendar"] for item in entries):
         base.update(status="blocked_incomplete_data", source_availability=entries,
                     reason="No complete frozen BTC/ETH 2024-2026 calendar; no backtest fabricated.")
@@ -203,25 +227,119 @@ def research(data_dir, output):
     return base
 
 
+def register_quarter(path):
+    """Freeze a separate quarter protocol before accessing candle outcomes."""
+    path = Path(path)
+    if path.exists() and json.loads(path.read_text()) != QUARTER_PLAN:
+        raise ValueError("Existing quarter protocol differs; do not modify inspected trials")
+    write_json(path, QUARTER_PLAN)
+    return digest(path)
+
+
+def _daily_uncertainty(trades, symbol, variant):
+    start = datetime(2026, 7, 1, tzinfo=timezone.utc)
+    days = (datetime(2026, 10, 1, tzinfo=timezone.utc) - start).days
+    pnl = [0.] * days
+    for trade in trades:
+        observed = datetime.fromisoformat(trade["exit_observed_at"].replace("Z", "+00:00"))
+        # The final bar closes exactly at the right boundary; keep its forced
+        # liquidation in the final observed calendar day, labelled separately.
+        index = min((observed.date() - start.date()).days, days - 1)
+        if not 0 <= index < days:
+            raise ValueError("Trade exit falls outside the registered quarter")
+        pnl[index] += trade["net_pnl"]
+    seed = int(hashlib.sha256((symbol + ":" + variant).encode()).hexdigest()[:16], 16)
+    rng = random.Random(seed)
+    samples = []
+    for _ in range(4000):
+        sample = []
+        while len(sample) < days:
+            first = rng.randrange(days)
+            sample.extend(pnl[(first + offset) % days] for offset in range(7))
+        samples.append(sum(sample[:days]))
+    samples.sort()
+    tail = .05 / QUARTER_PLAN["trials_count"] / 2
+    return {"metric": "quarter_realized_net_pnl", "days": days, "zero_trade_days": sum(value == 0 for value in pnl),
+            "block_days": 7, "replications": 4000, "seed": seed,
+            "individual_confidence_pct": 99.375, "familywise_confidence_pct": 95,
+            "ci_low": samples[int(tail * len(samples))],
+            "ci_high": samples[min(len(samples) - 1, int((1 - tail) * len(samples)))],
+            "realized_daily_net_pnl": pnl,
+            "interpretation": "Descriptive uncertainty for this realized exit-PnL sample; excludes unrealized daily equity, unknown regimes and funding/borrowing costs."}
+
+
+def replay_quarter(data_dir, output, registration):
+    protocol_hash = register_quarter(registration)
+    from propdesk.liquidity import backtest
+    data_dir = Path(data_dir)
+    manifest_path = data_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    entries = [entry for entry in manifest["datasets"] if entry["interval"] == "5m"]
+    base = {"schema": 1, "study_id": QUARTER_PLAN["study_id"], "plan": QUARTER_PLAN,
+            "protocol_sha256": protocol_hash, "data_manifest_sha256": digest(manifest_path),
+            "engine_sha256": digest(ROOT / "propdesk" / "liquidity.py"),
+            "producer_sha256": digest(__file__), "selected": None, "qualified": False,
+            "live_orders_enabled": False, "trials": []}
+    base.update(data_license="CC-BY-NC-SA-4.0", data_attribution="Binance Vision: https://data.binance.vision/",
+                data_use="Personal non-production historical research; production permissions unverified.")
+    if len(entries) != 2 or {entry["symbol"] for entry in entries} != set(QUARTER_PLAN["symbols"]) or any(not entry.get("requested_calendar_complete") for entry in entries):
+        base.update(status="blocked_incomplete_data", source_availability=entries,
+                    reason="Both symbols' complete registered quarter must be available; no partial-calendar replay.")
+        write_json(output, base)
+        return base
+    seconds = 300
+    expected = 92 * 86400 // seconds
+    config = {**QUARTER_PLAN["config"], **QUARTER_PLAN["costs"]}
+    for entry in entries:
+        # A limited snapshot is legitimate here because this distinct study
+        # registers exactly the acquired quarter, without inventing a train.
+        copied = {**entry, "complete_calendar": True}
+        all_bars = load_dataset(data_dir, copied)
+        bars = [bar for bar in all_bars if QUARTER_PLAN["start"] <= bar["time"] < QUARTER_PLAN["end_exclusive"]]
+        if len(bars) != expected or bars[0]["time"] != QUARTER_PLAN["start"] or bars[-1]["time"] != "2026-09-30T23:55:00Z":
+            raise ValueError("Registered quarter has missing calendar exposure")
+        for variant in QUARTER_PLAN["variants"]:
+            result = backtest(bars, symbol=entry["symbol"], variant=variant, config=config)
+            # Full trade ledger remains local; report contains small reproducible
+            # metric/uncertainty summaries plus explicitly hypothetical exits.
+            write_json(data_dir / "quarter-ledger" / f"{entry['symbol']}-{variant}.json", result)
+            base["trials"].append({"symbol": entry["symbol"], "variant": variant,
+                                   "bars": len(bars), "metrics": result["metrics"],
+                                   "uncertainty": _daily_uncertainty(result["trades"], entry["symbol"], variant),
+                                   "direction_counts": {side: sum(trade["side"] == side for trade in result["trades"]) for side in ("long", "short")},
+                                   "limitations": result["limitations"]})
+    base.update(status="completed_descriptive", trials_count=len(base["trials"]),
+                interpretation="All eight fixed quarter replays reported; no chosen winner, no independent holdout, no qualified live strategy.")
+    write_json(output, base)
+    return base
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", default=str(ROOT / ".local" / "exchange-history"))
     parser.add_argument("--output", default=str(ROOT / "docs" / "liquidity-research.json"))
     parser.add_argument("--download-only", action="store_true")
     parser.add_argument("--research-only", action="store_true")
+    parser.add_argument("--quarter-replay", action="store_true")
+    parser.add_argument("--register-quarter-only", action="store_true")
+    parser.add_argument("--quarter-registration", default=str(ROOT / "docs" / "liquidity-quarter-protocol.json"))
     parser.add_argument("--intervals", choices=("5m", "1h", "both"), default="both")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--5m-start-month", default="2024-01", dest="smc_start_month",
                         help="Limit initial acquisition, e.g.2026-07; cannot qualify the frozen full-calendar SMC study")
     args = parser.parse_args()
+    if args.register_quarter_only:
+        print("registered", register_quarter(args.quarter_registration))
+        return
     if args.download_only and args.research_only:
         parser.error("Choose download-only or research-only")
     if not 1 <= args.workers <= 8:
         parser.error("workers must be from1 through8")
-    if not args.research_only:
+    if not args.research_only and not args.quarter_replay:
         download(args.data_dir, ("5m", "1h") if args.intervals == "both" else (args.intervals,), args.workers, args.smc_start_month)
     if not args.download_only:
-        result = research(args.data_dir, args.output)
+        result = (replay_quarter(args.data_dir, args.output, args.quarter_registration)
+                  if args.quarter_replay else research(args.data_dir, args.output))
         print(result["status"], "qualified", result["qualified"], "selected", result["selected"])
 
 

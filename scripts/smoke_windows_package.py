@@ -151,6 +151,15 @@ def main():
                 assert studies["sourced_daily"]["primary"]["id"] == "bt_sma_10_30"
                 assert studies["mean_reversion"]["primary"]["id"] == "rsi2_pullback_5"
                 assert all(studies[name]["live_candidate"] is False for name in ("sourced_daily", "intraday", "mean_reversion"))
+                research = request(port, "GET", "/api/trader/evidence")
+                assert research["phase"] == "no_qualified_strategy" and research["primary"] is None
+                assert research["variant_count"] == 292 and research["registered_variant_count"] == 292
+                assert research["live_orders"] is False and research["telegram_enabled"] is False
+                assert len(research["studies"]) == 7 and all(s["protocol_verified"] for s in research["studies"])
+                carry = request(port, "GET", "/api/trader/evidence?study=funding_calibrated")
+                assert carry["phase"] == "completed_final_failed" and carry["retrospective_provisional_candidate"] is False
+                assert carry["validation"]["checks"]["block_ci99_lower_positive"] is True
+                assert carry["final"]["checks"]["block_ci99_lower_positive"] is False
                 diary = request(port, "GET", "/api/trader/diary")
                 assert diary["mode"] == "historical_replay" and diary["live_orders"] is False
                 assert isinstance(diary["trades"], list) and diary["manual_journal_unchanged"] is True
@@ -177,7 +186,7 @@ def main():
                                  for p in (app / "runtime").rglob("*") if p.is_file()}
                 assert runtime_before == runtime_after
                 record.update(status="passed", checks=["clean_extraction", "isolated_runtime_imports", "path_with_spaces",
-                    "health_exact_commit", "bootstrap", "setup_board", "fixed_evidence_reports", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
+                    "health_exact_commit", "bootstrap", "setup_board", "fixed_evidence_reports", "crypto_research_evidence", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
                     "journal_preserved", "settings_preserved", "runtime_preserved", "update_noop"])
             except Exception as exc:
                 detail = (work / "server.log").read_text(encoding="utf-8", errors="replace")[-8000:]

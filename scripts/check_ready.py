@@ -35,6 +35,8 @@ def main():
             board = json.load(response)
         with urlopen(base + "/api/trader/diary", timeout=5) as response:
             diary = json.load(response)
+        with urlopen(base + "/api/trader/evidence", timeout=5) as response:
+            evidence = json.load(response)
         if health.get("ok") is not True or health.get("mode") != "paper" or bootstrap.get("version") != VERSION:
             raise ValueError("На порту работает другой сервер")
         if len(bootstrap.get("strategies", [])) < 8 or not bootstrap.get("profiles") or len(script) < 100:
@@ -47,6 +49,9 @@ def main():
             raise ValueError("Экран сетапов не готов")
         if not isinstance(diary, dict) or "state" not in diary or diary.get("live_orders") is not False:
             raise ValueError("Автоматический дневник не готов")
+        if (evidence.get("live_orders") is not False or evidence.get("telegram_enabled") is not False
+                or not isinstance(evidence.get("studies"), list)):
+            raise ValueError("Статус доказательств стратегии не готов")
         if not args.quiet:
             print("READY: сетапы, автоматический дневник, API, профили, автопилот, календарь, обновления и JavaScript доступны; режим paper")
     except (URLError, OSError, ValueError) as exc:

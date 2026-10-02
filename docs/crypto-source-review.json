@@ -1,0 +1,637 @@
+{
+  "audit_version": "crypto-primary-source-review-v1",
+  "review_completed_at": "2026-10-02T09:32:01.834436+00:00",
+  "scope": "Ten primary-author/official implementation/documentation source groups; actual fetched bodies and reviewed relevant sections. Not all courses, all traders or all internet trading information.",
+  "previous_work_not_repeated": [
+    "docs/STRATEGY_SOURCES.md",
+    "docs/PROP_STRATEGY_SOURCES.md",
+    "docs/MEAN_REVERSION_SOURCES.md"
+  ],
+  "sources": [
+    {
+      "id": "binance_public_data",
+      "kind": "official_exchange_dataset_documentation",
+      "publisher": "Binance official GitHub organization",
+      "commit": "f446ce3812bd4e5521f21faecd4ae3c6460e49fc",
+      "receipt_ids": [
+        "binance_public_data_head",
+        "binance_public_data_readme",
+        "binance_data_terms"
+      ],
+      "verified_facts": [
+        "Spot archive timestamps from 2025-01-01 use microseconds. The retrieved futures examples use millisecond-sized timestamps; do not infer every future endpoint unit from spot archives.",
+        "Klines contain opening/closing timestamps, OHLC, base volume, quote volume, trade count and taker-buy volumes. Monthly/daily files are offered; monthly availability is the first Monday of the month.",
+        "Each zip has a SHA256 .CHECKSUM; archives may be retrospectively replaced, so preserve exact downloaded bytes and checksum.",
+        "Pinned dataset terms sections3.4/4.1/4.2 limit this source to personal non-production historical research and other noncommercial uses. Commercial data licensing and live-execution/signal uses need separate valid data rights. README MIT label does not erase the separately referenced dataset terms."
+      ],
+      "reviewed_sections": [
+        "README Data Information/SPOT/FUTURES/CHECKSUM/Updates/Dataset Terms",
+        "Dataset Terms sections3 and4"
+      ],
+      "performance_evidence": null,
+      "limit": "Documentation is not empirical strategy evidence. No live API or archives were downloaded during this source audit."
+    },
+    {
+      "id": "binance_spot_rest",
+      "kind": "official_exchange_api_documentation",
+      "publisher": "Binance",
+      "commit": "828ca74b809cfedbd5602df328b5f706368d483b",
+      "receipt_ids": [
+        "binance_spot_api_head",
+        "binance_spot_rest"
+      ],
+      "verified_facts": [
+        "REST JSON timestamps are milliseconds by default; X-MBX-TIME-UNIT can request microseconds. These defaults differ from post-2025 spot archive timestamps.",
+        "The matching-engine timeout after10 seconds reports send/execution status unknown; documentation directs querying order status if user-stream confirmation is absent. Do not treat timeout as rejected order and blindly resubmit.",
+        "newClientOrderId is unique among open orders; reuse can be accepted after the previous order fills. Durable local intent/reconciliation is still needed.",
+        "Spot MARKET BUY/SELL describes acquisition/disposal of the base asset. This document does not supply a margin borrowing or perpetual short execution contract."
+      ],
+      "reviewed_sections": [
+        "General API Information",
+        "New order/market order mandatory parameters/client IDs"
+      ],
+      "performance_evidence": null,
+      "limit": "No authenticated execution, account borrowing permission or strategy performance verified."
+    },
+    {
+      "id": "binance_spot_filters",
+      "kind": "official_exchange_api_documentation",
+      "publisher": "Binance",
+      "commit": "828ca74b809cfedbd5602df328b5f706368d483b",
+      "receipt_ids": [
+        "binance_spot_filters"
+      ],
+      "verified_facts": [
+        "PRICE_FILTER uses min/max price and tickSize. LOT_SIZE uses min/max quantity and stepSize.",
+        "MIN_NOTIONAL/NOTIONAL and MARKET_LOT_SIZE impose additional execution constraints; some notional checks apply to market orders.",
+        "An arbitrary research quantity step is not evidence for a historical or currently executable symbol filter."
+      ],
+      "reviewed_sections": [
+        "PRICE_FILTER",
+        "LOT_SIZE",
+        "MIN_NOTIONAL",
+        "NOTIONAL",
+        "MARKET_LOT_SIZE",
+        "MAX_POSITION"
+      ],
+      "performance_evidence": null,
+      "limit": "This audit verified definitions, not current or historical BTC/ETH numeric filters."
+    },
+    {
+      "id": "binance_spot_commission",
+      "kind": "official_exchange_fee_documentation",
+      "publisher": "Binance",
+      "commit": "828ca74b809cfedbd5602df328b5f706368d483b",
+      "receipt_ids": [
+        "binance_spot_commission"
+      ],
+      "verified_facts": [
+        "Document explicitly says example commissions/prices are fictional and applies only to spot.",
+        "Commission components are standardCommission, taxCommission and specialCommission; discounts depend on account/symbol conditions.",
+        "GET /api/v3/account/commission obtains current account/symbol rates; test orders with computeCommissionRates provide order-specific rates.",
+        "Commission is charged on fills; its asset/base/quote treatment depends on side and discount conditions."
+      ],
+      "reviewed_sections": [
+        "Disclaimer",
+        "What are the different types of rates?",
+        "How do I know what the commission rates are?",
+        "How is the commission calculated?"
+      ],
+      "performance_evidence": null,
+      "limit": "No actual user fee schedule was obtained.10bps/side is a project cost assumption, not an authenticated venue tariff."
+    },
+    {
+      "id": "binance_derivative_source",
+      "kind": "official_deprecated_exchange_connector_source",
+      "publisher": "Binance",
+      "commit": "a6bfbbf10fe2c1b4eb76fc24ffb82eb94bf9df89",
+      "receipt_ids": [
+        "binance_futures_head",
+        "binance_futures_market"
+      ],
+      "verified_facts": [
+        "mark_price source calls /fapi/v1/premiumIndex; funding_rate source calls /fapi/v1/fundingRate with historical range/limit parameters.",
+        "funding_info docstring mentions cap/floor/fundingIntervalHours adjustments and /fapi/v1/fundingInfo, but this pinned executable function calls /fapi/v1/fundingRate. That inconsistency means this connector must not be copied as current endpoint authority."
+      ],
+      "reviewed_sections": [
+        "mark_price",
+        "funding_rate",
+        "funding_info"
+      ],
+      "performance_evidence": null,
+      "limit": "Linked current developer-hosted derivative/margin docs returned CONNECT403. No funding series, interval invariance, borrowing rate, liquidation model or two-leg profitable basis strategy was verified."
+    },
+    {
+      "id": "statsmodels_cointegration",
+      "kind": "official_statistical_library_source",
+      "publisher": "statsmodels authors",
+      "version": "0.14.5",
+      "commit": "1107ea567121b80f90562d6c72085eed7e882113",
+      "receipt_ids": [
+        "statsmodels_release",
+        "statsmodels_coint"
+      ],
+      "verified_facts": [
+        "coint implements the augmented Engle-Granger two-step test with null of NO cointegration, assuming I(1) inputs.",
+        "First-stage regression includes the declared constant/trend; residual unit-root inference uses cointegration-specific MacKinnon approximations.",
+        "The function assumes no missing values and no time gaps. Ordinary return correlation is not this residual stationarity test.",
+        "adfuller has null of a unit root; kpss has null of level/trend stationarity. Rejection/nonrejection need correct assumptions and sample sizing."
+      ],
+      "reviewed_sections": [
+        "coint docstring/implementation",
+        "adfuller docstring",
+        "kpss docstring"
+      ],
+      "performance_evidence": null,
+      "limit": "Even a stable historical spread does not establish net two-leg profit or future stationarity. The broad spot lab does not implement an executable pairs portfolio."
+    },
+    {
+      "id": "arch_multiple_comparison",
+      "kind": "official_statistical_library_source",
+      "publisher": "Kevin Sheppard / arch authors",
+      "commit": "88ffcf87042ed5d4adf48bac41b144bc90b287a2",
+      "receipt_ids": [
+        "arch_head",
+        "arch_multiple_comparison"
+      ],
+      "verified_facts": [
+        "SPA compares a benchmark loss series with T-by-k alternative model losses using dependence-preserving stationary/circular/moving-block bootstraps.",
+        "Default block length sqrt(T) is only a default; the source recommends choosing an appropriate length for the data.",
+        "SPA documentation references Hansen2005 and White2000. StepM describes Romano-Wolf2005 stepwise multiple comparison.",
+        "Cross-sectional strategy dependence and serial dependence matter; counting every correlated parameter variant or trade as independent overstates evidence."
+      ],
+      "reviewed_sections": [
+        "SPA docstring/implementation",
+        "StepM docstring",
+        "MCS docstring"
+      ],
+      "performance_evidence": null,
+      "limit": "We read implementation documentation, not full original Hansen/White/Romano-Wolf papers. The project uses declared block sign-flip/Holm diagnostics, not this SPA implementation; no SPA claim is inherited."
+    },
+    {
+      "id": "smc_creator_repository",
+      "kind": "indicator_creators_official_repository",
+      "publisher": "Joshua Attridge / smart-money-concepts contributors; inspired by ICT, not an original ICT course",
+      "commit": "1b62fd6c41e1f508e7ed76831a039fa4c82d42f6",
+      "receipt_ids": [
+        "smc_head",
+        "smc_readme",
+        "smc_indicators"
+      ],
+      "verified_facts": [
+        "Creator README defines bullish FVG as preceding high below following low with bullish middle candle; bearish FVG is preceding low above following high with bearish middle candle. Source uses shift(-1), so the middle-bar label is unavailable until the following third candle closes.",
+        "Swing_highs_lows defines look-back AND look-forward swing_length. The source forward shifts before rolling extrema and performs subsequent pivot pruning. Retrospective labels cannot be treated as instant causal signals.",
+        "MitigatedIndex and swept/broken indices are historical annotations and must not leak future outcomes into entry selection.",
+        "Repository says educational purposes only and does not provide verified cost-adjusted out-of-sample profitability evidence in the reviewed README/indicator sections."
+      ],
+      "reviewed_sections": [
+        "README FVG/Swing Highs and Lows/BOS and CHoCH/Liquidity/Disclaimer",
+        "smc.py fvg and swing_highs_lows implementations"
+      ],
+      "performance_evidence": null,
+      "limit": "This is an implementer of inspired concepts, not proof of original ICT attribution, a course review, or an audited trading track record. Our two-sided pivot2, ATR thresholds, lunch window, entry/stop/target and trade-cost rules are independent protocol choices."
+    },
+    {
+      "id": "aqr_time_series_momentum_summary",
+      "kind": "author_affiliated_publication_summary",
+      "publisher": "AQR; Tobias J. Moskowitz, Yao Hua Ooi, Lasse H. Pedersen",
+      "document_date": "2012-05-01",
+      "receipt_ids": [
+        "aqr_tsmom",
+        "aqr_tsmom_pdf"
+      ],
+      "verified_facts": [
+        "Author-affiliated summary describes58 traditional futures/forward markets, more than25 years, and positive predictability from own preceding12-month excess return.",
+        "Summary distinguishes own-return time-series momentum from cross-sectional relative performance.",
+        "The ?aqrPDF=1 endpoint produced a two-page summary with disclaimers, NOT the complete journal article."
+      ],
+      "reviewed_sections": [
+        "Full author summary body; two-page PDF text"
+      ],
+      "performance_evidence": {
+        "kind": "author_summary_of_historical_study",
+        "context": "Traditional equity-index/currency/commodity/bond futures and forwards",
+        "numeric_return_or_sharpe_verified": false,
+        "crypto_hourly_reproduction": false
+      },
+      "limit": "No exact cost-adjusted returns or original detailed methodology established from this summary. Guessed complete PDF URL redirected to404 and is not verified."
+    },
+    {
+      "id": "aqr_century_trend_full_paper",
+      "kind": "full_original_author_affiliated_journal_article",
+      "publisher": "AQR author-hosted Journal of Portfolio Management Fall2017 paper",
+      "authors": [
+        "Brian Hurst",
+        "Yao Hua Ooi",
+        "Lasse Heje Pedersen"
+      ],
+      "title": "A Century of Evidence on Trend-Following Investing",
+      "document_date": "2017-Fall",
+      "receipt_ids": [
+        "aqr_century_trend",
+        "aqr_century_full_pdf"
+      ],
+      "verified_facts": [
+        "Paper studies67 traditional markets:29 commodities,11 equity indices,15 bond markets,12 currency pairs; monthly data; simulated strategy Jan1880–Dec2016 with varying available universe.",
+        "Strategy equally combines1-,3-,12-month own excess-return sign signals, monthly rebalanced long/short, equal volatility market positions, combined ex-ante annualized portfolio volatility target10%.",
+        "Simulates transaction costs and hypothetical2% management/20% performance fees; notes uncertain historical transaction estimates and unaccounted futures-roll costs.",
+        "Paper reports positive mean historical returns across markets and decades but significant drawdowns up to25%, with reversals and absence of trends causing losses.",
+        "Macroeconomic analyses note recessions not known in realtime and inflation classification performed ex post; contemporary regime associations cannot silently become causal timing signals.",
+        "Average absolute pairwise correlations estimated over36months relate inversely to subsequent trend performance; the authors also explain the portfolio volatility-scaling mechanism. This is a specific traditional-markets result, not a universal crypto forecasting law."
+      ],
+      "reviewed_sections": [
+        "Full extracted paper text, particularly Data/Constructing the Time-Series Momentum Strategy/Performance/Regimes/Appendices"
+      ],
+      "performance_evidence": {
+        "kind": "original_simulated_historical_research",
+        "context": "67 traditional markets1880–2016, monthly1/3/12month directional portfolio",
+        "max_drawdown_reported_up_to_pct": 25,
+        "specific_display_table_cagr_transcribed": false,
+        "crypto_hourly_reproduction": false,
+        "live_audited_track_record": false
+      },
+      "limit": "No reproduction of their historic proprietary/cash/futures dataset or instantaneous crypto strategy. Research paper evidence is not the project backtest or live exchange profitability."
+    }
+  ],
+  "retrievals": [
+    {
+      "id": "binance_public_data_head",
+      "requested_url": "https://api.github.com/repos/binance/binance-public-data/commits?per_page=1",
+      "requested_at": "2026-10-02T09:28:23.210860+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/binance/binance-public-data/commits?per_page=1",
+      "bytes": 4700,
+      "sha256": "f7e3e50d2334ed8766678932ecee37e5ea7cd73e80abe80ed68a02362c4f4a89",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.577264+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_spot_api_head",
+      "requested_url": "https://api.github.com/repos/binance/binance-spot-api-docs/commits?per_page=1",
+      "requested_at": "2026-10-02T09:28:23.211571+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/binance/binance-spot-api-docs/commits?per_page=1",
+      "bytes": 4638,
+      "sha256": "28a70fd292d07602d977ff0269cac3ad58983f1456995ed63f6cef3c64e08a1f",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.583978+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_futures_head",
+      "requested_url": "https://api.github.com/repos/binance/binance-futures-connector-python/commits?per_page=1",
+      "requested_at": "2026-10-02T09:28:23.212009+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/binance/binance-futures-connector-python/commits?per_page=1",
+      "bytes": 4905,
+      "sha256": "8e791661bfb5e877305360d057cb84f9d11acef2840c2093f9d244e3d3cc1c83",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.596815+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "statsmodels_release",
+      "requested_url": "https://api.github.com/repos/statsmodels/statsmodels/git/ref/tags/v0.14.5",
+      "requested_at": "2026-10-02T09:28:23.212343+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/statsmodels/statsmodels/git/ref/tags/v0.14.5",
+      "bytes": 357,
+      "sha256": "bbfd8659a75d7388e08548cb7b2cf994b975a4524553b70f085e9e9773d12c81",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.584520+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "arch_head",
+      "requested_url": "https://api.github.com/repos/bashtage/arch/commits?per_page=1",
+      "requested_at": "2026-10-02T09:28:23.212651+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/bashtage/arch/commits?per_page=1",
+      "bytes": 4824,
+      "sha256": "70ecb75930bac5a0bcf194fdd29343923c7642180e49741bcaf39f0c509d163a",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.584856+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "smc_head",
+      "requested_url": "https://api.github.com/repos/joshyattridge/smart-money-concepts/commits?per_page=1",
+      "requested_at": "2026-10-02T09:28:23.213108+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/joshyattridge/smart-money-concepts/commits?per_page=1",
+      "bytes": 3516,
+      "sha256": "5d30e504ca75235e0a6e3cc22a98c3c8bc91567fedbb5542e090c9b445e922d4",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.643359+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "aqr_tsmom",
+      "requested_url": "https://www.aqr.com/Insights/Research/Journal-Article/Time-Series-Momentum",
+      "requested_at": "2026-10-02T09:28:23.213541+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/Insights/Research/Journal-Article/Time-Series-Momentum",
+      "bytes": 71369,
+      "sha256": "95b8c1837f5497f0c28ca4e2223dfb9dff16fe21146c0de72a3f120666ab16d8",
+      "content_type": "text/html; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.980355+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "aqr_backtest_overfitting",
+      "requested_url": "https://www.aqr.com/Insights/Research/Journal-Article/The-Probability-of-Backtest-Overfitting",
+      "requested_at": "2026-10-02T09:28:23.214513+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/404",
+      "bytes": 50617,
+      "sha256": "cfe849e0e362d1a24c9089e8062404fdf1e9ac28bf34692caf09407799095554",
+      "content_type": "text/html; charset=utf-8",
+      "received_at": "2026-10-02T09:28:23.974417+00:00",
+      "body_verified": false,
+      "verification_note": "HTTP200 redirected to branded404; not a verified source body"
+    },
+    {
+      "id": "liu_tsyvinski_crypto",
+      "requested_url": "https://www.nber.org/system/files/working_papers/w24877/w24877.pdf",
+      "requested_at": "2026-10-02T09:28:23.577463+00:00",
+      "body_limit_bytes": 6000000,
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false
+    },
+    {
+      "id": "lopezdeprado_dsr",
+      "requested_url": "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf",
+      "requested_at": "2026-10-02T09:28:23.581315+00:00",
+      "body_limit_bytes": 6000000,
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false
+    },
+    {
+      "id": "binance_public_data_readme",
+      "requested_url": "https://raw.githubusercontent.com/binance/binance-public-data/f446ce3812bd4e5521f21faecd4ae3c6460e49fc/README.md",
+      "requested_at": "2026-10-02T09:28:46.045631+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/binance/binance-public-data/f446ce3812bd4e5521f21faecd4ae3c6460e49fc/README.md",
+      "bytes": 5282,
+      "sha256": "2e133d9945a9263a02781369078e72805eff074680f305cd5460016471c6caad",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.306457+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_spot_rest",
+      "requested_url": "https://raw.githubusercontent.com/binance/binance-spot-api-docs/828ca74b809cfedbd5602df328b5f706368d483b/rest-api.md",
+      "requested_at": "2026-10-02T09:28:46.046462+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/binance/binance-spot-api-docs/828ca74b809cfedbd5602df328b5f706368d483b/rest-api.md",
+      "bytes": 181189,
+      "sha256": "49ea6809243fc7fb426e07f2fe662097736c7bb405bd2da5eef637d715427999",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.376884+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_spot_filters",
+      "requested_url": "https://raw.githubusercontent.com/binance/binance-spot-api-docs/828ca74b809cfedbd5602df328b5f706368d483b/filters.md",
+      "requested_at": "2026-10-02T09:28:46.047072+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/binance/binance-spot-api-docs/828ca74b809cfedbd5602df328b5f706368d483b/filters.md",
+      "bytes": 13528,
+      "sha256": "4b5a8f0f5d15bcf68fd7ac2059ba6c88da641c06fd7885e642330c5ac8124dd3",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.349646+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_spot_commission",
+      "requested_url": "https://raw.githubusercontent.com/binance/binance-spot-api-docs/828ca74b809cfedbd5602df328b5f706368d483b/faqs/commission_faq.md",
+      "requested_at": "2026-10-02T09:28:46.048020+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/binance/binance-spot-api-docs/828ca74b809cfedbd5602df328b5f706368d483b/faqs/commission_faq.md",
+      "bytes": 6508,
+      "sha256": "580cfa59c9f55adae0d27bf38d2bc7f268ad759fdf054486e356464c30bbd54c",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.343262+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_futures_market",
+      "requested_url": "https://raw.githubusercontent.com/binance/binance-futures-connector-python/a6bfbbf10fe2c1b4eb76fc24ffb82eb94bf9df89/binance/um_futures/market.py",
+      "requested_at": "2026-10-02T09:28:46.048518+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/binance/binance-futures-connector-python/a6bfbbf10fe2c1b4eb76fc24ffb82eb94bf9df89/binance/um_futures/market.py",
+      "bytes": 20935,
+      "sha256": "9e55db014233d92bad66a90ec36212f1fada7f1f93a092ec5d6bc9298988659f",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.337316+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "statsmodels_coint",
+      "requested_url": "https://raw.githubusercontent.com/statsmodels/statsmodels/1107ea567121b80f90562d6c72085eed7e882113/statsmodels/tsa/stattools.py",
+      "requested_at": "2026-10-02T09:28:46.048914+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/statsmodels/statsmodels/1107ea567121b80f90562d6c72085eed7e882113/statsmodels/tsa/stattools.py",
+      "bytes": 96492,
+      "sha256": "e6a9fa11f763ebf1792100f39b7fc99a58bb8e9964d233152f956c844e3859bd",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.411190+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "arch_multiple_comparison",
+      "requested_url": "https://raw.githubusercontent.com/bashtage/arch/88ffcf87042ed5d4adf48bac41b144bc90b287a2/arch/bootstrap/multiple_comparison.py",
+      "requested_at": "2026-10-02T09:28:46.051014+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/bashtage/arch/88ffcf87042ed5d4adf48bac41b144bc90b287a2/arch/bootstrap/multiple_comparison.py",
+      "bytes": 30193,
+      "sha256": "b8ab370e5f1697a9a0cf2e245dc157feacdd276ae5c02adc3e4a8f74a7fed4c3",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.345376+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "smc_readme",
+      "requested_url": "https://raw.githubusercontent.com/joshyattridge/smart-money-concepts/1b62fd6c41e1f508e7ed76831a039fa4c82d42f6/README.md",
+      "requested_at": "2026-10-02T09:28:46.306623+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/joshyattridge/smart-money-concepts/1b62fd6c41e1f508e7ed76831a039fa4c82d42f6/README.md",
+      "bytes": 7932,
+      "sha256": "0b0e9b1b3699a4f8992dec68976ca0a3f66399199ad50d4db7ef08261043ac38",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.525460+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "smc_indicators",
+      "requested_url": "https://raw.githubusercontent.com/joshyattridge/smart-money-concepts/1b62fd6c41e1f508e7ed76831a039fa4c82d42f6/smartmoneyconcepts/smc.py",
+      "requested_at": "2026-10-02T09:28:46.337483+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/joshyattridge/smart-money-concepts/1b62fd6c41e1f508e7ed76831a039fa4c82d42f6/smartmoneyconcepts/smc.py",
+      "bytes": 40213,
+      "sha256": "6dd994e65322233be420ae750075cbe11a6ca55531521f2afe26b14adf036793",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:28:46.548495+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "aqr_tsmom_pdf",
+      "requested_url": "https://www.aqr.com/Insights/Research/Journal-Article/Time-Series-Momentum?aqrPDF=1",
+      "requested_at": "2026-10-02T09:28:46.343616+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/Insights/Research/Journal-Article/Time-Series-Momentum?aqrPDF=1",
+      "bytes": 26836,
+      "sha256": "1b1cbbd9a3e1bd5dd45c9c787a065a480d2acba757969086b061beac6c554c1f",
+      "content_type": "application/pdf",
+      "received_at": "2026-10-02T09:28:47.498542+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "aqr_tsmom_full_candidate",
+      "requested_url": "https://www.aqr.com/-/media/AQR/Documents/Journal-Articles/Time-Series-Momentum.pdf",
+      "requested_at": "2026-10-02T09:29:20.960938+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/404",
+      "bytes": 50617,
+      "sha256": "6ae4490e714197c35ef61f304d80ee2b3a49f9f26a8fccbe9e539b21fcb3fdff",
+      "content_type": "text/html; charset=utf-8",
+      "received_at": "2026-10-02T09:29:21.857869+00:00",
+      "body_verified": false,
+      "verification_note": "HTTP200 redirected to branded404; not a verified source body"
+    },
+    {
+      "id": "aqr_century_trend",
+      "requested_url": "https://www.aqr.com/Insights/Research/Journal-Article/A-Century-of-Evidence-on-Trend-Following-Investing",
+      "requested_at": "2026-10-02T09:29:20.961608+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/Insights/Research/Journal-Article/A-Century-of-Evidence-on-Trend-Following-Investing",
+      "bytes": 72662,
+      "sha256": "70a26e443f73c6c3734cedb36458ae2980424e030dba9a1dd6786741fd1a2487",
+      "content_type": "text/html; charset=utf-8",
+      "received_at": "2026-10-02T09:29:21.652474+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "aqr_century_trend_pdf_candidate",
+      "requested_url": "https://www.aqr.com/-/media/AQR/Documents/Journal-Articles/A-Century-of-Evidence-on-Trend-Following-Investing.pdf",
+      "requested_at": "2026-10-02T09:29:20.962037+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/404",
+      "bytes": 50617,
+      "sha256": "735fc82ea180344aff2fca06287676d579c27460db8928b1b2d93370f5209c1b",
+      "content_type": "text/html; charset=utf-8",
+      "received_at": "2026-10-02T09:29:21.765290+00:00",
+      "body_verified": false,
+      "verification_note": "HTTP200 redirected to branded404; not a verified source body"
+    },
+    {
+      "id": "binance_margin_repo_tree",
+      "requested_url": "https://api.github.com/repos/binance/binance-spot-api-docs/git/trees/828ca74b809cfedbd5602df328b5f706368d483b?recursive=1",
+      "requested_at": "2026-10-02T09:29:20.962441+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/binance/binance-spot-api-docs/git/trees/828ca74b809cfedbd5602df328b5f706368d483b?recursive=1",
+      "bytes": 24485,
+      "sha256": "652e7f1352a18555d6c058cd231cb09d084659ac49b279df3bfd31a8cda819ac",
+      "content_type": "application/json; charset=utf-8",
+      "received_at": "2026-10-02T09:29:21.297165+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "aqr_century_full_pdf",
+      "requested_url": "https://www.aqr.com/-/media/AQR/Documents/Insights/Journal-Article/AQR-JPM-Fall-2017.pdf",
+      "requested_at": "2026-10-02T09:29:45.093450+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/-/media/AQR/Documents/Insights/Journal-Article/AQR-JPM-Fall-2017.pdf",
+      "bytes": 2752830,
+      "sha256": "d2b96b73e6b7e90c244562822e98455c110796bc03056d12fff17fb1bf825dfa",
+      "content_type": "application/pdf",
+      "received_at": "2026-10-02T09:29:45.852360+00:00",
+      "body_verified": true
+    },
+    {
+      "id": "binance_funding_history_doc",
+      "requested_url": "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-History",
+      "requested_at": "2026-10-02T09:29:45.094163+00:00",
+      "body_limit_bytes": 6000000,
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false
+    },
+    {
+      "id": "binance_funding_info_doc",
+      "requested_url": "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Info",
+      "requested_at": "2026-10-02T09:29:45.094586+00:00",
+      "body_limit_bytes": 6000000,
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false
+    },
+    {
+      "id": "binance_margin_borrow_doc",
+      "requested_url": "https://developers.binance.com/docs/margin_trading/borrow-and-repay/Margin-Account-Borrow-Repay",
+      "requested_at": "2026-10-02T09:29:45.094982+00:00",
+      "body_limit_bytes": 6000000,
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false
+    },
+    {
+      "id": "binance_data_terms",
+      "requested_url": "https://raw.githubusercontent.com/binance/binance-public-data/f446ce3812bd4e5521f21faecd4ae3c6460e49fc/TERMS_AND_CONDITIONS.md",
+      "requested_at": "2026-10-02T09:30:17.754206+00:00",
+      "body_limit_bytes": 6000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/binance/binance-public-data/f446ce3812bd4e5521f21faecd4ae3c6460e49fc/TERMS_AND_CONDITIONS.md",
+      "bytes": 9798,
+      "sha256": "dcf358e9d18f598a7a635fac80f6e643fa24a0e111a4d39bda47f1e246b31eb1",
+      "content_type": "text/plain; charset=utf-8",
+      "received_at": "2026-10-02T09:30:18.000797+00:00",
+      "body_verified": true
+    }
+  ],
+  "source_group_count": 10,
+  "raw_foreign_bodies_committed": false,
+  "strategy_performance_claim": "No project profitability established by this source audit; broadlab and liquidity experiment results are separate.",
+  "course_scope": {
+    "purchased_or_private_courses_accessed": false,
+    "all_courses_reviewed": false,
+    "original_ICT_course_verified": false,
+    "no_pirated_material": true
+  },
+  "method_connections": {
+    "costs": "Every modeled fill must include declared fee/spread/slippage; historical assumptions remain explicit until actual contract/account schedules are verified.",
+    "time_series_trend": "Public empirical evidence supports a family-level hypothesis. Hourly simple-price returns/SMA/Donchian/etc are independent adapted hypotheses, not the original monthly futures system.",
+    "mean_reversion": "RSI/threshold/volatility shock rules are hypotheses; previous official RSI2 source audit supports causal definitions, not crypto profitability.",
+    "correlation": "Training-only lagged feature/return and strategy-return correlations are descriptive. No level-price spurious-correlation or automatic causal-profit conclusion.",
+    "stationary_spread": "A future pairs study needs training-only fit, correct residual stationarity/cointegration inference, synchronized two-leg executable prices and borrowing/funding; none tested here.",
+    "multiple_testing": "208 correlated parameter variants across9 implementation families are not208 independent strategies or9 independent economic edges. Preserve trial count and failed variants; chronology and final candidate lock prevent winner substitution.",
+    "smc": "Reveal3-candle FVG after third close; confirm pivots causally and exclude future annotation fields. Numerical thresholds and execution policy derive from docs/LIQUIDITY_PROTOCOL.md, not image/creator claim.",
+    "data_rights": "Pinned archive dataset supports current non-production personal historical backtests. Future realtime/signal/execution use must bind a separately valid source rather than silently treating archive license as live permission."
+  }
+}

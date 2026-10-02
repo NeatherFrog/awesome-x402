@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta, timezone
 import hashlib
 import io
+import importlib.util
 import json
 from pathlib import Path
 import tempfile
@@ -181,6 +182,40 @@ class ExchangeArchiveTests(unittest.TestCase):
                     "https://username:secret@data-api.binance.vision/api", "https://data-api.binance.vision:444/a"):
             with self.assertRaises(ExchangeDataError):
                 _SafeRedirect().redirect_request(None, None, 302, "found", {}, url)
+
+
+class LiquidityResearchProtocolTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        root = Path(__file__).resolve().parents[1]
+        spec = importlib.util.spec_from_file_location("research_liquidity", root / "scripts" / "research_liquidity.py")
+        cls.module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.module)
+
+    def test_quarter_registration_is_immutable_and_no_winner_is_selected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "quarter-protocol.json"
+            first = self.module.register_quarter(path)
+            self.assertEqual(first, self.module.register_quarter(path))
+            plan = json.loads(path.read_text())
+            self.assertEqual(plan["trials_count"], 8)
+            self.assertIsNone(plan["selected"])
+            self.assertFalse(plan["qualified"])
+            plan["selected"] = "mss_all"
+            path.write_text(json.dumps(plan))
+            with self.assertRaisesRegex(ValueError, "Existing quarter protocol differs"):
+                self.module.register_quarter(path)
+
+    def test_uncertainty_retains_all_calendar_days_and_is_reproducible(self):
+        trades = [{"exit_observed_at": "2026-07-05T04:00:00Z", "net_pnl": 12.5},
+                  {"exit_observed_at": "2026-10-01T00:00:00Z", "net_pnl": -3.}]
+        first = self.module._daily_uncertainty(trades, "BTCUSDT", "mss_all")
+        self.assertEqual(first, self.module._daily_uncertainty(trades, "BTCUSDT", "mss_all"))
+        self.assertEqual(first["days"], 92)
+        self.assertEqual(first["zero_trade_days"], 90)
+        self.assertEqual(sum(first["realized_daily_net_pnl"]), 9.5)
+        self.assertEqual(first["individual_confidence_pct"], 99.375)
+        self.assertLessEqual(first["ci_low"], first["ci_high"])
 
 
 if __name__ == "__main__":
