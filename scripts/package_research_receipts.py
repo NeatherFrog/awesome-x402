@@ -14,7 +14,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from propdesk.research_campaign import STUDIES, inspect, read_report
+from propdesk.research_campaign import STUDIES, read_report
+from propdesk.research_progress import inspect
 
 RECEIPT_FILES = frozenset({
     "protocol.json", "input-lock.json", "input_lock.json", "source-lock.json",

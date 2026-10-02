@@ -632,7 +632,7 @@ def make_handler(app):
                 elif path == "/api/trader/board":
                     self.respond(200, app.trader_board())
                 elif path == "/api/trader/research-progress":
-                    from . import research_campaign
+                    from . import research_progress as research_campaign
                     query = parse_qs(parsed.query, keep_blank_values=True)
                     if set(query) - {"study"} or any(len(values) != 1 for values in query.values()):
                         raise ValueError("Допустим только один параметр study")
