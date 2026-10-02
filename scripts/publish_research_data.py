@@ -20,22 +20,26 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
-def main():
+def publish(kind="spot"):
     if (os.environ.get("GITHUB_ACTIONS") != "true" or
             os.environ.get("GITHUB_REPOSITORY") != REPOSITORY or
             os.environ.get("GITHUB_REF") != "refs/heads/research-data-acquisition"):
         raise ValueError("Only the dedicated repository research runner may publish")
     source = git("rev-parse", "HEAD")
-    original = ROOT / ".local" / "exchange-history"
+    if kind not in ("spot", "funding"):
+        raise ValueError("Unsupported research dataset kind")
+    original = ROOT / ".local" / ("funding-history" if kind == "funding" else "exchange-history")
     manifest = json.loads((original / "manifest.json").read_text())
-    hourly = [d for d in manifest["datasets"] if d["interval"] == "1h"]
-    if len(hourly) != 2 or not all(d.get("complete_calendar") for d in hourly):
-        raise ValueError("Complete official hourly calendars are required")
-    target = ROOT / "research-data"
+    required = manifest["datasets"] if kind == "funding" else [d for d in manifest["datasets"] if d["interval"] == "1h"]
+    if len(required) != (4 if kind == "funding" else 2) or not all(d.get("complete_calendar") for d in required):
+        raise ValueError("Complete official research calendars are required")
+    folder = "funding-data" if kind == "funding" else "research-data"
+    target = ROOT / folder
     target.mkdir(exist_ok=True)
     exports = []
-    for name in ("manifest.json", "protocol.json", "BTCUSDT-1h.json",
-                 "ETHUSDT-1h.json", "BTCUSDT-5m.json", "ETHUSDT-5m.json"):
+    names = ["manifest.json", "protocol.json", "BTCUSDT-1h.json", "ETHUSDT-1h.json"]
+    names += ["BTCUSDT-funding.json", "ETHUSDT-funding.json"] if kind == "funding" else ["BTCUSDT-5m.json", "ETHUSDT-5m.json"]
+    for name in names:
         p = original / name
         if not p.is_file():
             continue
@@ -59,8 +63,9 @@ def main():
         "They do not grant live proprietary execution or commercial signal rights. "
         "The manifests contain individual original archive checksums.\n",
         encoding="utf-8")
-    branch = "research-data-" + source[:12]
+    branch = folder + "-" + source[:12]
     index = {"schema": 1, "source_commit": source, "branch": branch,
+             "kind": kind,
              "run_url": "https://github.com/" + REPOSITORY + "/actions/runs/" + os.environ["GITHUB_RUN_ID"],
              "purpose": "personal_nonproduction_historical_research",
              "license": "CC-BY-NC-SA-4.0", "exports": exports}
@@ -70,11 +75,11 @@ def main():
     git("rm", "-r", "--cached", "--quiet", ".")
     git("config", "user.name", "github-actions[bot]")
     git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
-    git("add", "--force", "--", "research-data")
+    git("add", "--force", "--", folder)
     git("commit", "-m", "Retain attributed official historical research inputs")
     git("push", "origin", "HEAD:refs/heads/" + branch)
     print(json.dumps(index))
 
 
 if __name__ == "__main__":
-    main()
+    publish()

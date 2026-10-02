@@ -11,7 +11,8 @@ from urllib.request import Request, urlopen
 
 BASE = "https://raw.githubusercontent.com/NeatherFrog/awesome-x402/"
 ALLOWED = {"manifest.json", "protocol.json", "BTCUSDT-1h.json",
-           "ETHUSDT-1h.json", "BTCUSDT-5m.json", "ETHUSDT-5m.json"}
+           "ETHUSDT-1h.json", "BTCUSDT-5m.json", "ETHUSDT-5m.json",
+           "BTCUSDT-funding.json", "ETHUSDT-funding.json"}
 
 
 def get(url, limit):
@@ -27,16 +28,19 @@ def get(url, limit):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--branch", required=True)
+    parser.add_argument("--kind", choices=("spot", "funding"), default="spot")
     parser.add_argument("--data-dir", default=".local/exchange-history")
     args = parser.parse_args()
-    if not re.fullmatch(r"research-data-[0-9a-f]{12}", args.branch):
+    folder = "funding-data" if args.kind == "funding" else "research-data"
+    if not re.fullmatch(folder + r"-[0-9a-f]{12}", args.branch):
         raise ValueError("Only immutable research export branches are accepted")
-    base = BASE + args.branch + "/research-data/"
+    base = BASE + args.branch + "/" + folder + "/"
     index_raw = get(base + "index.json", 100_000)
     index = json.loads(index_raw)
     if (index.get("schema") != 1 or index.get("branch") != args.branch or
             not re.fullmatch(r"[0-9a-f]{40}", index.get("source_commit", "")) or
-            args.branch != "research-data-" + index["source_commit"][:12] or
+            args.branch != folder + "-" + index["source_commit"][:12] or
+            index.get("kind", "spot") != args.kind or
             index.get("license") != "CC-BY-NC-SA-4.0"):
         raise ValueError("Invalid research export identity/license")
     directory = Path(args.data_dir)

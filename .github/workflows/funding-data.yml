@@ -1,0 +1,42 @@
+name: Official funding research inputs
+
+on:
+  push:
+    branches: [research-data-acquisition]
+    paths:
+      - '.github/workflows/funding-data.yml'
+      - 'propdesk/funding_data.py'
+      - 'scripts/download_funding.py'
+      - 'scripts/publish_funding_data.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-funding-data
+  cancel-in-progress: false
+
+jobs:
+  archives:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify funding timestamp and checksum parsing
+        run: python -X utf8 -m unittest discover -s tests -p test_funding_data.py -q
+      - name: Acquire official perpetual and funding history
+        run: python -X utf8 scripts/download_funding.py --data-dir .local/funding-history --workers 6
+      - name: Retain receipts even when coverage fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: funding-research-manifests
+          path: |
+            .local/funding-history/manifest.json
+            .local/funding-history/protocol.json
+          retention-days: 30
+      - name: Publish attributed research-only inputs
+        run: python -X utf8 scripts/publish_funding_data.py
