@@ -1,0 +1,432 @@
+{
+  "archive": {
+    "compressed_bytes": 6573119,
+    "entries": 448,
+    "expanded_bytes": 38324037,
+    "files": 402,
+    "old_limits": {
+      "archive": 20971520,
+      "entries": 2000,
+      "expanded": 52428800,
+      "files": 1000
+    },
+    "remaining_expanded_bytes": 14104763,
+    "sha256": "50d9dea809da6af8c4278f806e50999f1120a25748d6ec5eee772973c6cf35b1",
+    "url": "https://api.github.com/repos/NeatherFrog/awesome-x402/zipball/6336c37d5bf171d6b002fae38016eeeb77a31a13"
+  },
+  "checks": [
+    {
+      "backup_baseline_verified": true,
+      "completed_studies_receipt_verified": 9,
+      "installed_managed_files": 327,
+      "package": "PROP-LAB-0.5.0.zip",
+      "package_sha256": "bc25db07ac93dcdca3ef932359687085b8bc4600051ff8ded2752692cd9d3c72",
+      "passed": true,
+      "portable_studies": [
+        {
+          "id": "pairs",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "pairs_close",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "sessions",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "complete",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "fx",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_validation_failed_final_unopened",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "native_fvg",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_validation_failed",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "native_trend",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "native_context",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "metals",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_validation_failed_final_unopened",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "crypto_flow",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        }
+      ],
+      "public_fixture_files_preserved": 15,
+      "restart_required": true,
+      "user_state_unchanged": true,
+      "version_after_update": "0.6.0",
+      "windows_runtime_files_preserved": 0
+    },
+    {
+      "backup_baseline_verified": true,
+      "completed_studies_receipt_verified": 9,
+      "installed_managed_files": 327,
+      "package": "PROP-LAB-Windows-x64-0.5.0.zip",
+      "package_sha256": "469376dc5466aa6e48bf84517a7db1bef234e11aada832454a86f0bbea13fb1e",
+      "passed": true,
+      "portable_studies": [
+        {
+          "id": "pairs",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "pairs_close",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "sessions",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "complete",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "fx",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_validation_failed_final_unopened",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "native_fvg",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_validation_failed",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "native_trend",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "native_context",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "metals",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_validation_failed_final_unopened",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        },
+        {
+          "id": "crypto_flow",
+          "input_available": false,
+          "input_hashes_verified": false,
+          "phase": "completed_no_training_candidate",
+          "producer_hashes_verified": true,
+          "protocol_verified": true,
+          "training_results_verified": true
+        }
+      ],
+      "public_fixture_files_preserved": 15,
+      "restart_required": true,
+      "user_state_unchanged": true,
+      "version_after_update": "0.6.0",
+      "windows_runtime_files_preserved": 35
+    }
+  ],
+  "evidence_interpretation": {
+    "all_nine_studies_report_input_available_false": true,
+    "all_nine_studies_report_input_hashes_verified_false": true,
+    "complete_replay_claimed": false,
+    "profitability_claimed": false,
+    "protocol_producer_training_receipts_verified_for_completed_studies": true,
+    "raw_campaign_market_inputs_installed": false
+  },
+  "excluded_optional_reports": [
+    "docs/edge-search.json",
+    "docs/current-research.json"
+  ],
+  "export_ignore_verified_on_actual_target": true,
+  "frozen_receipt_copies": [
+    {
+      "bytes": 47069,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/crypto-flow-research/input-lock.json",
+      "sha256": "c7a00df759188f90dc35bf55b2660611eb6c4f3eb20fb34794279c70730dcb5c"
+    },
+    {
+      "bytes": 55353,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/crypto-flow-research/protocol.json",
+      "sha256": "7c9b7b6dd9c8fa56fd308db0e6c53ea2cff1181f0d2e04ef0c3258bec184e399"
+    },
+    {
+      "bytes": 262,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/crypto-flow-research/training-selection.json",
+      "sha256": "36b30aef7b1c517382f0e161f8caa804b88fc34877c3be4c418801e788198233"
+    },
+    {
+      "bytes": 623,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/fx-session-research/input-lock.json",
+      "sha256": "91564d5d34b86656f7a6386e1ec0f9d05b6d7b2ff08f1de91fcb94129f05276d"
+    },
+    {
+      "bytes": 13671,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/fx-session-research/protocol.json",
+      "sha256": "2602dc969ecba4f6e4cca9660f3b2fffb3db5a8e0097d62017aaf403ae14a514"
+    },
+    {
+      "bytes": 3391,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/fx-session-research/runtime-timezone-audit.json",
+      "sha256": "ca035cff952f8f936d191bb7aef82177a6c798794d9c457963e7e01b71862e59"
+    },
+    {
+      "bytes": 271,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/fx-session-research/selection.json",
+      "sha256": "fbd4cd98c2efa01a53c923e8156784fffcc138d15897c6814538d61f72e7b3dd"
+    },
+    {
+      "bytes": 19502,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/liquidity-context-research/protocol.json",
+      "sha256": "19984331f8aa37947a336faa33d8a9e8ac7d0f818d4971195503bca4a4957097"
+    },
+    {
+      "bytes": 262,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/liquidity-context-research/training-selection.json",
+      "sha256": "13f00e3ff62083670b0e3763f313d6269d1d172ebb2b3ea8b605efcc177885a7"
+    },
+    {
+      "bytes": 35306,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/liquidity-native-research/protocol.json",
+      "sha256": "34e844b9c4d7eeaf8430a36629ac0466cca076412739e46ef9fc63d7a7449a32"
+    },
+    {
+      "bytes": 287,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/liquidity-native-research/training-selection.json",
+      "sha256": "5c750d7a17c886a1f868dec6ca01c5fccb15afe4405f291df3c03b4042e2f1e5"
+    },
+    {
+      "bytes": 635,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/metal-session-research/input-lock.json",
+      "sha256": "e797efacf40e3c589c12f95bd9c46be028376dba566efa4f0fcea90dc058f851"
+    },
+    {
+      "bytes": 111409,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/metal-session-research/protocol.json",
+      "sha256": "c9510665b2089b6c1b3507d84a61cac76bf27c71ad158ab711cca029e7990ae9"
+    },
+    {
+      "bytes": 20992,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/metal-session-research/selection.json",
+      "sha256": "e7136a923d4daef73d06455ed222b8d76c9ad3974411778720851eee5781c4f3"
+    },
+    {
+      "bytes": 1762,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/native-crypto-trend-research/pre_outcome_audit.json",
+      "sha256": "06bfc7a7244541f118e46fee2e9dbe5dd341fe18215709434b3ab94e605dc0c1"
+    },
+    {
+      "bytes": 39420,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/native-crypto-trend-research/protocol.json",
+      "sha256": "38fa47e759b08e9c50988aed92c9dfe0845143e82bf51494809fb90da2db0d0d"
+    },
+    {
+      "bytes": 798856,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/native-crypto-trend-research/training_results.json",
+      "sha256": "2ae6f9f1086b6a946840496a79a555c47df1a3421074265d08bd240c1384439d"
+    },
+    {
+      "bytes": 270,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/native-crypto-trend-research/training_selection.json",
+      "sha256": "0874f558f4da1861ffc8a84d6c3165d563b55367ed837df77f8069c228c4d70d"
+    },
+    {
+      "bytes": 21166,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/relative-value-close-research/protocol.json",
+      "sha256": "57bc2449b015ecfc011c2440267f558701e3101e69d5f9b8ff7f2277a3a8be94"
+    },
+    {
+      "bytes": 270,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/relative-value-close-research/training_selection.json",
+      "sha256": "a6e78e2db26591a5632b751a07efd1ce19c643820233acdd35315b6f30c171f3"
+    },
+    {
+      "bytes": 20402,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/relative-value-research/protocol.json",
+      "sha256": "ab2e6860dcd87f5368e4cf8e0d1f7444cb1a77f8b52d87281a0017d2a8dea3eb"
+    },
+    {
+      "bytes": 270,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/relative-value-research/training_selection.json",
+      "sha256": "276ff63c2cdbf378536c69c6d4596587b21483abe63b70d0895c794e7ef738d1"
+    },
+    {
+      "bytes": 37940,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/session-research/protocol.json",
+      "sha256": "69e8d52124ff05e9a950ed77bdb7f6ef2b481257e49be6a2b0005618b7ccb65a"
+    },
+    {
+      "bytes": 1144,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/session-research/result-lock.json",
+      "sha256": "2d98ec078f60b542917198f01dc53dd734ed2de922202033bee8a73f5bcef95b"
+    },
+    {
+      "bytes": 4784,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/session-research/source-lock.json",
+      "sha256": "dc119430b4070eaad5241b7934e9eafa11e00666ad27b8aa2a98b98931bcae86"
+    },
+    {
+      "bytes": 402224,
+      "matches_frozen_local_original": true,
+      "matching_original_in_source_archive": true,
+      "path": "docs/research-receipts/session-research/training-lock.json",
+      "sha256": "9f669a05d82bdf4da948e512f5d5bc8c824c6a7a49ce8fa5530993e856995457"
+    }
+  ],
+  "local_audit_harness_sha256": "2ca18cab40121580b0f3d3b09e4a907884326c96b563b024faec21115be91019",
+  "network": {
+    "actual_archive_fetched_from_github": true,
+    "mocked_metadata_returns_candidate_sha": true,
+    "old_apply_unpack_install_code_unchanged": true,
+    "old_updater_api_responses_mocked": true,
+    "original_old_archive_limit_enforced": true
+  },
+  "old_updater_sha256": "518a927e45a3a0a4ba80c4df33442a82fbc414a93d0ad63c0acd6e2f7b46d292",
+  "omitted_files_remain_in_git": true,
+  "platform": {
+    "launcher_restart_executed": false,
+    "restart_required_flag_verified": true,
+    "test_host": "Linux",
+    "windows_binaries_executed": false,
+    "windows_package_contents_verified": true
+  },
+  "previous_release_commit": "9b38ac3cb14427e7a9ce1f6caa61c437bdaca0b0",
+  "recheck_rule": "Repeat the exact-archive and old-updater checks on the final merge/release commit whenever packaged files change.",
+  "schema": 1,
+  "scope": "Old 0.5 updater compatibility with exact public candidate archive; not proof of deployed main, Windows execution, strategy profitability or full market-data replay",
+  "tested_candidate_branch": "trading-eight-percent-research",
+  "tested_candidate_commit": "6336c37d5bf171d6b002fae38016eeeb77a31a13",
+  "verified_at": "2026-10-02T12:00:43.813435Z"
+}

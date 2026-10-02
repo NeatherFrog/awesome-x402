@@ -130,7 +130,7 @@ CSV: `time,open,high,low,close,volume`. `time` — UTC open-label (`Z` или `+
 
 Quantity — выбранные units/contracts, не автоматические lots. `contract_multiplier` — деньги счёта за движение цены на 1,0 на единицу quantity. При другой валюте требуется отдельная конвертация. Комиссия и slippage — **bps за сторону**, spread — **полный**; `fee_per_unit` — денежная комиссия на единицу за сторону. Полные определения: [DATA.md](docs/DATA.md).
 
-CLI:
+CLI для разработки из полного Git checkout:
 
 ```bash
 python3 scripts/test_offline.py

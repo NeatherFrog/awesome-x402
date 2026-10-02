@@ -22,6 +22,12 @@ STUDIES = {
     "native_context": {"file": "liquidity-context-research.json", "directory": "liquidity-context-research", "title": "Крипто: FVG в часы Нью-Йорка и Лондона", "count": 48, "engine": "native_liquidity_context", "driver": "research_native_liquidity_context", "kind": "generic"},
     "metals": {"file": "metal-session-research.json", "directory": "metal-session-research", "title": "Золото: сессионные стратегии", "count": 96, "engine": "metal_sessions", "driver": "research_metal_sessions", "kind": "fx"},
     "crypto_flow": {"file": "crypto-flow-research.json", "directory": "crypto-flow-research", "title": "Крипто: направленный поток сделок", "count": 64, "engine": "crypto_flow", "driver": "research_crypto_flow", "kind": "generic"},
+    "native_mark": {"file": "native-crypto-mark-research.json", "directory": "native-crypto-mark-research", "title": "Крипто: повторная оценка mark — ограничение причинности", "count": 96, "engine": "native_crypto_mark", "driver": "research_native_crypto_mark", "kind": "generic",
+                    "blocked_protocol_sha256": "682b6ea6df249aee086b3acc35d5d5879af5010612874cef6e1a11fde7bc4f9b",
+                    "causality_audit_sha256": "bc17693ce65a61900c46ea4d3210836e8558a874e18050955a4dc5c895f6092f"},
+    "native_mark_v2": {"file": "native-crypto-mark-v2-research.json", "directory": "native-crypto-mark-v2-research", "title": "Крипто: исправленная хронология исполнения mark", "count": 96, "engine": "native_crypto_mark_v2", "driver": "research_native_crypto_mark_v2", "kind": "generic", "selection_file": "training_selection.json"},
+    "native_noise": {"file": "native-noise-area-research.json", "directory": "native-noise-area-research", "title": "Крипто: пробой внутридневной шумовой зоны", "count": 24, "engine": "native_noise_area", "driver": "research_native_noise_area", "kind": "generic", "selection_file": "selection.json", "selection_field": "selection", "selection_digest_field": "selection_sha256"},
+    "cross_sectional": {"file": "cross-sectional-research.json", "directory": "cross-sectional-research", "title": "Крипто: относительный импульс корзины", "count": 72, "engine": "cross_sectional", "driver": "research_cross_sectional", "kind": "generic"},
 }
 
 
@@ -205,12 +211,12 @@ def inspect(root, study, value):
                 and lock.get("training_sha256") == digest(value.get("training"))
                 and input_lock == protocol.get("inputs"))
         else:
-            lock = value.get("selection_lock", value.get("training_selection"))
+            lock = value.get(spec.get("selection_field", "selection_lock"), value.get("training_selection"))
             # Legacy pairs use an underscore; newer native studies declare a
             # hyphenated lock. Both paths are fixed by the campaign allowlist.
-            filename = "training_selection.json" if study in ("pairs", "pairs_close", "native_trend") else "training-selection.json"
+            filename = spec.get("selection_file", "training_selection.json" if study in ("pairs", "pairs_close", "native_trend", "native_mark") else "training-selection.json")
             stored = _receipt(root, spec["directory"], filename)
-            expected = value.get("selection_lock_sha256", value.get("training_selection_sha256"))
+            expected = value.get(spec.get("selection_digest_field", "selection_lock_sha256"), value.get("training_selection_sha256"))
             training_verified = (isinstance(lock, dict) and stored == lock and digest(lock) == expected
                 and lock.get("protocol_sha256") == value.get("protocol_sha256")
                 and lock.get("training_results_sha256", lock.get("training_sha256")) == digest(value.get("training")))
@@ -218,6 +224,27 @@ def inspect(root, study, value):
         reasons.append("Учёт результатов TRAIN или его фиксация не подтверждены")
     protocol_verified = bool(protocol_digest and protocol_lock and objective_verified and human_protocol_verified)
     replay = bool(protocol_verified and producer_verified and inputs_verified and rows_verified and training_verified and result_verified)
+    causality_revoked = bool(spec.get("blocked_protocol_sha256") and value.get("protocol_sha256") == spec["blocked_protocol_sha256"])
+    audit_verified = False
+    if causality_revoked:
+        try:
+            audit = _receipt(root, spec["directory"], "retrospective-causality-audit.json")
+            audit_verified = bool(audit and audit.get("protocol_sha256") == value.get("protocol_sha256") and
+                                  audit.get("status") == "causal_green_revoked" and audit.get("promotion_blocked") is True and
+                                  audit.get("sealed_report_sha256") == _file_hash(_path(root, "docs/" + spec["file"])))
+            if audit_verified:
+                # A report flag or missing/modified receipt cannot revoke the
+                # known protocol's fixed block. Receipt checks are separate.
+                original_name = "data/" + spec["directory"] + "/retrospective-causality-audit.json"
+                original = _path(root, original_name)
+                audit_path = original if original.exists() or (Path(root) / original_name).is_symlink() else _path(root, "docs/research-receipts/" + spec["directory"] + "/retrospective-causality-audit.json")
+                audit_verified = _hash_matches(root, str(audit_path.relative_to(Path(root).resolve())), spec["causality_audit_sha256"])
+        except (OSError, ValueError, TypeError, KeyError):
+            audit_verified = False
+    interpretation = ("Оценка заблокирована: объём всей текущей свечи BTC влияет на выход старой позиции, освобождённые деньги и объём новой позиции ETH. Формальная отметка о прохождении обучения не даёт допуска." if causality_revoked else
+                      "48 повторных оценок исполнения; не 48 новых независимых стратегий" if study == "pairs_close" else
+                      "96 повторных оценок прежних правил с иной моделью mark/исполнения; не 96 новых независимых стратегий" if study in ("native_mark", "native_mark_v2") else
+                      "Историческое исследование; будущая прибыль не доказана")
     return {"id": study, "title": spec["title"], "phase": str(value.get("phase", "unknown")),
             "expected_configurations": spec["count"], "registered_configurations": len(declared_ids),
             "reported_evaluated_configurations": len(set(ids) & declared_ids), "training_passes_reported": sum(item["passed"] for name, item in evaluated if name in declared_ids),
@@ -225,9 +252,11 @@ def inspect(root, study, value):
             "input_available": bool(available), "input_hashes_verified": bool(inputs_verified),
             "training_results_verified": bool(rows_verified and training_verified and result_verified),
             "replay_artifacts_verified": replay, "verification_reasons": reasons,
-            "status": "verified_artifacts" if replay else "unverified_artifacts",
+            "status": "verified_artifacts_execution_blocked" if replay and causality_revoked else "verified_artifacts" if replay else "unverified_artifacts",
             "report_url": "/api/trader/research-progress?study=" + study,
-            "interpretation": "48 повторных оценок исполнения; не 48 новых независимых стратегий" if study == "pairs_close" else "Историческое исследование; будущая прибыль не доказана",
+            "interpretation": interpretation,
+            "execution_causality_status": "revoked_after_synthetic_audit" if causality_revoked else "not_certified_by_this_api",
+            "promotion_blocked": causality_revoked, "causality_audit_receipt_verified": audit_verified,
             "eligible_for_paper": False, "live_orders": False, "telegram_enabled": False}
 
 
@@ -254,7 +283,8 @@ def board(root):
     verified = sum(row["reported_evaluated_configurations"] for row in studies if row["replay_artifacts_verified"])
     producer_verified = sum(row["reported_evaluated_configurations"] for row in studies
                             if row["protocol_verified"] and row["producer_hashes_verified"] and row["training_results_verified"])
-    pending_crypto = any(row["id"] in ("native_fvg", "native_trend", "native_context", "crypto_flow") and row["phase"] != "unverified"
+    pending_crypto = any(row["id"] in ("native_fvg", "native_trend", "native_context", "crypto_flow", "native_mark", "native_mark_v2", "native_noise", "cross_sectional") and row["phase"] != "unverified"
+                         and not (row.get("promotion_blocked") and row["reported_evaluated_configurations"] >= row.get("expected_configurations", 1))
                          and row["phase"] != "complete" and not row["phase"].startswith("completed") for row in studies)
     return {"target_monthly_return_pct": 8, "previous_evaluated_configurations": PREVIOUS_EVALUATED_CONFIGURATIONS,
             "new_reported_evaluated_configurations": reported,

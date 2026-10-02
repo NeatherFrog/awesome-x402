@@ -25,13 +25,13 @@ import urllib.request
 import zipfile
 
 
-def request(port, method, path, payload=None):
+def request(port, method, path, payload=None, *, timeout=5):
     data = json.dumps(payload).encode() if payload is not None else None
     headers = {"Content-Type": "application/json"} if payload is not None else {}
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     query = urllib.request.Request(f"http://127.0.0.1:{port}{path}", data=data, headers=headers, method=method)
     try:
-        with opener.open(query, timeout=5) as response:
+        with opener.open(query, timeout=timeout) as response:
             return json.load(response)
     except urllib.error.HTTPError as exc:
         try:
@@ -63,6 +63,9 @@ def main():
     if sys.platform != "win32":
         parser.error("This check must run on native Windows")
     archive = args.archive.resolve()
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from propdesk.research_campaign import board as research_board
+    expected_campaign = research_board(Path(__file__).resolve().parents[1])
     record = {"archive_name": archive.name,
               "archive_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
               "platform": sys.platform, "status": "running"}
@@ -161,6 +164,24 @@ def main():
                 assert research["variant_count"] == 292 and research["registered_variant_count"] == 292
                 assert research["live_orders"] is False and research["telegram_enabled"] is False
                 assert len(research["studies"]) == 7 and all(s["protocol_verified"] for s in research["studies"])
+                campaign = request(port, "GET", "/api/trader/research-progress")
+                assert campaign["reported_evaluated_configurations"] == expected_campaign["reported_evaluated_configurations"]
+                assert campaign["target_monthly_return_pct"] == 8
+                assert campaign["eligible_for_paper"] is False and campaign["live_orders"] is False
+                assert campaign["telegram_enabled"] is False and campaign["primary"] is None
+                assert all(s["protocol_verified"] and s["producer_hashes_verified"] and s["training_results_verified"]
+                           for s in campaign["studies"] if s["reported_evaluated_configurations"])
+                assert all(s["input_available"] is False for s in campaign["studies"])
+                setup = request(port, "POST", "/api/trader/qualified-setups", {})
+                assert setup["status"] == "no_qualified_strategy" and setup["setups"] == []
+                assert setup["queued"] is False and setup["job"] is None
+                assert setup["live_orders"] is False and setup["telegram_enabled"] is False
+                assert board["setups"] == [] and board["strategy_qualification"]["runtime_model"] is None
+                blocked = next((s for s in campaign["studies"] if s["id"] == "native_mark"), None)
+                if blocked:
+                    assert blocked["promotion_blocked"] is True and blocked["causality_audit_receipt_verified"] is True
+                record["research_evaluated_configurations"] = campaign["reported_evaluated_configurations"]
+                record["research_studies"] = len(campaign["studies"])
                 carry = request(port, "GET", "/api/trader/evidence?study=funding_calibrated")
                 assert carry["phase"] == "completed_final_failed" and carry["retrospective_provisional_candidate"] is False
                 assert carry["validation"]["checks"]["block_ci99_lower_positive"] is True
@@ -181,7 +202,9 @@ def main():
                     "opened_at": "2026-10-01T10:00:00Z", "closed_at": "2026-10-01T11:00:00Z"})
                 trade_id = journal["trade"]["id"]
                 (app / ".env").write_text("local-user-setting\n", encoding="utf-8")
-                update = request(port, "POST", "/api/updates/apply", {})
+                update_started = time.monotonic()
+                update = request(port, "POST", "/api/updates/apply", {}, timeout=180)
+                record["update_elapsed_seconds"] = time.monotonic() - update_started
                 assert update["updated"] is True and update["restarting"] is True
                 health_until(port, future_version, future_commit, process)
                 assert request(port, "GET", "/api/journal")["trades"][0]["id"] == trade_id
@@ -191,7 +214,7 @@ def main():
                                  for p in (app / "runtime").rglob("*") if p.is_file()}
                 assert runtime_before == runtime_after
                 record.update(status="passed", checks=["clean_extraction", "isolated_runtime_imports", "path_with_spaces",
-                    "health_exact_commit", "bootstrap", "iana_new_york_timezone", "setup_board", "fixed_evidence_reports", "crypto_research_evidence", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
+                    "health_exact_commit", "bootstrap", "iana_new_york_timezone", "setup_board", "fixed_evidence_reports", "crypto_research_evidence", "campaign_receipts", "qualified_setup_gate", "retrospective_diary", "rsi2_diary", "supervised_updater", "real_update_restart",
                     "journal_preserved", "settings_preserved", "runtime_preserved", "update_noop"])
             except Exception as exc:
                 detail = (work / "server.log").read_text(encoding="utf-8", errors="replace")[-8000:]

@@ -1,6 +1,6 @@
 # Offline tests and historical replay
 
-Run `python scripts/test_offline.py --quiet` for the application/unit checks.
+From a full Git checkout, run `python scripts/test_offline.py --quiet` for the application/unit checks.
 The Windows CI uses this runner. It runs ordinary failing tests normally.
 
 One immutable integration test in `test_crypto_flow.py` verifies its parent's

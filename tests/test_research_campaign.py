@@ -68,8 +68,9 @@ def fixture(root, study="pairs", *, kind=None, configurations=3, evaluated=2):
         value = {"phase": "completed_no_training_candidate", "protocol": protocol,
                  "protocol_sha256": campaign.digest(protocol), "training": rows}
         lock = {"protocol_sha256": value["protocol_sha256"], "training_results_sha256": campaign.digest(rows), "selected": None}
-        value.update(selection_lock=lock, selection_lock_sha256=campaign.digest(lock))
-        filename = "training_selection.json" if study in ("pairs", "pairs_close", "native_trend") else "training-selection.json"
+        value[spec.get("selection_field", "selection_lock")] = lock
+        value[spec.get("selection_digest_field", "selection_lock_sha256")] = campaign.digest(lock)
+        filename = spec.get("selection_file", "training_selection.json" if study in ("pairs", "pairs_close", "native_trend", "native_mark") else "training-selection.json")
         write(directory / filename, lock)
     write(directory / "protocol.json", protocol)
     path = root / "docs" / spec["file"]
@@ -272,17 +273,114 @@ class ResearchCampaignTests(unittest.TestCase):
         self.assertTrue(row["replay_artifacts_verified"])
         self.assertEqual(board["reported_evaluated_configurations"], 388)
 
+    def test_partial_mark96_counts_actual_rows_and_waits_for_immutable_selection(self):
+        value, path, directory = fixture(self.root, "native_mark", configurations=96, evaluated=42)
+        (directory / "training_selection.json").unlink()
+        value.pop("selection_lock")
+        value.pop("selection_lock_sha256")
+        value["phase"] = "training_in_progress"
+        write(path, value)
+        board = campaign.board(self.root)
+        row = next(item for item in board["studies"] if item["id"] == "native_mark")
+        self.assertEqual(board["reported_evaluated_configurations"], 334)
+        self.assertEqual(row["expected_configurations"], 96)
+        self.assertEqual(row["registered_configurations"], 96)
+        self.assertEqual(row["reported_evaluated_configurations"], 42)
+        self.assertTrue(row["protocol_verified"])
+        self.assertTrue(row["producer_hashes_verified"])
+        self.assertFalse(row["training_results_verified"])
+        self.assertFalse(row["replay_artifacts_verified"])
+        self.assertIn("повторных", row["interpretation"])
+        self.assertTrue(board["crypto_pending_reports"])
+        self.assertEqual(board["phase"], "research_in_progress")
+        for flag in ("eligible_for_paper", "live_orders", "telegram_enabled"):
+            self.assertIs(row[flag], False)
+
+    def test_complete_mark96_uses_actual_underscore_selection_lock(self):
+        value, _path, _directory = fixture(self.root, "native_mark", configurations=96, evaluated=96)
+        row = campaign.inspect(self.root, "native_mark", value)
+        self.assertEqual(row["reported_evaluated_configurations"], 96)
+        self.assertTrue(row["training_results_verified"])
+        self.assertTrue(row["replay_artifacts_verified"])
+        self.assertFalse(row["eligible_for_paper"])
+
+    def test_mark_v2_noise_cross_pending_budgets_contribute_zero(self):
+        board = campaign.board(self.root)
+        for name, count in (("native_mark_v2", 96), ("native_noise", 24), ("cross_sectional", 72)):
+            row = next(item for item in board["studies"] if item["id"] == name)
+            self.assertEqual(row["expected_configurations"], count)
+            self.assertEqual(row["reported_evaluated_configurations"], 0)
+            self.assertEqual(row["registered_configurations"], 0)
+        self.assertEqual(board["reported_evaluated_configurations"], 292)
+        self.assertTrue(board["crypto_pending_reports"])
+
+    def test_noise_selection_envelope_and_v2_underscore_lock_are_supported(self):
+        for name, count in (("native_mark_v2", 96), ("native_noise", 24), ("cross_sectional", 72)):
+            with self.subTest(study=name):
+                value, _path, directory = fixture(self.root, name, configurations=count, evaluated=2)
+                row = campaign.inspect(self.root, name, value)
+                self.assertEqual(row["reported_evaluated_configurations"], 2)
+                self.assertTrue(row["training_results_verified"])
+                self.assertTrue(row["replay_artifacts_verified"])
+                self.assertFalse(row["eligible_for_paper"])
+                if name == "native_noise":
+                    self.assertIn("selection", value)
+                    self.assertIn("selection_sha256", value)
+                    self.assertTrue((directory / "selection.json").is_file())
+                    write(directory / "selection.json", {"changed": True})
+                    self.assertFalse(campaign.inspect(self.root, name, value)["training_results_verified"])
+
+    def test_known_causality_revocation_is_separate_from_sha_artifact_consistency(self):
+        value, path, directory = fixture(self.root, "native_mark")
+        value.update(live_orders=True, telegram_enabled=True, promotion_blocked=False,
+                     execution_causality_status="verified", retrospective_target_candidate=True)
+        write(path, value)
+        with patch.dict(campaign.STUDIES["native_mark"], {"blocked_protocol_sha256": value["protocol_sha256"]}):
+            row = campaign.inspect(self.root, "native_mark", value)
+            self.assertTrue(row["replay_artifacts_verified"])
+            self.assertEqual(row["reported_evaluated_configurations"], 2)
+            self.assertEqual(row["status"], "verified_artifacts_execution_blocked")
+            self.assertEqual(row["execution_causality_status"], "revoked_after_synthetic_audit")
+            self.assertTrue(row["promotion_blocked"])
+            self.assertFalse(row["causality_audit_receipt_verified"])
+            self.assertIn("BTC", row["interpretation"])
+            self.assertIn("ETH", row["interpretation"])
+            for flag in ("eligible_for_paper", "live_orders", "telegram_enabled"):
+                self.assertIs(row[flag], False)
+            # Missing or malformed optional audit bytes cannot erase observed
+            # evaluations or undo the fixed known protocol's causal block.
+            (directory / "retrospective-causality-audit.json").write_text("invalid")
+            row = next(item for item in campaign.board(self.root)["studies"] if item["id"] == "native_mark")
+            self.assertEqual(row["reported_evaluated_configurations"], 2)
+            self.assertTrue(row["promotion_blocked"])
+        other = campaign.inspect(self.root, "native_mark", value)
+        self.assertFalse(other["promotion_blocked"])
+
+    def test_sealed_causally_blocked_study_does_not_remain_an_active_search(self):
+        value, path, _directory = fixture(self.root, "native_mark", configurations=96, evaluated=96)
+        value["phase"] = "training_complete_primary_locked_oos_unopened"
+        write(path, value)
+        spec = {**campaign.STUDIES["native_mark"], "blocked_protocol_sha256": value["protocol_sha256"]}
+        with patch.dict(campaign.STUDIES, {"native_mark": spec}, clear=True):
+            board = campaign.board(self.root)
+        self.assertEqual(board["reported_evaluated_configurations"], 388)
+        self.assertFalse(board["crypto_pending_reports"])
+        self.assertEqual(board["phase"], "reports_available")
+        self.assertTrue(board["studies"][0]["promotion_blocked"])
+
     def test_all_nine_completed_catalogues_count1100_without_signal_permissions(self):
-        for name, spec in campaign.STUDIES.items():
+        original = ("pairs", "pairs_close", "sessions", "fx", "native_fvg", "native_trend", "native_context", "metals", "crypto_flow")
+        for name in original:
+            spec = campaign.STUDIES[name]
             fixture(self.root, name, configurations=spec["count"], evaluated=spec["count"])
         board = campaign.board(self.root)
-        self.assertEqual(len(board["studies"]), 9)
+        self.assertGreaterEqual(len(board["studies"]), 10)
         self.assertEqual(board["reported_evaluated_configurations"], 1100)
         self.assertEqual(board["new_reported_evaluated_configurations"], 808)
         self.assertEqual(board["new_protocol_producer_verified_configurations"], 808)
         self.assertEqual(board["new_replay_artifacts_verified_configurations"], 808)
-        self.assertFalse(board["crypto_pending_reports"])
-        self.assertEqual(board["phase"], "reports_available")
+        self.assertTrue(board["crypto_pending_reports"])
+        self.assertEqual(board["phase"], "research_in_progress")
         self.assertIsNone(board["primary"])
         for subject in [board, *board["studies"]]:
             for flag in ("eligible_for_paper", "live_orders", "telegram_enabled"):
