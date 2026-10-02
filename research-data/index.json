@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "source_commit": "623b09c49417a21d10006cae180e7adb43bbaec9",
+  "branch": "research-data-623b09c49417",
+  "kind": "spot",
+  "run_url": "https://github.com/NeatherFrog/awesome-x402/actions/runs/36991940852",
+  "purpose": "personal_nonproduction_historical_research",
+  "license": "CC-BY-NC-SA-4.0",
+  "exports": [
+    {
+      "filename": "manifest.json.gz",
+      "output": "manifest.json",
+      "bytes": 202376,
+      "sha256": "e2bc5d2c46c5eb9b18ec570f576a53c7f9cf6f9a014541adbab447b59ef34476",
+      "compressed_sha256": "f5c5bfa9349f1127df7a25a5447e6401b2c01785ee236858495255340f7b6067"
+    },
+    {
+      "filename": "protocol.json.gz",
+      "output": "protocol.json",
+      "bytes": 1358,
+      "sha256": "a91c5618c87b80d3f6c64711b4d9bcd241bc7480dd57a14d7a98e649acfaaeea",
+      "compressed_sha256": "c850459f9bc66641d1f1d9114b072dd5608d2a67cb2a82bf59847e40dcc32c13"
+    },
+    {
+      "filename": "BTCUSDT-1h.json.gz",
+      "output": "BTCUSDT-1h.json",
+      "bytes": 3784191,
+      "sha256": "c287aa48b8f206af74543f01c083121f06bb0e49ccc4e83db98020817ce8a406",
+      "compressed_sha256": "577ee1efa33c76bcca05033b46266ab0ae7268a1508567789635c6ac345e0ff8"
+    },
+    {
+      "filename": "ETHUSDT-1h.json.gz",
+      "output": "ETHUSDT-1h.json",
+      "bytes": 3679940,
+      "sha256": "1e1e26e0d886b0a0d212213acb8ab5ca3aefd6842884fbe106613bd2098a4084",
+      "compressed_sha256": "acf02d91aea0e7e3e8ef1ffb9d052c8992824263e66c3e4248db35d91047299c"
+    },
+    {
+      "filename": "BTCUSDT-5m.json.gz",
+      "output": "BTCUSDT-5m.json",
+      "bytes": 45101044,
+      "sha256": "d50f79eca92924724f07e7d1f94658caae61adb8cd5fbff7b9be1d3f6972daa2",
+      "compressed_sha256": "57aede43ccd1a196e4b8466981bb9faf27f4581fb5e2aac076b99929a0dad604"
+    },
+    {
+      "filename": "ETHUSDT-5m.json.gz",
+      "output": "ETHUSDT-5m.json",
+      "bytes": 43831306,
+      "sha256": "a72f30518ffcf654db55cc6eb9025e36ac769f828be077b1fc7e0983c00cc3e4",
+      "compressed_sha256": "bfaea177841265eda0f3b2139008d6ac4b09465d1fcc4926423bbf76fcf9b7aa"
+    }
+  ]
+}
