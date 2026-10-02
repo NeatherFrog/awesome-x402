@@ -1,0 +1,204 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "id": "gatev_pairs",
+      "requested_url": "https://www.nber.org/system/files/working_papers/w7032/w7032.pdf",
+      "retrieved_at": "2026-10-02T10:41:26.154692+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": 200,
+      "final_url": "https://www.nber.org/system/files/working_papers/w7032/w7032.pdf",
+      "bytes": 163124,
+      "sha256": "30a54a682259681e163f79120393281a4f158f9cd97c33ca032469f1924f6cf4",
+      "pages": 35,
+      "pdf_title_metadata": null,
+      "extracted_word_count": 8892,
+      "body_not_available_to_local_reviewer": true,
+      "excerpts": [
+        {
+          "word_start": 0,
+          "word_count": 26,
+          "text": "1 I. Introduction Wall Street has long been interested in quantitative methods of speculation. One popular short-term speculation strategy is known as \"pairs trading.\" The strategy"
+        },
+        {
+          "word_start": 228,
+          "word_count": 26,
+          "text": "After the bid-ask bounce and transaction costs are taken into account, pairs trading yields reduced -- but still positive and significant -- returns. Regardless of the"
+        },
+        {
+          "word_start": 284,
+          "word_count": 26,
+          "text": "efficiency, economists have little empirical information about how such efficiency is maintained. Event studies show us that new information 2 is rapidly impounded into stock prices,"
+        }
+      ]
+    },
+    {
+      "id": "gao_intraday",
+      "requested_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2440866",
+      "retrieved_at": "2026-10-02T10:41:27.934863+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": "unavailable",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "concretum_noise",
+      "requested_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4824172",
+      "retrieved_at": "2026-10-02T10:41:28.031564+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": "unavailable",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "concretum_orb",
+      "requested_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4729284",
+      "retrieved_at": "2026-10-02T10:41:28.097497+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": "unavailable",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "snb_fx",
+      "requested_url": "https://www.snb.ch/n/mmr/reference/working_paper_2010_10/source/working_paper_2010_10.n.pdf",
+      "retrieved_at": "2026-10-02T10:41:28.143377+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": 200,
+      "final_url": "https://www.snb.ch/de/publications/research/working-papers/2010/working_paper_2010_10",
+      "bytes": 75188,
+      "sha256": "63f9c8f250907b17c6cd2f28d47681de86a5e65569003e3e43eecd730c60bffb",
+      "title_tag": [
+        "The Business Cycle Implications of Reciprocity in Labor Relations"
+      ],
+      "pdf_links": [],
+      "extracted_word_count": 680,
+      "body_not_available_to_local_reviewer": true,
+      "excerpts": [
+        {
+          "word_start": 0,
+          "word_count": 26,
+          "text": "The Business Cycle Implications of Reciprocity in Labor Relations Skip Links Navigation Zur Hauptnavigation wechseln Skip to main content Zur Suche wechseln Skip to Footer Header"
+        },
+        {
+          "word_start": 436,
+          "word_count": 26,
+          "text": "aktuelle Banknotenserie Geldpolitik Geschäftsbericht Terminkalender Informationen für Medien Finanzmarktteilnehmer Aktionäre Portale Datenportal der SNB Marktoperationen eSurvey Offene Stellen © Schweizerische Nationalbank, Zürich (Schweiz) 2026 Urheberrecht Haftungsbeschränkung"
+        }
+      ]
+    },
+    {
+      "id": "author_pairs",
+      "requested_url": "https://www.utstat.utoronto.ca/~ali/papers/PairsTrading.pdf",
+      "retrieved_at": "2026-10-02T10:41:30.162174+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": "unavailable",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "author_orb_page",
+      "requested_url": "https://concretumgroup.com/a-profitable-day-trading-strategy-for-the-u-s-equity-market/",
+      "retrieved_at": "2026-10-02T10:41:30.763473+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": 200,
+      "final_url": "https://concretumgroup.com/a-profitable-day-trading-strategy-for-the-u-s-equity-market/",
+      "bytes": 114643,
+      "sha256": "cf4316d603a4129bf4e5939a3f20dfb8e7c0da1bbf48992ff704cdadcada10a9",
+      "title_tag": [
+        "A Profitable Day Trading Strategy For The U.S. Equity Market - Concretum Group"
+      ],
+      "pdf_links": [
+        "https://concretumgroup.com/wp-content/uploads/2026/02/A-Profitable-Day-Trading-Strategy-For-The-U.S.-Equity-Market.pdf"
+      ],
+      "extracted_word_count": 779,
+      "body_not_available_to_local_reviewer": true,
+      "excerpts": [
+        {
+          "word_start": 0,
+          "word_count": 26,
+          "text": "A Profitable Day Trading Strategy For The U.S. Equity Market - Concretum Group Skip to content Home Awards Research Papers LAB Coding Articles Audio Papers Software"
+        },
+        {
+          "word_start": 247,
+          "word_count": 26,
+          "text": "performance even after accounting for transaction costs. Performance of the ORB Strategy The results demonstrate strong performance for the ORB day trading strategy . A portfolio"
+        },
+        {
+          "word_start": 560,
+          "word_count": 26,
+          "text": "and R... NextVoL® White Paper: Volatility Targeting for Long-Term Compounding QuanTip: Improving Performance with Fast Alphas; A Tactical Overlay for ... The Tranching Dilemma. A Cost-Aware"
+        }
+      ]
+    },
+    {
+      "id": "author_noise_page",
+      "requested_url": "https://concretumgroup.com/beat-the-market-an-effective-intraday-momentum-strategy-for-sp500-etf-spy/",
+      "retrieved_at": "2026-10-02T10:41:32.175824+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": 200,
+      "final_url": "https://concretumgroup.com/beat-the-market-an-effective-intraday-momentum-strategy-for-sp500-etf-spy/",
+      "bytes": 116989,
+      "sha256": "d6c4ad171ee876e6168911d1252253ca450f71e9f661a8c5cfe611578442db1e",
+      "title_tag": [
+        "Beat the Market: An Effective Intraday Momentum Strategy for S&amp;P500 ETF (SPY) - Concretum Group"
+      ],
+      "pdf_links": [
+        "https://concretumgroup.com/wp-content/uploads/2026/02/Beat-the-Market.pdf"
+      ],
+      "extracted_word_count": 803,
+      "body_not_available_to_local_reviewer": true,
+      "excerpts": [
+        {
+          "word_start": 0,
+          "word_count": 26,
+          "text": "Beat the Market: An Effective Intraday Momentum Strategy for S&amp;P500 ETF (SPY) - Concretum Group Skip to content Home Awards Research Papers LAB Coding Articles Audio"
+        },
+        {
+          "word_start": 406,
+          "word_count": 26,
+          "text": "impact. Therefore, the analysis incorporates commissions and slippage to evaluate whether the strategy remains profitable under realistic trading conditions. Key Takeaways The intraday momentum strategy for"
+        },
+        {
+          "word_start": 384,
+          "word_count": 26,
+          "text": "behavior of intraday momentum strategies. Transaction Costs and Slippage Because the strategy operates at high frequency, trading costs can have a significant impact. Therefore, the analysis"
+        }
+      ]
+    },
+    {
+      "id": "cme_mes",
+      "requested_url": "https://www.cmegroup.com/markets/equities/sp/micro-e-mini-sandp-500.contractSpecs.html",
+      "retrieved_at": "2026-10-02T10:41:33.556780+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": "unavailable",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "cme_mnq",
+      "requested_url": "https://www.cmegroup.com/markets/equities/nasdaq/micro-e-mini-nasdaq-100.contractSpecs.html",
+      "retrieved_at": "2026-10-02T10:41:33.643931+00:00",
+      "copyright": "Full body stays ephemeral; excerpts at most80words TOTAL per source.",
+      "title_verified": false,
+      "strategy_profit_verified": false,
+      "status": "unavailable",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    }
+  ],
+  "limitations": "Receipts and tiny excerpts are not full paper review or empirical profit proof.",
+  "producer_commit": "950e5ca3b66d79013d37ed9ff09ecb08eaa9eb58"
+}
