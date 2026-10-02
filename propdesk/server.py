@@ -171,8 +171,31 @@ class Application:
             if context_path.is_symlink() or context_path.stat().st_size > MAX_BODY:
                 raise ValueError("Сохранённый контекст имеет недопустимый размер или путь")
             context = json.loads(context_path.read_text(encoding="utf-8"))
-        return self.trader.board(self.scanner.latest(), self.autopilot.status(),
-                                 self.news.context(), context=context)
+        result = self.trader.board(self.scanner.latest(), self.autopilot.status(),
+                                   self.news.context(), context=context)
+        # The legacy scanner's generic holdout flag cannot authorize the new
+        # 8%-monthly objective. No model has passed that campaign or has a
+        # qualified fixed-model runtime adapter in this release.
+        result.update(status="no_trade", setups=[], job=None, next_check_at=None,
+                      decision="Стратегия для цели 8% в месяц ещё не прошла проверку. Допущенных сетапов нет.",
+                      strategy_qualification={"state": "no_qualified_strategy",
+                                              "target_monthly_return": .08,
+                                              "runtime_model": None})
+        for item in result.get("markets", []):
+            item.update(selected=False, setup=None)
+            item.setdefault("blockers", []).append("Нет допущенной фиксированной стратегии для текущей цели.")
+        return result
+
+    def qualified_setups(self, payload):
+        if payload:
+            raise ValueError("Поиск допущенных сетапов принимает пустой JSON объект")
+        # A setup refresh never launches parameter selection or a new backtest.
+        # Native runtime scanning is added only with an actually qualified,
+        # frozen model; historical diagnostic rows cannot supply trade levels.
+        return {"queued": False, "reused": False, "job": None,
+                "status": "no_qualified_strategy", "setups": [],
+                "reason": "Нет стратегии, прошедшей проверку цели 8% в месяц и условий исполнения.",
+                "live_orders": False, "telegram_enabled": False}
 
     def find_setups(self, payload):
         if payload:
@@ -797,6 +820,8 @@ def make_handler(app):
                         self.respond(200, app.autopilot.configure(payload))
                 elif path == "/api/trader/find-setups":
                     self.respond(202, app.find_setups(payload))
+                elif path == "/api/trader/qualified-setups":
+                    self.respond(200, app.qualified_setups(payload))
                 elif path == "/api/news/refresh":
                     if payload:
                         raise ValueError("Обновление календаря принимает пустой JSON объект")

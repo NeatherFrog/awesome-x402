@@ -57,14 +57,16 @@ const messages = {
 };
 const translate = value => {const s = String(value ?? ''); if(messages[s]) return messages[s]; const m=s.match(/^Holdout has (\d+) trades; at least (\d+) are required\.$/);if(m)return 'На тесте '+m[1]+' сделок; требуется минимум '+m[2]+'.';return s;};
 const tabMeta = {
-overview:{label:'Сегодня',eyebrow:'СЕТАП · УРОВНИ · ПРИЧИНА РЕШЕНИЯ',title:'Ваш план на сегодня.<br><span>По условиям рынка.</span>',description:'Найдите сетапы. Программа сама проверит рынки и покажет, где есть допустимый план, а где нужно ждать.'},
-scanner:{label:'Автопоиск',eyebrow:'РЫНКИ · СТРАТЕГИИ · НЕЗАВИСИМАЯ ПРОВЕРКА',title:'Пусть данные выбирают.<br><span>Вы следуете плану.</span>',description:'Автоматическое сравнение рынков с правом отклонить все варианты и остаться вне рынка.'},
-lab:{label:'Лаборатория',eyebrow:'ИССЛЕДОВАНИЕ · СРАВНЕНИЕ · ОТБОР',title:'Не угадывайте.<br><span>Проверяйте гипотезы.</span>',description:'Бэктест с издержками, отложенная выборка и проверка устойчивости.'},
+overview:{label:'Найти сетапы',eyebrow:'СЕТАП · УРОВНИ · ПРИЧИНА РЕШЕНИЯ',title:'Ваш план на сегодня.<br><span>По условиям рынка.</span>',description:'Найдите сетапы. Программа сама проверит рынки и покажет, где есть допустимый план, а где нужно ждать.'},
+strategy:{label:'Стратегия',eyebrow:'ДОПУСК · РЕЗУЛЬТАТЫ · ПРИЧИНЫ',title:'Что прошло проверку.<br><span>И что осталось вне рынка.</span>',description:'Допуск стратегии и результаты автоматических проверок. Исторический отчёт сам по себе не разрешает вход.'},
+settings:{label:'Настройки',eyebrow:'РАСПИСАНИЕ · ДАННЫЕ · ПАРАМЕТРЫ',title:'Настройте проверки.<br><span>Следите за решением.</span>',description:'Расписание автоматических проверок и доступ к дополнительным инструментам.'},
+scanner:{label:'Диагностика рынков',eyebrow:'РУЧНАЯ ПРОВЕРКА ИСТОРИИ',title:'История рынков.<br><span>Дополнительная диагностика.</span>',description:'Ручной расчёт доступен в раскрывающемся блоке. Его результат не становится торговым сигналом автоматически.'},
+lab:{label:'Ручной бэктест',eyebrow:'ИСТОРИЯ · ИЗДЕРЖКИ · ПРОВЕРКА',title:'Свои данные.<br><span>Ручная проверка.</span>',description:'Дополнительный бэктест с издержками и отложенной выборкой. Результат не заменяет допуск стратегии.'},
 setups:{label:'Сетапы',eyebrow:'ВХОД · РИСК · ЦЕЛЬ · ОТМЕНА',title:'Планируйте уровни.<br><span>Проверяйте контекст.</span>',description:'Условные зоны по исследованной истории, режиму рынка и доступному новостному календарю.'},
-firms:{label:'Проп-фирмы',eyebrow:'СНАЧАЛА ДОГОВОР · ПОТОМ РИСК',title:'Знайте правила.<br><span>Берегите аккаунт.</span>',description:'Соберите собственные профили и сравнивайте ограничения до торговли.'},
+firms:{label:'Правила',eyebrow:'СНАЧАЛА ДОГОВОР · ПОТОМ РИСК',title:'Знайте правила.<br><span>Берегите аккаунт.</span>',description:'Соберите собственные профили и сравнивайте ограничения до торговли.'},
 checker:{label:'Чекер сделки',eyebrow:'ПРОВЕРКА ДО ОТКРЫТИЯ ПОЗИЦИИ',title:'Сначала риск.<br><span>Потом решение.</span>',description:'Рассчитайте допустимый объём и проверьте ограничения своего аккаунта.'},
 journal:{label:'Дневник',eyebrow:'ПРОЦЕСС ВАЖНЕЕ ОДНОЙ СДЕЛКИ',title:'Фиксируйте сделки.<br><span>Улучшайте процесс.</span>',description:'Входы, издержки, дисциплина и выводы — в локальном дневнике.'},
-integrations:{label:'Интеграции',eyebrow:'ПРОВЕРЯЙТЕ НЕЗАВИСИМО',title:'Ваш рабочий процесс.<br><span>Ваши инструменты.</span>',description:'TradingView, история CSV и локальный API для дальнейшего исследования.'},
+integrations:{label:'Данные и экспорт',eyebrow:'ФОРМАТЫ · ИСТОРИЯ · API',title:'Ваш рабочий процесс.<br><span>Ваши инструменты.</span>',description:'TradingView, история CSV и локальные форматы для дополнительной проверки.'},
 updates:{label:'Обновления',eyebrow:'GITHUB · ВАША КОПИЯ PROP LAB',title:'Развиваем программу.<br><span>Вы обновляете по кнопке.</span>',description:'Проверяйте новые версии и продолжайте работу со своим дневником и настройками.'}
 };
 function navigate(tab, updateHash = true) {
@@ -640,7 +642,7 @@ function scheduleTraderPoll() {
 clearTimeout(traderPollTimer);traderPollTimer=setTimeout(()=>loadTraderBoard(),state.traderError?5000:state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state)?1500:15000);
 }
 let researchProgressLoading=false,researchProgressLastRequest=0;
-const researchProgressStudies=['pairs','pairs_close','sessions','fx','native_fvg','native_trend'];
+const researchProgressStudies=['pairs','pairs_close','sessions','fx','native_fvg','native_trend','native_context','metals','crypto_flow'];
 function researchProgressReportUrl(study) {
 return researchProgressStudies.includes(study)?'/api/trader/research-progress?study='+encodeURIComponent(study):null;
 }
@@ -648,7 +650,7 @@ function renderResearchProgress() {
 const summary=$('#research-progress-summary'),details=$('#research-progress-details'),data=state.researchProgress;
 if(state.researchProgressError){summary.textContent='Результаты исследований · цель: 8% в месяц. Связь с отчётами недоступна.';details.hidden=true;return;}
 if(!data)return;
-summary.textContent='Результаты исследований · цель: 8% в месяц. По отчётам проверено '+num(data.reported_evaluated_configurations,0)+' конфигураций ('+num(data.previous_evaluated_configurations,0)+' ранее + '+num(data.new_reported_evaluated_configurations,0)+' новых).'+(data.crypto_pending_reports?' Крипто: ждём следующие отчёты.':'');
+summary.textContent='Результаты исследований · цель: 8% в месяц. По отчётам проверено '+num(data.reported_evaluated_configurations,0)+' конфигураций ('+num(data.previous_evaluated_configurations,0)+' ранее + '+num(data.new_reported_evaluated_configurations,0)+' новых). Сигналы по этим результатам не включены.'+(data.crypto_pending_reports?' Крипто: ждём следующие отчёты.':'');
 const studies=Array.isArray(data.studies)?data.studies:[];
 $('#research-progress-reports').innerHTML=studies.filter(item=>item&&researchProgressStudies.includes(item.id)).map(item=>{
 const url=researchProgressReportUrl(item.id),count=Number.isInteger(item.reported_evaluated_configurations)?item.reported_evaluated_configurations:0;
@@ -679,7 +681,7 @@ finally{if(serial===traderRequestSerial&&!state.traderAction)scheduleTraderPoll(
 $('#find-setups').addEventListener('click',async()=>{
 if(state.traderAction||state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state))return;
 navigate('overview');clearTimeout(traderPollTimer);++traderRequestSerial;state.traderAction=true;state.traderError='';renderTraderBoard();
-try{await post('/api/trader/find-setups',{});await loadTraderBoard(true);}
+try{await post('/api/trader/qualified-setups',{});await loadTraderBoard(true);}
 catch(e){state.traderError='Найти сетапы не удалось: '+e.message;}
 finally{state.traderAction=false;renderTraderBoard();scheduleTraderPoll();}
 });
@@ -802,14 +804,14 @@ run.disabled=state.autopilotAction||!data||data.running===true||scannerIsActive(
 $('#autopilot-refresh').disabled=state.autopilotAction;
 $('#autopilot-results').disabled=!(data?.job_id||state.scanJob?.id);
 if(!data){if(state.autopilotError){$('#autopilot-badge').textContent='Нет связи';$('#autopilot-description').textContent='Состояние автоматического поиска сейчас недоступно.';notice('autopilot-error',state.autopilotError);}return;}
-toggle.innerHTML=state.autopilotAction?'Сохраняем…':data.enabled?'Выключить автопилот <span>Ⅱ</span>':'Включить автопилот <span>→</span>';
+toggle.innerHTML=state.autopilotAction?'Сохраняем…':data.enabled?'Остановить автопроверки <span>Ⅱ</span>':'Включить автопроверки <span>→</span>';
 const label=data.running?(data.state==='stalled'?'Проверка задержана':data.enabled?'Проверяет рынки':'Завершает проверку'):data.enabled?(data.last_error?'Ожидает повтора':data.state==='waiting_for_idle'?'Ждёт свободного окна':'Включён'):'Выключен';
 $('#autopilot-badge').textContent=label;
 $('#autopilot-badge').className='badge badge-'+(data.last_error?'warning':data.enabled?'good':'neutral');
-$('#autopilot-description').textContent=data.running?(data.enabled?'Поиск выполняется в фоне. Результаты и причины решения появятся в «Автопоиске».':'Новые автоматические проверки остановлены. Текущая проверка завершится и сохранит результат.'):data.enabled?'Программа сама загружает историю, сравнивает рынки и повторяет исследование по расписанию.':'Автоматические проверки остановлены. Можно включить расписание или запустить одну проверку по кнопке.';
+$('#autopilot-description').textContent=data.running?(data.enabled?'Проверка выполняется в фоне. Решение и причины появятся на экране сетапов.':'Новые автоматические проверки остановлены. Текущая проверка завершится и сохранит результат.'):data.enabled?'По расписанию проверяем рынки и сохраняем причины допуска или отказа.':'Автоматические проверки остановлены. Можно включить расписание или найти сетапы одной кнопкой.';
 $('#autopilot-last-attempt').textContent=data.last_attempt_at?timestamp(data.last_attempt_at):'Ещё не было';
 $('#autopilot-next-attempt').textContent=!data.enabled&&!data.running?'Остановлен':data.next_attempt_at?timestamp(data.next_attempt_at):data.running?'После завершения':'Ожидается расписание';
-$('#autopilot-result').textContent=data.running?'Проверка выполняется':data.result_ready?(data.selected_symbol?'Кандидат исследований: '+data.selected_symbol:'Устойчивый кандидат не найден'):data.last_error?'Нужна повторная проверка':data.job_id?'Результат пока не готов':'Результатов пока нет';
+$('#autopilot-result').textContent=data.running?'Проверка выполняется':data.result_ready?(data.selected_symbol?'Прошёл исторический отбор: '+data.selected_symbol:'Допустимая стратегия не найдена'):data.last_error?'Нужна повторная проверка':data.job_id?'Результат пока не готов':'Результатов пока нет';
 const error=state.autopilotError||(data.last_error?(typeof data.last_error==='string'?data.last_error:JSON.stringify(data.last_error)):'');
 notice('autopilot-error',error,state.autopilotError?'error':'warning');
 if(state.autopilotError){$('#autopilot-badge').textContent='Требует внимания';$('#autopilot-badge').className='badge badge-warning';}
@@ -827,7 +829,7 @@ const response=await api('/api/research/latest');
 if(state.autopilot?.job_id!==job||state.autopilot.running)return;
 autopilotResearchJob=job;
 if(response.research?.autopilot_job_id===job&&state.research===previous)renderResearch(response.research);
-}catch(e){if(state.autopilot?.job_id===job){state.autopilotError='Результат поиска сохранён, но исследование не удалось показать: '+e.message;renderAutopilot();}}
+}catch(e){if(state.autopilot?.job_id===job){state.autopilotError='Результат поиска сохранён, но отчёт не удалось показать: '+e.message;renderAutopilot();}}
 }
 async function loadAutopilotStatus() {
 clearTimeout(autopilotPollTimer);if(state.autopilotAction)return;
@@ -848,7 +850,7 @@ const response=await post('/api/autopilot',payload);state.autopilot=response.aut
 if(state.autopilot.job_id)await loadScannerLatest();
 await synchronizeAutopilotResearch(state.autopilot);
 if(state.autopilot.job_id&&!state.autopilot.running&&autopilotCalendarJob!==state.autopilot.job_id){autopilotCalendarJob=state.autopilot.job_id;await loadCalendarStatus();}
-toast(payload.action==='run'?(state.autopilot.running?'Проверка запущена. Результат появится в «Автопоиске».':'Запрос проверки обработан. Состояние показано в карточке.'):state.autopilot.enabled?'Автопилот включён. Проверки будут повторяться автоматически.':'Расписание автопилота выключено.');
+toast(payload.action==='run'?(state.autopilot.running?'Проверка запущена. Решение появится на экране сетапов.':'Запрос проверки обработан. Состояние показано в карточке.'):state.autopilot.enabled?'Автопроверки включены. Решения будут обновляться по расписанию.':'Автоматические проверки остановлены.');
 }catch(e){state.autopilotError='Изменение автопилота не выполнено: '+e.message;notice('autopilot-error',state.autopilotError);toast(e.message);}
 finally{state.autopilotAction=false;renderAutopilot();scheduleAutopilotPoll();}
 }

@@ -19,6 +19,9 @@ STUDIES = {
     "fx": {"file": "fx-session-research.json", "directory": "fx-session-research", "title": "Форекс: Азия и Лондон", "count": 72, "engine": "fx_sessions", "driver": "research_fx_sessions", "kind": "fx"},
     "native_fvg": {"file": "liquidity-native-research.json", "directory": "liquidity-native-research", "title": "Крипто: снятие ликвидности и FVG", "count": 192, "engine": "liquidity_native", "driver": "research_liquidity_native", "kind": "generic"},
     "native_trend": {"file": "native-crypto-trend-research.json", "directory": "native-crypto-trend-research", "title": "Крипто: тренд и контекст", "count": 96, "engine": "native_crypto_trend", "driver": "research_native_crypto_trend", "kind": "generic"},
+    "native_context": {"file": "liquidity-context-research.json", "directory": "liquidity-context-research", "title": "Крипто: FVG в часы Нью-Йорка и Лондона", "count": 48, "engine": "native_liquidity_context", "driver": "research_native_liquidity_context", "kind": "generic"},
+    "metals": {"file": "metal-session-research.json", "directory": "metal-session-research", "title": "Золото: сессионные стратегии", "count": 96, "engine": "metal_sessions", "driver": "research_metal_sessions", "kind": "fx"},
+    "crypto_flow": {"file": "crypto-flow-research.json", "directory": "crypto-flow-research", "title": "Крипто: направленный поток сделок", "count": 64, "engine": "crypto_flow", "driver": "research_crypto_flow", "kind": "generic"},
 }
 
 
@@ -49,6 +52,20 @@ def _json(path):
     if not isinstance(value, dict):
         raise ValueError("Неверный формат артефакта")
     return value
+
+
+def _receipt(root, directory, filename):
+    """Prefer original locks; portable copies are used only when absent.
+
+    This lookup never applies to market inputs. An existing invalid original
+    must fail verification rather than being hidden by a valid packaged copy.
+    """
+    name = "data/" + directory + "/" + filename
+    original = _path(root, name)
+    lexical = Path(root) / name
+    if original.exists() or lexical.is_symlink():
+        return _json(original)
+    return _json(_path(root, "docs/research-receipts/" + directory + "/" + filename))
 
 
 @lru_cache(maxsize=256)
@@ -121,8 +138,7 @@ def inspect(root, study, value):
     if not isinstance(protocol, dict):
         protocol = {}
     protocol_digest = bool(protocol) and digest(protocol, ascii=ascii) == value.get("protocol_sha256")
-    directory = "data/" + spec["directory"] + "/"
-    locked_protocol = _json(_path(root, directory + "protocol.json"))
+    locked_protocol = _receipt(root, spec["directory"], "protocol.json")
     protocol_lock = locked_protocol == protocol and bool(protocol)
     if not protocol_digest or not protocol_lock:
         reasons.append("Контрольная сумма или фиксация протокола не подтверждена")
@@ -169,22 +185,22 @@ def inspect(root, study, value):
     training_verified, result_verified = not evaluated, True
     if evaluated:
         if kind == "sessions":
-            lock = _json(_path(root, directory + "training-lock.json")) or {}
-            source_lock = _json(_path(root, directory + "source-lock.json"))
+            lock = _receipt(root, spec["directory"], "training-lock.json") or {}
+            source_lock = _receipt(root, spec["directory"], "source-lock.json")
             training_verified = (digest(lock, ascii=False) == value.get("training_lock_sha256")
                 and lock.get("protocol_sha256") == value.get("protocol_sha256")
                 and lock.get("producer_sha256") == producers and source_lock == value.get("source_lock")
                 and lock.get("source_lock_sha256") == digest(value.get("source_lock"), ascii=False)
                 and lock.get("training_metrics") == dict(evaluated))
             if value.get("phase") == "complete":
-                result_lock = _json(_path(root, directory + "result-lock.json")) or {}
+                result_lock = _receipt(root, spec["directory"], "result-lock.json") or {}
                 result_verified = (result_lock.get("report_sha256") == _file_hash(_path(root, "docs/" + spec["file"]))
                     and result_lock.get("protocol_sha256") == value.get("protocol_sha256")
                     and result_lock.get("producer_sha256") == producers
                     and result_lock.get("training_lock_sha256") == value.get("training_lock_sha256"))
         elif kind == "fx":
-            lock = _json(_path(root, directory + "selection.json"))
-            input_lock = _json(_path(root, directory + "input-lock.json"))
+            lock = _receipt(root, spec["directory"], "selection.json")
+            input_lock = _receipt(root, spec["directory"], "input-lock.json")
             training_verified = (isinstance(lock, dict) and lock == value.get("selection")
                 and lock.get("training_sha256") == digest(value.get("training"))
                 and input_lock == protocol.get("inputs"))
@@ -193,7 +209,7 @@ def inspect(root, study, value):
             # Legacy pairs use an underscore; newer native studies declare a
             # hyphenated lock. Both paths are fixed by the campaign allowlist.
             filename = "training_selection.json" if study in ("pairs", "pairs_close", "native_trend") else "training-selection.json"
-            stored = _json(_path(root, directory + filename))
+            stored = _receipt(root, spec["directory"], filename)
             expected = value.get("selection_lock_sha256", value.get("training_selection_sha256"))
             training_verified = (isinstance(lock, dict) and stored == lock and digest(lock) == expected
                 and lock.get("protocol_sha256") == value.get("protocol_sha256")
@@ -238,7 +254,7 @@ def board(root):
     verified = sum(row["reported_evaluated_configurations"] for row in studies if row["replay_artifacts_verified"])
     producer_verified = sum(row["reported_evaluated_configurations"] for row in studies
                             if row["protocol_verified"] and row["producer_hashes_verified"] and row["training_results_verified"])
-    pending_crypto = any(row["id"] in ("native_fvg", "native_trend") and row["phase"] != "unverified"
+    pending_crypto = any(row["id"] in ("native_fvg", "native_trend", "native_context", "crypto_flow") and row["phase"] != "unverified"
                          and row["phase"] != "complete" and not row["phase"].startswith("completed") for row in studies)
     return {"target_monthly_return_pct": 8, "previous_evaluated_configurations": PREVIOUS_EVALUATED_CONFIGURATIONS,
             "new_reported_evaluated_configurations": reported,

@@ -1,0 +1,128 @@
+{
+  "audit_kind": "complete_calculated_mark_source_only",
+  "strategy_outcomes_inspected": false,
+  "manifest_sha256": "9887c9b08a73a6a63e71c00815f45d9534977045e15d79805e10ae4f37f59e94",
+  "protocol_sha256": "84c03585b12b75ada698f942581953ddd4e56e9c96b474b12f748c38c7fc1aef",
+  "assets": [
+    {
+      "symbol": "BTCUSDT",
+      "bars": 289152,
+      "json_sha256": "4ca24c13af46cb6650e88f2aa26a113e7b45bb036a920818d45a93d1e1f39265",
+      "json_bytes": 49036413,
+      "used_sources": 62,
+      "monthly_sources": 32,
+      "daily_sources": 30,
+      "open_labels_sha256": "56dca16f339ecda30266d43f98498a2153014ab2ce6621c6a7810bd396a586d9",
+      "all_rows_known_at_close": true,
+      "all_labels_equal_native_trade_input": true,
+      "native_absent_trade_intervals": 21,
+      "mark_nonflat_during_absent_trade_intervals": 21,
+      "mark_auxiliary_counts_during_absent_trade_intervals": [
+        300
+      ],
+      "source_auxiliary_count_histogram": {
+        "1": 5,
+        "2": 1,
+        "72": 1,
+        "172": 1,
+        "175": 1,
+        "185": 1,
+        "204": 1,
+        "246": 1,
+        "248": 1,
+        "259": 1,
+        "262": 1,
+        "277": 1,
+        "286": 1,
+        "287": 3,
+        "289": 3,
+        "290": 3,
+        "291": 4,
+        "292": 1,
+        "293": 3,
+        "294": 5,
+        "295": 3,
+        "297": 6,
+        "298": 53,
+        "299": 454,
+        "300": 288597
+      },
+      "zero_auxiliary_count_bars": 0,
+      "rejected_sources": [
+        {
+          "zip_sha256": "e02cf899d32a506fcb3165e795040dadea291989bdd12082bec1a83875d908fc",
+          "csv_sha256": "fbec7be718a82ca17fd4b273e03af366cb19bad21476107cb99f106c2e877ad1",
+          "checksum_verified": true,
+          "source_url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/5m/BTCUSDT-5m-2026-06.zip",
+          "rejected_reason": "Missing exactly all288 June29 intervals",
+          "original_rows": 8352,
+          "missing_intervals": 288,
+          "used_for_prices": false,
+          "daily_overlap_ohlc_difference_rows": 0,
+          "daily_overlap_auxiliary_count_difference_rows": 0,
+          "all30_daily_sources_verified": true
+        }
+      ]
+    },
+    {
+      "symbol": "ETHUSDT",
+      "bars": 289152,
+      "json_sha256": "cc0b1d5c0e2116f4a7907f70511e57a6ad2dbdf6f6579948df558ec0eb7dde65",
+      "json_bytes": 48150582,
+      "used_sources": 62,
+      "monthly_sources": 32,
+      "daily_sources": 30,
+      "open_labels_sha256": "56dca16f339ecda30266d43f98498a2153014ab2ce6621c6a7810bd396a586d9",
+      "all_rows_known_at_close": true,
+      "all_labels_equal_native_trade_input": true,
+      "native_absent_trade_intervals": 21,
+      "mark_nonflat_during_absent_trade_intervals": 21,
+      "mark_auxiliary_counts_during_absent_trade_intervals": [
+        300
+      ],
+      "source_auxiliary_count_histogram": {
+        "1": 5,
+        "2": 1,
+        "72": 1,
+        "172": 1,
+        "175": 1,
+        "185": 1,
+        "204": 1,
+        "246": 1,
+        "248": 1,
+        "259": 1,
+        "262": 1,
+        "277": 1,
+        "289": 2,
+        "290": 5,
+        "291": 3,
+        "292": 3,
+        "293": 1,
+        "294": 5,
+        "295": 5,
+        "296": 3,
+        "297": 5,
+        "298": 53,
+        "299": 454,
+        "300": 288597
+      },
+      "zero_auxiliary_count_bars": 0,
+      "rejected_sources": [
+        {
+          "zip_sha256": "de38736aea72c09d2802071b7c49bb108557fc5a5c81022bf8d706fd7e42430d",
+          "csv_sha256": "f2638cdbfe04d506d26e3148c93a58cc46cfd61911987b632fbc2d78674d5a8a",
+          "checksum_verified": true,
+          "source_url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/5m/ETHUSDT-5m-2026-06.zip",
+          "rejected_reason": "Missing exactly all288 June29 intervals",
+          "original_rows": 8352,
+          "missing_intervals": 288,
+          "used_for_prices": false,
+          "daily_overlap_ohlc_difference_rows": 0,
+          "daily_overlap_auxiliary_count_difference_rows": 0,
+          "all30_daily_sources_verified": true
+        }
+      ]
+    }
+  ],
+  "raw_source_pairs_reverified": 124
+}

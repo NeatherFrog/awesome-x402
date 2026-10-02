@@ -178,6 +178,46 @@ class TraderAPITests(unittest.TestCase):
         self.assertEqual(self.wait(first["job"]["id"])["state"], "completed")
         self.assertEqual(self.app.trader.summary()["count"], 1)
 
+    def test_qualified_setup_refresh_never_starts_research_or_fetches_prices(self):
+        before = self.app.store.journal()
+        with patch("propdesk.feeds.get_history") as prices, \
+                patch.object(self.app.autopilot, "run_now") as research, \
+                patch.object(self.app.scanner, "latest") as scanner:
+            status, result, _ = self.request("POST", "/api/trader/qualified-setups", {})
+        self.assertEqual(status, 200)
+        self.assertEqual(result["status"], "no_qualified_strategy")
+        self.assertEqual(result["setups"], [])
+        self.assertFalse(result["queued"])
+        self.assertFalse(result["live_orders"])
+        self.assertFalse(result["telegram_enabled"])
+        prices.assert_not_called()
+        research.assert_not_called()
+        scanner.assert_not_called()
+        self.assertEqual(self.app.store.journal(), before)
+        self.assertEqual(self.app.trader.summary()["count"], 0)
+
+    def test_generic_legacy_holdout_candidate_cannot_supply_current_target_levels(self):
+        job, auto = self.board_fixture()
+        legacy = self.app.trader.board(job, auto, {}, now=NOW)
+        self.assertEqual(len(legacy["setups"]), 1)
+        with patch.object(self.app.trader, "board", return_value=legacy):
+            status, result, _ = self.request("GET", "/api/trader/board")
+        self.assertEqual(status, 200)
+        self.assertEqual(result["status"], "no_trade")
+        self.assertEqual(result["setups"], [])
+        self.assertIsNone(result["markets"][0]["setup"])
+        self.assertFalse(result["markets"][0]["selected"])
+        self.assertEqual(result["strategy_qualification"]["target_monthly_return"], .08)
+        self.assertIsNone(result["strategy_qualification"]["runtime_model"])
+
+    def test_qualified_refresh_rejects_arbitrary_strategy_and_secret_parameters(self):
+        with patch.object(self.app.autopilot, "run_now") as research:
+            for payload in ({"strategy": "force-entry"}, {"token": "never-echo-this-value"}):
+                status, result, _ = self.request("POST", "/api/trader/qualified-setups", payload)
+                self.assertEqual(status, 400)
+                self.assertNotIn("never-echo-this-value", json.dumps(result))
+            research.assert_not_called()
+
     def test_persisted_automatic_search_warms_diary_before_market_research(self):
         self.app.autopilot.configure({"enabled": True})
         with patch.dict("os.environ", {"TRADING_AUTOPILOT_DEFAULT": "0"}):

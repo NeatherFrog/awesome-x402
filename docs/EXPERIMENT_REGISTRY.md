@@ -1,4 +1,10 @@
-# Experiment registry — completed 2026-10-02
+# Experiment registry — preserved baseline and active continuation
+
+The active **8% monthly** campaign is recorded separately in
+[HIGH_RETURN_CAMPAIGN.md](HIGH_RETURN_CAMPAIGN.md) and the read-only
+`/api/trader/research-progress` endpoint. Its additional families and actual
+completed counts do not rewrite the 292 baseline configurations below.
+The independent continuation audit is [HIGH_RETURN_RESEARCH_AUDIT.md](HIGH_RETURN_RESEARCH_AUDIT.md).
 
 Negative outcomes remain research evidence, never Telegram trade alerts.
 All percentages below are net total-account period returns under each report's

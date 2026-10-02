@@ -9,3 +9,9 @@ propdesk/tzdata/America/* -text
 propdesk/tzdata/Asia/* -text
 propdesk/tzdata/Etc/* -text
 propdesk/tzdata/UTC -text
+
+# These optional historical reports remain in Git and full local builds.
+# Omit them from source archives so installed 0.5 packages can fetch the first
+# upgrade within their original 50 MiB extracted-archive limit.
+docs/edge-search.json export-ignore
+docs/current-research.json export-ignore

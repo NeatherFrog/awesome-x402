@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "data_protocol_id": "binance-usdm-btceth-calculated-mark-five-minute-2024-2026-v2",
+  "declared_at": "2026-10-02",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT"
+  ],
+  "start": "2024-01-01T00:00:00Z",
+  "end_exclusive": "2026-10-01T00:00:00Z",
+  "interval": "5m",
+  "interval_seconds": 300,
+  "timestamp_unit": "milliseconds",
+  "expected_bars_each": 289152,
+  "quote_currency": "USDT",
+  "provider": "Binance USD-M official checksum-verified markPriceKlines archives",
+  "price_kind": "computed_mark_price",
+  "trade_execution_evidence": false,
+  "missing_data": "No imputation, stale-mark fill-forward, source substitution, sorting or duplicate removal.",
+  "fallback": "Exact documented June2026 omission: replace the entire June container with all30 same-venue official daily mark ZIPs, each checksum/calendar verified. Existing monthly overlap must agree in OHLC; no borrowed/inserted/fill-forward prices. Original blocked revision remains immutable. Other months retain prior strict source policy.",
+  "knowledge": "UTC opening labels describe complete five-minute marks known no earlier than bar close; actual publication latency is unverified.",
+  "permitted_research_role": "Historical computed-mark floating-equity bounds, collateral and provisional liquidation analysis; causal sizing uses preceding completed mark only.",
+  "forbidden_inference": "Mark OHLC never establishes executable entry/exit prices, liquidity or queue fills. Zero source volume is normal for marks, not trading evidence.",
+  "uncertainty": "Five-minute OHLC and auxiliary source counts do not prove uninterrupted tick sampling or exact account liquidation rules. No live qualification follows.",
+  "data_license": "CC-BY-NC-SA-4.0; Binance Vision terms v1.0; personal non-production historical research",
+  "live_orders": false,
+  "strategy_outcomes_inspected": false,
+  "source_revision": 2,
+  "predecessor": {
+    "data_protocol_id": "binance-usdm-btceth-calculated-mark-five-minute-2024-2026-v1",
+    "manifest_sha256": "3029309a8533141dda91ddc4ade82b3b470d07cdf69552caa75cc367ba7e65fe",
+    "protocol_sha256": "252c687ff8cae38ab9a65f3469710794b5dc45f11487e96ca9e7e292deeab250",
+    "state": "blocked; both June 2026 monthly ZIPs omit all 288 June29 bars"
+  },
+  "source_revision_selection": "Chosen only from a verified archive-calendar defect before new mark-strategy outcomes; strategy/risk parameters unchanged."
+}

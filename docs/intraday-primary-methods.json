@@ -1,0 +1,707 @@
+{
+  "schema": 1,
+  "reviewed_at": "2026-10-02T11:51:43.019660+00:00",
+  "review_scope": "Entire43-page noise and26-page ORB extracted texts read, includingFAQ/tables/references; figure images not digitized. Originalcrypto48-page paper delegated to cross-sectional reviewer. No paper performance or broker execution reproduction.",
+  "previous_source_snapshot_sha256": "b47f3ccd66d61a0fbb09d891763f32270d13ad7244cc193d13c23b511d1691d5",
+  "original_retrieval": {
+    "actions_run": 37002836679,
+    "producer_commit": "4f486d93a08db4c2d58e35bcefb5c927d49bdf71",
+    "producer_sha256": "c36bd4fc634f3945a06745e9c90db91f9cc77f3764edea577b5fd7089589c0c1",
+    "receipt_sha256": "c9dfc54479f322d52c21f9fd95c832d650a0bdbae429f790c73f5a50a6ba0702",
+    "private_artifact_directory": ".local/original-intraday-4f486d93a08d",
+    "copyright": "No complete copyrighted bodies published to repository; original private authenticated artifact and own method summaries only."
+  },
+  "papers": [
+    {
+      "id": "concretum_noise_original",
+      "requested_url": "https://concretumgroup.com/wp-content/uploads/2026/02/Beat-the-Market.pdf",
+      "retrieved_at": "2026-10-02T11:46:25.724514+00:00",
+      "status": 200,
+      "final_url": "https://concretumgroup.com/wp-content/uploads/2026/02/Beat-the-Market.pdf",
+      "pdf_sha256": "865010dfd938d513c1cd22a7be5932bc232afe498c3cf493d6d8bd4b0de86ebb",
+      "private_text_sha256": "5ea2a583950e9362a16ce05e2eb2376ed5c20ffe681cfd0259c35831fd46783a",
+      "pages": 43,
+      "extracted_words": 11741
+    },
+    {
+      "id": "concretum_orb_original",
+      "requested_url": "https://concretumgroup.com/wp-content/uploads/2026/02/A-Profitable-Day-Trading-Strategy-For-The-U.S.-Equity-Market.pdf",
+      "retrieved_at": "2026-10-02T11:46:26.874513+00:00",
+      "status": 200,
+      "final_url": "https://concretumgroup.com/wp-content/uploads/2026/02/A-Profitable-Day-Trading-Strategy-For-The-U.S.-Equity-Market.pdf",
+      "pdf_sha256": "9423012e9f0199e3f6925c500725815c236d7ddbdd7500d50d10bac2be745e91",
+      "private_text_sha256": "4b087262c9a52e962971d0221b4e579392503f49934b7302571f890477cb57c4",
+      "pages": 26,
+      "extracted_words": 7748
+    },
+    {
+      "id": "liu_tsyvinski_wu_common_crypto_original",
+      "requested_url": "https://www.nber.org/system/files/working_papers/w25882/w25882.pdf",
+      "retrieved_at": "2026-10-02T11:46:27.481248+00:00",
+      "status": 200,
+      "final_url": "https://www.nber.org/system/files/working_papers/w25882/w25882.pdf",
+      "pdf_sha256": "01fa7e448623627078b43cc75ca70471caa1c436e48795f12704106392b486f2",
+      "private_text_sha256": "6fe41b0a5a7a48d4caff80399e22208964ea3e92c147dd6e476ab5b7feccba21",
+      "pages": 48,
+      "extracted_words": 14469
+    }
+  ],
+  "noise_primary": {
+    "authors": [
+      "Carlo Zarattini",
+      "Andrew Aziz",
+      "Andrea Barbon"
+    ],
+    "first_version": "2024-05-10",
+    "retrieved_version": "2025-09-22",
+    "data": {
+      "pages": [
+        6
+      ],
+      "instrument": "SPY ETF",
+      "provider": "IQFeed",
+      "resolution": "1-minute OHLCV",
+      "sample": "May2007–April2024",
+      "original_vendor_panel_available_locally": false
+    },
+    "definitions": {
+      "same_slot_movement": {
+        "pages": [
+          6
+        ],
+        "formula": "m(d-i,t)=abs(C(d-i,t)/O(d-i,09:30)-1),i=1..14; sigma(d,t)=sum_i m/14",
+        "interpretation": "Mean absolute open-to-slot movement, not a standard deviation or news probability."
+      },
+      "gap_bounds": {
+        "pages": [
+          7,
+          21
+        ],
+        "formula": "UB=max(today09:30open,prior16close)*(1+VM*sigma); LB=min(same anchors)*(1-VM*sigma)",
+        "primary_VM": 1
+      },
+      "decisions": {
+        "pages": [
+          9,
+          21
+        ],
+        "rule": "Semi-hourly HH:00/HH:30,first10:00NY. Long aboveUB/short belowLB; opposite breakout closes/flips. All exposure closes16:00. Originalstop checks also semi-hourly."
+      },
+      "vwap_trail": {
+        "pages": [
+          12,
+          13
+        ],
+        "formula": "Long threshold=max(UB,VWAP);short threshold=min(LB,VWAP);crossing closes exposure.",
+        "vwap_scope": "Current regular session only; mainpaper does not specify exacttick-versus-bar calculation.",
+        "monotonic_ratchet_specified": false
+      },
+      "sizing": {
+        "pages": [
+          10,
+          15
+        ],
+        "formula": "shares=floor(previous_close_AUM/today_open * min(4,.02/s_daily)); s_daily=sqrt(sum_previous14(r-mean14)^2/13)",
+        "target_is_daily_volatility_not_stop_loss_budget": true
+      }
+    },
+    "reported_results_only": {
+      "pages": [
+        11,
+        14,
+        15,
+        16,
+        43
+      ],
+      "base_opposite_band_annual": 0.062,
+      "base_opposite_band_drawdown": 0.21,
+      "current_band_vwap_1x_annual": 0.097,
+      "current_band_vwap_1x_drawdown": 0.12,
+      "dynamic_vol_annual": 0.196,
+      "dynamic_vol_drawdown": 0.25,
+      "dynamic_vol_sharpe": 1.33,
+      "dynamic_net_total_return": 19.85,
+      "native_reproduced": false,
+      "prop_qualified": false
+    },
+    "costs": {
+      "pages": [
+        10,
+        24,
+        25,
+        36,
+        37
+      ],
+      "commission_usd_per_share_side": 0.0035,
+      "constant_slippage_usd_per_share_side": 0.001,
+      "live_slippage_case": "Authors report >1000 randomly sided SPY trades/>50Mnotional on a100kIBaccount over a fewApril2024days. Actual original fills not available here.",
+      "impact_extension": "I-Star large-cap parameters(687,.70,.72),Q/ADV participation and30dayvol; authorreportedSharpe1.17vs1.33, not reproduced."
+    },
+    "limits": {
+      "pages": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        31,
+        34,
+        35,
+        36,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "regime_findings": "VIXatopen/prior-daypatterns/weekday/VM/lookback findings are historical diagnostics. RSI5 is proposedgamma proxy, not observeddealerinventory. Main rule refinements reuse history; no fully specified preregistered untouched split.",
+      "updated_FAQ": "Author postpublication monthly table runs through2025August, includes losing months and differs in endpoints from main metrics; not independent execution evidence.",
+      "market_transfer": "SPYshare fees,4x cap,stockborrow,IQFeed liquidity andminuteexecution do not transfer to crypto CFD/perpetual/prop returns."
+    }
+  },
+  "orb_primary": {
+    "authors": [
+      "Carlo Zarattini",
+      "Andrea Barbon",
+      "Andrew Aziz"
+    ],
+    "first_version": "2024-02-16",
+    "data": {
+      "pages": [
+        7,
+        8
+      ],
+      "universe": "~7000NYSE/NasdaqUSstocks including delisted",
+      "sample": "2016-01-01–2023-12-31",
+      "daily_vendor": "CRSP",
+      "intraday_vendor": "IQFeed",
+      "unadjusted_intraday": true,
+      "vendor_panel_available_locally": false
+    },
+    "definitions": {
+      "eligibility": {
+        "pages": [
+          9
+        ],
+        "rule": "Openingprice>$5,prior14daymeanvolume>=1Mshares,prior14dayATR>$0.50."
+      },
+      "entry": {
+        "pages": [
+          6,
+          9
+        ],
+        "rule": "First09:30–09:35bodydirection fixesonlyallowedside; stop-entry atfirst5mhigh forbull/low forbear;dojinotrade."
+      },
+      "exit": {
+        "pages": [
+          7,
+          9
+        ],
+        "rule": "Stop10%prior14daydailyATR fromactualentry; remainingpositionflat16NY;no fixed1/2Rtarget."
+      },
+      "volume_selection": {
+        "pages": [
+          13,
+          14,
+          15
+        ],
+        "rule": "Openingvolume/meanprevious14same-opening-windowvolumes; ratio>=1;daily top20eligible. Printed denominator repeats t-1subscript; surroundingtext specifiesprevious14days."
+      },
+      "risk": {
+        "pages": [
+          10,
+          16
+        ],
+        "rule": "1%ofcapitalallocatedtoeachposition,4xleverage cap; explicit multi-position allocation implementation absent."
+      }
+    },
+    "reported_results_only": {
+      "pages": [
+        12,
+        17,
+        19
+      ],
+      "base_annual": 0.032,
+      "base_sharpe": 0.48,
+      "top20_relvol_annual": 0.416,
+      "top20_relvol_sharpe": 2.81,
+      "top20_relvol_drawdown": 0.12,
+      "top20_relvol_worst_day": -0.0161,
+      "top20_relvol_net_total_return": 16.37,
+      "native_reproduced": false
+    },
+    "costs_limits": {
+      "pages": [
+        10,
+        17,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "commission_usd_per_share_side": 0.0035,
+      "slippage_borrow_full_model_verified": false,
+      "held_out_split_preregistered": false,
+      "market_transfer": "Top20news-sensitiveindividualstocks/openingvolume selection central; indexhourly/BTCETHNYclock does not reproduce it. Best/worststocklists are retrospective."
+    }
+  },
+  "secondary_code": {
+    "pinned_MIT_repository": "https://github.com/giovannibrusco/zarattini-2024-momentum-spy/tree/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1",
+    "original_author_affiliation_verified": false,
+    "findings": [
+      "Uses completedclose of minute labelledHH:MM tofillatHH:MM while documentedinterval endsHH:MM+1; ours waitsforcompletion.",
+      "Sparsecheckpoint fallsback to stalepriorclose ascurrentfill; ours refusesstalefills.",
+      "Noise defaultminobs accepts7sessions in14window; ours requires full14priorlocalweekdays.",
+      "VWAP uses typicalprice(H+L+C)/3*volume; originalBinance quote/base totals permit actualaggregateVWAP.",
+      "Secondary futuresfees/benchmarkreturns are not verified currentprop contract proof."
+    ]
+  },
+  "native_noise_proposal": {
+    "status": "proposed_before_native_strategy_outcomes_not_yet_frozen",
+    "count": 24,
+    "description": "DistinctBTCETHNewYork-clockcryptoADAPTATION, not authorsSPYreproduction.",
+    "grid": {
+      "lookback_prior_completed_weekday_sessions": [
+        14
+      ],
+      "band_multiplier": [
+        0.75,
+        1,
+        1.25
+      ],
+      "checkpoint_minutes": [
+        15,
+        30
+      ],
+      "exit_mode": [
+        "current_band",
+        "current_band_vwap"
+      ],
+      "aggregate_stop_risk": [
+        0.005,
+        0.01
+      ]
+    },
+    "clock": "DirectpinnedNYTZif;actual9:30opening weekdays;completedcheckpointprices;next5mopening fills/updates;flatfirst16NYopening. NoNYSEholiday assertion for24/7crypto.",
+    "vwap": "sum(originalquote_volume)/sum(originalbase_volume) overalreadycompletedcurrentsessionbars;nevermarkvolume.",
+    "causal_quality": "Only14priorcompletedeligiblelocalweekday sessions forslotmeans;todayfuture16/fullsessionmissing cannot cancel earlierentry. Unavailableupdates/gaps explicit;no stale/zero-tradefills.",
+    "own_deltas": "15mcheckpoints,kgrid,protectivebandstop,monotoniccheckpointtrail,2xsharedcashgross,riskbudgets,two-assetcryptoUSDTfunding/marks differfromauthors.",
+    "capital_costs": "TOTAL100000USDT,physicalisolated2x,positiveavailablecash,aggregatecost-inclusivestoprisk/gross<=2equity;5bpstaker/side+2bpsslip/side+1bpsfullspread researchassumptions. Bothfees/actualfunding,doublecostreplay;.001grid/actualtariffs/tierfiltersunverified,neverprop/livequalified.",
+    "gates": "Originalunchanged8%objective;2024TRAINoneprimarybefore2025validation;failedval leaves2026unopened,no substitute/rescale."
+  },
+  "native_receipts": [
+    {
+      "id": "github_author_concretum",
+      "requested_url": "https://api.github.com/search/users?q=Concretum&per_page=10",
+      "requested_at": "2026-10-02T11:40:19.366183+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/users?q=Concretum&per_page=10",
+      "sha256": "f3a9395ec43f14c639a4140f530fc2880b704df0aa7560a597bc15d720aedd35",
+      "bytes": 1078,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "github_author_zarattini",
+      "requested_url": "https://api.github.com/search/users?q=Zarattini&per_page=10",
+      "requested_at": "2026-10-02T11:40:19.367028+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/users?q=Zarattini&per_page=10",
+      "sha256": "39fb6cbe5d4473ef3f718deb1c6e674feb0a5e3b4ef8dbb971dab410adca1f92",
+      "bytes": 7096,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "github_noise_repositories",
+      "requested_url": "https://api.github.com/search/repositories?q=%22noise+area%22+in%3Areadme&per_page=15",
+      "requested_at": "2026-10-02T11:40:19.367444+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=%22noise+area%22+in%3Areadme&per_page=15",
+      "sha256": "6a23b78eb19abca2eb0cc6325b903b77ed32861ad06f563dd0ed1576a9516f33",
+      "bytes": 85102,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "github_concretum_repositories",
+      "requested_url": "https://api.github.com/search/repositories?q=Concretum+in%3Areadme&per_page=15",
+      "requested_at": "2026-10-02T11:40:19.367843+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=Concretum+in%3Areadme&per_page=15",
+      "sha256": "eafd11c505e96d737cd14c399dbd0a84ee46c3a6990f009b16379f0192c609bf",
+      "bytes": 87533,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "github_intraday_momentum_repositories",
+      "requested_url": "https://api.github.com/search/repositories?q=%22Beat+the+Market%22+%22intraday%22+in%3Areadme&per_page=15",
+      "requested_at": "2026-10-02T11:40:19.368182+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=%22Beat+the+Market%22+%22intraday%22+in%3Areadme&per_page=15",
+      "sha256": "b580c4d4de213f8dfd0344f92de70f1db32339540d9d5f61f39e0c22b1d82229",
+      "bytes": 94397,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "noise_original_pdf_native",
+      "requested_url": "https://concretumgroup.com/wp-content/uploads/2026/02/Beat-the-Market.pdf",
+      "requested_at": "2026-10-02T11:40:19.696107+00:00",
+      "body_limit_bytes": 8000000,
+      "status": "unavailable",
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false,
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_common_nber_page",
+      "requested_url": "https://www.nber.org/papers/w25882",
+      "requested_at": "2026-10-02T11:40:19.699702+00:00",
+      "body_limit_bytes": 8000000,
+      "status": "unavailable",
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false,
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_common_author",
+      "requested_url": "https://economics.yale.edu/sites/default/files/common_risk_factors.pdf",
+      "requested_at": "2026-10-02T11:40:19.702009+00:00",
+      "body_limit_bytes": 8000000,
+      "status": "unavailable",
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false,
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "concretum_candidate_profile",
+      "requested_url": "https://api.github.com/users/ConcretumCaelum",
+      "requested_at": "2026-10-02T11:40:41.823007+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/users/ConcretumCaelum",
+      "sha256": "ac701b9d7b4bac4457435ee2ebbcc39cb03be745e8741f0c5db491a94ec12930",
+      "bytes": 1262,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "ascensao_commit",
+      "requested_url": "https://api.github.com/repos/Ascensao/Intraday-momentum-strategy/commits/main",
+      "requested_at": "2026-10-02T11:40:41.823600+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/Ascensao/Intraday-momentum-strategy/commits/main",
+      "sha256": "9ebed4c307d195477717f444eac21e85b6ee8d7ebe5b87da041e9665ae88e337",
+      "bytes": 11665,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "ascensao_tree",
+      "requested_url": "https://api.github.com/repos/Ascensao/Intraday-momentum-strategy/git/trees/main?recursive=1",
+      "requested_at": "2026-10-02T11:40:41.823983+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/Ascensao/Intraday-momentum-strategy/git/trees/main?recursive=1",
+      "sha256": "2d0bd72a297e987c73ed85551580ed00ae920787f5a910a87e6b5d3473cfc6c0",
+      "bytes": 5586,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_commit",
+      "requested_url": "https://api.github.com/repos/giovannibrusco/zarattini-2024-momentum-spy/commits/main",
+      "requested_at": "2026-10-02T11:40:41.824335+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/giovannibrusco/zarattini-2024-momentum-spy/commits/main",
+      "sha256": "1d97dfc105492f5e3add41748d0570bd03627dd9f0a78d985b567c4c2521866c",
+      "bytes": 7130,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_tree",
+      "requested_url": "https://api.github.com/repos/giovannibrusco/zarattini-2024-momentum-spy/git/trees/main?recursive=1",
+      "requested_at": "2026-10-02T11:40:41.824663+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/giovannibrusco/zarattini-2024-momentum-spy/git/trees/main?recursive=1",
+      "sha256": "85825278076a7798919f0fe5c7f9734d787085afbc8718c8b2ba53853d087e1a",
+      "bytes": 16122,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "crypto_common_github_search",
+      "requested_url": "https://api.github.com/search/repositories?q=%22Common+Risk+Factors+in+Cryptocurrency%22+in%3Areadme&per_page=10",
+      "requested_at": "2026-10-02T11:40:42.173562+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=%22Common+Risk+Factors+in+Cryptocurrency%22+in%3Areadme&per_page=10",
+      "sha256": "edb9c8441aad1dcec961daf8d4b86b845549a2c6e2deda574ef6da1dd8851464",
+      "bytes": 63574,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "ascensao_README_md",
+      "requested_url": "https://raw.githubusercontent.com/Ascensao/Intraday-momentum-strategy/5a9e956994d1ca9ef16e5e0ae6af4ce4e04e87eb/README.md",
+      "requested_at": "2026-10-02T11:41:15.634851+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/Ascensao/Intraday-momentum-strategy/5a9e956994d1ca9ef16e5e0ae6af4ce4e04e87eb/README.md",
+      "sha256": "99d05e2c3811c819676dab0c06de11a414b2765a57486bd0228d518e873ea579",
+      "bytes": 3472,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "ascensao_prepare_indicators_py",
+      "requested_url": "https://raw.githubusercontent.com/Ascensao/Intraday-momentum-strategy/5a9e956994d1ca9ef16e5e0ae6af4ce4e04e87eb/prepare_indicators.py",
+      "requested_at": "2026-10-02T11:41:15.635594+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/Ascensao/Intraday-momentum-strategy/5a9e956994d1ca9ef16e5e0ae6af4ce4e04e87eb/prepare_indicators.py",
+      "sha256": "d6e71a2abe77772effd1b7342f10bed29a2d781e84c1f6e178eb29bb7cdd4e0f",
+      "bytes": 2371,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "ascensao_backtest_strategy_py",
+      "requested_url": "https://raw.githubusercontent.com/Ascensao/Intraday-momentum-strategy/5a9e956994d1ca9ef16e5e0ae6af4ce4e04e87eb/backtest_strategy.py",
+      "requested_at": "2026-10-02T11:41:15.637078+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/Ascensao/Intraday-momentum-strategy/5a9e956994d1ca9ef16e5e0ae6af4ce4e04e87eb/backtest_strategy.py",
+      "sha256": "966cf09cb58247be6b1e6cacf558546703d9bb717d3655af6fe7daa287e0dfa7",
+      "bytes": 9166,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_README_md",
+      "requested_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/README.md",
+      "requested_at": "2026-10-02T11:41:15.637425+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/README.md",
+      "sha256": "5cca6d77d3145c1b575285708ebae667e109296441b78a9c36c5a825540107c1",
+      "bytes": 9422,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_LICENSE",
+      "requested_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/LICENSE",
+      "requested_at": "2026-10-02T11:41:15.637808+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/LICENSE",
+      "sha256": "8be8304944d6376145d729673cb20b3f3e2a85066fcbd08c1758ea7bfe3feeaf",
+      "bytes": 1072,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_docs_SPEC_md",
+      "requested_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/docs/SPEC.md",
+      "requested_at": "2026-10-02T11:41:15.894064+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/docs/SPEC.md",
+      "sha256": "bc8f098eebb62a682db8feb279dfa370615cbd6280f5668ab32f80af0f14d87f",
+      "bytes": 6919,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_src_noise_area_py",
+      "requested_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/src/noise_area.py",
+      "requested_at": "2026-10-02T11:41:15.929676+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/src/noise_area.py",
+      "sha256": "154f3e97483b62f52c3552fb36a596fdbd2651177378001b93b1873034e98a87",
+      "bytes": 4411,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_src_backtest_py",
+      "requested_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/src/backtest.py",
+      "requested_at": "2026-10-02T11:41:15.930512+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/src/backtest.py",
+      "sha256": "6cdff1ac55d033f0dd33ddcaa317dce777f017f58f5d280018a036914ca7dfb7",
+      "bytes": 8690,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "brusco_src_sizing_py",
+      "requested_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/src/sizing.py",
+      "requested_at": "2026-10-02T11:41:15.936347+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/giovannibrusco/zarattini-2024-momentum-spy/ec10608398b86c1a48d83411ae3e0fc9ab4cbfd1/src/sizing.py",
+      "sha256": "4ad608e5587131162051e1b77e1da10aae6d3259b57be12f2a6bb73e7fc62166",
+      "bytes": 1455,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Complete selected pinned secondary code/specification read; original-author attribution not verified."
+    },
+    {
+      "id": "cryptolist_README_md",
+      "requested_url": "https://raw.githubusercontent.com/DolbyUUU/awesome-cryptocurrency-blockchain-economics-business/main/README.md",
+      "requested_at": "2026-10-02T11:41:15.937012+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/DolbyUUU/awesome-cryptocurrency-blockchain-economics-business/main/README.md",
+      "sha256": "cd9f2479405b33699cfec27983e9139a10f327b02cb6e4307ab16ce409b86144",
+      "bytes": 3429,
+      "content_type": "text/plain; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "barbon_users",
+      "requested_url": "https://api.github.com/search/users?q=Barbon&per_page=20",
+      "requested_at": "2026-10-02T11:42:17.148189+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/users?q=Barbon&per_page=20",
+      "sha256": "f1792dd1f7d79fbcdfbc13791c64a623af438d0758ee31af89dfc2c9326bda4f",
+      "bytes": 18988,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "noise_pdf_github_leads",
+      "requested_url": "https://api.github.com/search/repositories?q=%224824172%22+in%3Areadme&per_page=15",
+      "requested_at": "2026-10-02T11:42:17.148795+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=%224824172%22+in%3Areadme&per_page=15",
+      "sha256": "d29fc9cbdfe2e2d6147e335e06d262d166a48e2861c74dfeb097358ab70b5d2d",
+      "bytes": 70966,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "nicolas_tree",
+      "requested_url": "https://api.github.com/repos/nicolasdd1996/equity-intraday-momentum/git/trees/main?recursive=1",
+      "requested_at": "2026-10-02T11:42:17.149175+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/nicolasdd1996/equity-intraday-momentum/git/trees/main?recursive=1",
+      "sha256": "90326346ef87d122cf18e888b5c2857e5c4db9c999d3a0e4dca78b30835c6fa6",
+      "bytes": 2625,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_haoyu_tree",
+      "requested_url": "https://api.github.com/repos/Haoyu-tech/Green-Cryto-vs-Brown-Crypto-Reproduce-JF---Three-factor-in-Crypto-/git/trees/main?recursive=1",
+      "requested_at": "2026-10-02T11:42:17.149506+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/Haoyu-tech/Green-Cryto-vs-Brown-Crypto-Reproduce-JF---Three-factor-in-Crypto-/git/trees/main?recursive=1",
+      "sha256": "48dbb525774279f1914986828789ca6d8e2677230de7ace37bb6b6b4e50ac026",
+      "bytes": 21478,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_factors_tree",
+      "requested_url": "https://api.github.com/repos/hara-desu/CryptoRiskFactors/git/trees/main?recursive=1",
+      "requested_at": "2026-10-02T11:42:17.149882+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/hara-desu/CryptoRiskFactors/git/trees/main?recursive=1",
+      "sha256": "bdeb4038189799ee2c05d4dea27a5fb8eac519ab6abc3028e8f7bf0f7d122dcf",
+      "bytes": 1592,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_azaro_tree",
+      "requested_url": "https://api.github.com/repos/thisisazaro/Common_Risk_Factors_in_Cryptocurrency/git/trees/main?recursive=1",
+      "requested_at": "2026-10-02T11:42:17.525586+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/thisisazaro/Common_Risk_Factors_in_Cryptocurrency/git/trees/main?recursive=1",
+      "sha256": "88acd60a9c59c9dc262066666f481ab02026828201e8a2bacb1ae686ec7802e8",
+      "bytes": 29034,
+      "content_type": "application/json; charset=utf-8",
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_common_crossref",
+      "requested_url": "https://api.crossref.org/works?query.title=Common%20Risk%20Factors%20in%20Cryptocurrency&rows=1",
+      "requested_at": "2026-10-02T11:42:17.559260+00:00",
+      "body_limit_bytes": 8000000,
+      "status": "unavailable",
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false,
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "crypto_common_wiley",
+      "requested_url": "https://onlinelibrary.wiley.com/doi/10.1111/jofi.13119",
+      "requested_at": "2026-10-02T11:42:17.562435+00:00",
+      "body_limit_bytes": 8000000,
+      "status": "unavailable",
+      "error_type": "URLError",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "body_verified": false,
+      "read_scope": "Source retrieval/search metadata; not a paper method or empirical performance review."
+    },
+    {
+      "id": "aqr_intraday_author",
+      "requested_url": "https://www.aqr.com/Insights/Research/Journal-Article/Market-Intraday-Momentum",
+      "requested_at": "2026-10-02T11:42:17.565357+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://www.aqr.com/404",
+      "sha256": "5086f92d222eb17991fc05723323ad4a7c4af1389ca9c6788153284c244a9b3f",
+      "bytes": 50617,
+      "content_type": "text/html; charset=utf-8",
+      "read_scope": "HTTP200 redirected to /404; rejected as the intended paper.",
+      "accepted_as_original": false
+    },
+    {
+      "id": "crypto_common_original_mirror",
+      "requested_url": "https://raw.githubusercontent.com/hara-desu/CryptoRiskFactors/66e00f60a0df9feee3959a5ca9f10777e326ad7c/article.pdf",
+      "requested_at": "2026-10-02T11:42:54.992862+00:00",
+      "body_limit_bytes": 8000000,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/hara-desu/CryptoRiskFactors/66e00f60a0df9feee3959a5ca9f10777e326ad7c/article.pdf",
+      "sha256": "4aded738b46bd22d5de2524a0df81c65e79331c1a9d1b4f2c17f54c00514cbd6",
+      "bytes": 1079160,
+      "content_type": "application/octet-stream",
+      "read_scope": "First nine pages inspected; actual Lada Zimina student replication rejected as original-author paper.",
+      "accepted_as_original": false
+    }
+  ],
+  "live_orders": false,
+  "telegram_enabled": false,
+  "prop_qualified": false,
+  "eight_percent_proved": false
+}
