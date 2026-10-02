@@ -22,6 +22,7 @@ RECEIPT_FILES = frozenset({
     "training-selection.json", "training_selection.json", "training_results.json",
     "validation-confirmation.json", "validation_selection.json",
     "pre_outcome_audit.json", "runtime-timezone-audit.json",
+    "retrospective-causality-audit.json",
 })
 
 

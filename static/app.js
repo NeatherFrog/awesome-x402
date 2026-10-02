@@ -642,7 +642,7 @@ function scheduleTraderPoll() {
 clearTimeout(traderPollTimer);traderPollTimer=setTimeout(()=>loadTraderBoard(),state.traderError?5000:state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state)?1500:15000);
 }
 let researchProgressLoading=false,researchProgressLastRequest=0;
-const researchProgressStudies=['pairs','pairs_close','sessions','fx','native_fvg','native_trend','native_context','metals','crypto_flow'];
+const researchProgressStudies=['pairs','pairs_close','sessions','fx','native_fvg','native_trend','native_context','metals','crypto_flow','native_mark','native_mark_v2','native_noise','cross_sectional'];
 function researchProgressReportUrl(study) {
 return researchProgressStudies.includes(study)?'/api/trader/research-progress?study='+encodeURIComponent(study):null;
 }
@@ -654,8 +654,8 @@ summary.textContent='Результаты исследований · цель: 
 const studies=Array.isArray(data.studies)?data.studies:[];
 $('#research-progress-reports').innerHTML=studies.filter(item=>item&&researchProgressStudies.includes(item.id)).map(item=>{
 const url=researchProgressReportUrl(item.id),count=Number.isInteger(item.reported_evaluated_configurations)?item.reported_evaluated_configurations:0;
-const verification=item.replay_artifacts_verified?'Файлы протокола, движка и истории подтверждены':item.protocol_verified&&item.producer_hashes_verified&&!item.input_available?'Версия подтверждена; исходные файлы истории отсутствуют':item.status==='missing_report'?'Отчёт ещё не опубликован':'Контрольные суммы не подтверждены';
-return '<div><p><strong>'+esc(item.title||'Исследование')+'</strong> · '+esc(num(count,0))+' конфигураций<br>'+esc(verification)+'</p>'+(item.status!=='missing_report'?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Отчёт JSON ↗</a>':'')+(item.id==='pairs_close'?'<p class="field-help">48 повторных оценок исполнения; не 48 новых независимых стратегий.</p>':'')+'</div>';
+const verification=item.promotion_blocked?'Версия исполнения заблокирована после проверки хронологии':item.replay_artifacts_verified?'Файлы протокола, движка и истории подтверждены':item.protocol_verified&&item.producer_hashes_verified&&!item.input_available?'Версия подтверждена; исходные файлы истории отсутствуют':item.status==='missing_report'?'Отчёт ещё не опубликован':'Контрольные суммы не подтверждены';
+return '<div><p><strong>'+esc(item.title||'Исследование')+'</strong> · '+esc(num(count,0))+' конфигураций<br>'+esc(verification)+'</p>'+(item.status!=='missing_report'?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Отчёт JSON ↗</a>':'')+(item.id==='pairs_close'?'<p class="field-help">48 повторных оценок исполнения; не 48 новых независимых стратегий.</p>':'')+(['native_mark','native_mark_v2'].includes(item.id)?'<p class="field-help">Повторная оценка прежних правил с иной моделью исполнения; не новые независимые стратегии.</p>':'')+'</div>';
 }).join('')+'<p class="field-help">Контроль исходных файлов подтверждён для '+esc(num(data.new_replay_artifacts_verified_configurations,0))+' новых конфигураций. Прежние 292 — учёт выполненных исследований. Цель доходности не означает допуск к торговле; торговля и Telegram не включаются этим разделом.</p>';
 details.hidden=false;
 }

@@ -78,7 +78,7 @@ def main():
         parser.error("This diagnostic wrapper is for this repository's own GitHub runner")
     python = [sys.executable, "-X", "utf8"]
     if args.stage == "tests":
-        command = python + ["-m", "unittest", "discover", "-s", "tests", "-q"]
+        command = python + ["scripts/test_offline.py", "--quiet"]
     elif args.stage == "build":
         command = python + ["scripts/build_windows_distribution.py", "--commit", source, "--output-dir", "dist"]
     elif args.stage == "smoke":

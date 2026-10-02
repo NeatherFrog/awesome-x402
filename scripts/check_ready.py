@@ -37,6 +37,8 @@ def main():
             diary = json.load(response)
         with urlopen(base + "/api/trader/evidence", timeout=5) as response:
             evidence = json.load(response)
+        with urlopen(base + "/api/trader/research-progress", timeout=5) as response:
+            campaign = json.load(response)
         if health.get("ok") is not True or health.get("mode") != "paper" or bootstrap.get("version") != VERSION:
             raise ValueError("На порту работает другой сервер")
         if len(bootstrap.get("strategies", [])) < 8 or not bootstrap.get("profiles") or len(script) < 100:
@@ -52,6 +54,13 @@ def main():
         if (evidence.get("live_orders") is not False or evidence.get("telegram_enabled") is not False
                 or not isinstance(evidence.get("studies"), list)):
             raise ValueError("Статус доказательств стратегии не готов")
+        if (campaign.get("target_monthly_return_pct") != 8 or campaign.get("live_orders") is not False
+                or campaign.get("telegram_enabled") is not False or not isinstance(campaign.get("studies"), list)):
+            raise ValueError("Результаты проверки текущей цели не готовы")
+        qualification = board.get("strategy_qualification", {})
+        if (qualification.get("state") != "no_qualified_strategy" or qualification.get("runtime_model") is not None
+                or board.get("setups") != []):
+            raise ValueError("Главный экран допускает непроверенную текущую модель")
         if not args.quiet:
             print("READY: сетапы, автоматический дневник, API, профили, автопилот, календарь, обновления и JavaScript доступны; режим paper")
     except (URLError, OSError, ValueError) as exc:

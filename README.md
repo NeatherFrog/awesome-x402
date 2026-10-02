@@ -133,7 +133,7 @@ Quantity — выбранные units/contracts, не автоматически
 CLI:
 
 ```bash
-python3 -m unittest discover -s tests -v
+python3 scripts/test_offline.py
 python3 -m propdesk demo --symbol EURUSD --output /tmp/prop-lab-demo.json
 python3 -m propdesk validate-csv /path/to/candles.csv
 python3 -m propdesk research --symbol YOUR_ASSET --csv /path/to/candles.csv --output /tmp/research.json
