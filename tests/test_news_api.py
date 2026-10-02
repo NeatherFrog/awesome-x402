@@ -114,14 +114,38 @@ class NewsAPITests(unittest.TestCase):
         self.assertEqual(code, 200, result)
         return result
 
-    def wait_job(self, identifier):
-        deadline = time.monotonic() + 5
+    def wait_job(self, identifier, timeout=15):
+        # The worker keeps real atomic/fsync persistence even when quotes and
+        # research are mocked. Match the scanner API suite's bounded allowance
+        # for slower Windows CI filesystems; this is not a performance check.
+        deadline = time.monotonic() + timeout
+        job = {"state": "unknown", "progress": {"stage": "unknown"}}
         while time.monotonic() < deadline:
             job = self.app.scanner.get(identifier)
             if job["state"] in ("completed", "failed", "interrupted"):
                 return job
             time.sleep(.01)
-        self.fail("Offline worker exceeded the test deadline")
+        self.fail(f"Offline worker exceeded {timeout:g}s test deadline "
+                  f"(state={job['state']}, stage={job.get('progress', {}).get('stage', 'unknown')})")
+
+    def test_worker_wait_allows_slow_persistence_without_real_time_delay(self):
+        completed = {"state": "completed", "progress": {"stage": "completed"}}
+        with patch(__name__ + ".time") as timing, \
+                patch.object(self.app.scanner, "get", side_effect=[
+                    {"state": "running", "progress": {"stage": "loading"}}, completed]) as poll:
+            timing.monotonic.side_effect = [0, 0, 6]
+            self.assertEqual(self.wait_job("offline-fixture"), completed)
+            self.assertEqual(poll.call_count, 2)
+            timing.sleep.assert_called_once_with(.01)
+
+    def test_worker_wait_remains_bounded_and_reports_last_progress(self):
+        with patch(__name__ + ".time") as timing, \
+                patch.object(self.app.scanner, "get", return_value={
+                    "state": "running", "progress": {"stage": "loading"}}) as poll:
+            timing.monotonic.side_effect = [0, 0, 15]
+            with self.assertRaisesRegex(AssertionError, r"15s.*state=running, stage=loading"):
+                self.wait_job("offline-fixture")
+            poll.assert_called_once_with("offline-fixture")
 
     def test_status_is_readonly_unknown_without_external_requests_or_empty_confirmation(self):
         code, status, headers = self.request("GET", "/api/news/status")
