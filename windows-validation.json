@@ -1,15 +1,17 @@
 {
-  "archive_name": "PROP-LAB-Windows-x64-0.4.0.zip",
-  "archive_sha256": "42120b113b2afff8164d5080f74145944471e9b86a25229995201fadee04c092",
+  "archive_name": "PROP-LAB-Windows-x64-0.5.0.zip",
+  "archive_sha256": "469376dc5466aa6e48bf84517a7db1bef234e11aada832454a86f0bbea13fb1e",
   "platform": "win32",
   "status": "passed",
-  "version": "0.4.0",
-  "source_commit": "734629dfae61c01fa853570a468fa804dac7098c",
+  "version": "0.5.0",
+  "source_commit": "9b38ac3cb14427e7a9ce1f6caa61c437bdaca0b0",
   "runtime": {
     "python": "3.13.16",
     "isolated": 1,
     "sqlite": "3.50.4",
-    "ssl": "OpenSSL 3.5.9 29 Sep 2026"
+    "ssl": "OpenSSL 3.5.9 29 Sep 2026",
+    "ny_winter_hours": -5.0,
+    "ny_summer_hours": -4.0
   },
   "checks": [
     "clean_extraction",
@@ -17,8 +19,10 @@
     "path_with_spaces",
     "health_exact_commit",
     "bootstrap",
+    "iana_new_york_timezone",
     "setup_board",
     "fixed_evidence_reports",
+    "crypto_research_evidence",
     "retrospective_diary",
     "rsi2_diary",
     "supervised_updater",
