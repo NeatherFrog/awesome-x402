@@ -6,14 +6,17 @@ original frozen producers, protocols, selections and ledgers were preserved.
 
 ## Finding and actual scope
 
-At this snapshot, nine completed new studies evaluated **808 registered TRAIN
+At this snapshot, thirteen completed new studies evaluated **1,096 registered TRAIN
 configurations**, in addition to the earlier **292 configurations**, giving
-**1,100 evaluated configurations**. None of these nine studies produced an eligible
-8% monthly historical candidate. A configuration is a parameter/risk/market
+**1,388 evaluated configurations**. None produced an eligible 8% monthly
+historical candidate. The first authentic-mark interpretation is explicitly
+blocked by a retrospective causality finding, including its nominal TRAIN
+survivors. A configuration is a parameter/risk/market
 choice, **not an independent discovery**. Cost stresses, asset subtests,
 synthetic test fixtures and repeated selected-primary accounting checks do not
-increase this count. An authentic-mark refinement study is still pending
-at this snapshot and are excluded from the completed total.
+increase this count. Every listed study is sealed. Reinterpreting the same alpha
+with different execution assumptions does not create an independent economic
+discovery. Any later pending budget contributes zero completed configurations.
 
 | Completed study | Actual TRAIN configurations | Passing TRAIN | Subsequent primary result |
 |---|---:|---:|---|
@@ -26,6 +29,10 @@ at this snapshot and are excluded from the completed total.
 | Native FVG with known NY lunch/London clock context | 48 | 0 | 2025/2026 strategy results unopened |
 | Gold London/US session reference strategies | 96 | 4 | One TRAIN winner failed 2025; 2026 unopened |
 | Native BTC/ETH aggressor-flow/absorption hypotheses | 64 | 0 | 2025/2026 strategy results unopened |
+| Same native trend choices, first authentic-mark interpretation | 96 | 20 nominal; all blocked | Causal clearance revoked; 2025/2026 unopened |
+| Native BTC/ETH prior-session noise-area adaptation | 24 | 0 | 2025/2026 strategy results unopened |
+| Same native trend choices, corrected authentic-mark execution | 96 | 20 | One TRAIN winner failed 2025; 2026 unopened |
+| Eleven-asset current-survivor momentum/financing adaptations | 72 | 0 | New-cohort 2025/2026 sources and results unopened |
 
 Rejection does not establish that every strategy has negative expected returns.
 For example, 51 native trend configurations had positive TRAIN returns, but none
@@ -142,7 +149,7 @@ When within-bar entry or exit timing is unresolved, possible adverse funding is
 retained and uncertain positive receipts are omitted. Boundary debits and source
 absences are retained rather than hidden by dropping exposure dates.
 
-### Later-discovered limitation of the rejected original native trend engine
+### Tested conditions and subsequent causality corrections
 
 A NEW synthetic stress case during review of the authentic-mark refinement
 revealed an additional same-bar dependency in the already frozen original
@@ -161,13 +168,41 @@ condition, later-bar price changes; they did not cover this same-bar
 volume-dependent capital-ordering case. No historical configuration was rerun
 to obtain the synthetic counterexample.
 
-The NEW mark interpreter fixes this with joint opening intent reservations;
-the same case leaves ETH quantity unchanged. The separate flow engine already
-reserved both assets' cash/gross/risk before either current-volume fill check
-and its explicit regression passed before its own freeze. The native FVG
-engine's equivalent reservation issue had been fixed before its original
-192-configuration run. Authentic marks and revised risk execution are additional
-new assumptions, not permission to alter the old rejected history.
+Joint NEW-intent reservations fixed this specific two-new-orders case in the
+first mark interpreter and the flow engine; those synthetic controls passed.
+The native FVG equivalent issue had also been fixed before its own 192-case run.
+These checks did not exercise an OLD exit releasing margin before a different
+asset's NEW entry.
+
+A separate OLD-exit/NEW-entry case subsequently failed the frozen first mark
+interpreter: BTC entered at `2024-01-20T00:00:00Z`, then a known BTC indicator
+exit and NEW ETH entry occurred at `01:00`. Changing ONLY that opening's BTC
+whole-bar volume from positive to zero changed ETH quantity from **998.25 to
+997.752**. Cash recovery from the old exit occurred before the new reservation.
+Whole-bar fill evidence was changing another asset's earlier order quantity.
+The reviewer immediately revoked unconditional causal clearance for this
+coupling. Frozen producers and all 96 numerical outcomes remain unchanged,
+including 20 nominal passing rows. OOS and promotion are blocked regardless.
+
+The same OLD-exit dependency was independently reproduced in the frozen Flow64
+producer, despite its successful two-NEW-intent control: an old BTC exit and
+NEW ETH fill at `2024-01-02T01:05:00Z` produced ETH **998.25 versus 997.752** when
+only current BTC volume and linked flow fields were set to domain-consistent
+zero. All 64 historical rows were already rejected. Their values remain
+diagnostic history; no producer was repaired or market strategy rerun.
+Earlier prefix/accounting tests do not certify these uncovered coupled cases.
+
+The new noise-area engine reserves from the known pre-exit budget and passed
+the OLD-exit control before its own freeze. The separate Mark V2 correction
+fixes all new plans before old closes, current funding, current marks and
+volume-dependent outcomes. Old-book gross reservations use prior completed
+marks; current old first-print prices cannot resize another order. A
+retrospective OLD-snapshot plus actually filled NEW gross-cap breach blocks
+qualification without changing quantities or subtracting a beneficial old exit.
+These are new registered interpretations, not amendments to old outcomes.
+The cross-sectional engine also passed the known pre-exit budget controls before
+its own freeze. Exact-boundary funding was moved after all joint plans; a current
+settlement outcome cannot resize another asset's simultaneous new intent.
 
 ## Existing result receipts checked independently
 
@@ -317,16 +352,266 @@ Selection digest:
 Report SHA256:
 `ffa23a4f242059fbd8ab749cedcf9a2f538ba9d5d95bc7ed9555e10d4b451b07`.
 
-Across FX, native FVG and gold, **344 existing scenario ledgers** received hash
-and accounting checks. This count is separate from the 1,100 TRAIN configurations
-and does not denote 344 independent profitable strategies or new complete
-historical strategy replays.
+### First authentic-mark interpretation: accounting valid, causality blocked
+
+All original frozen source/producer hashes, exact 96 TRAIN identities, actual
+`training_results.json`, immutable selection and selected full evidence were
+checked. Twenty rows nominally pass the numerical TRAIN checks; the nominal
+maximum-score primary is `native_trend-12db6855362d`. Its retained base and
+double-cost ledgers contain 188 completed trades and 2,660 funding rows.
+Margin, lots, two-sided fees, signed net PnL, funding, final cash and complete
+366-day compounded returns reconciled. The common target and conditional 99%
+daily mean interval reproduced exactly, including the existing fold screen.
+Maximum ledger identity error was **1.165e-9** account currency units, including
+million-unit turnover identities.
+
+Nominal TRAIN return was +10.264199% for the year, +0.817567% monthly equivalent,
+with doubled costs +9.051484% for the year. These are neither an 8% OOS result
+nor eligible causal evidence. No validation, final or confirmation exists. The
+retrospective receipt binds the sealed report, selection, rows, producer and
+sources and requires promotion blocked. The report's nominal selection remains
+preserved.
+
+Protocol digest:
+`682b6ea6df249aee086b3acc35d5d5879af5010612874cef6e1a11fde7bc4f9b`.
+Selection digest:
+`724ef098a53427e335c76f0e3118f0d0ba0ff144757bdebbd8687e3940e66313`.
+Sealed report SHA256:
+`8d0b90f72e54c426a08d20faeafe2b403940964f827c5556ffa81712c6acb723`.
+Retrospective causal-block receipt SHA256:
+`bc17693ce65a61900c46ea4d3210836e8558a874e18050955a4dc5c895f6092f`.
+
+### Noise-area adaptation
+
+The exact ordered 24 TRAIN identities, all failed checks, actual immutable
+training/selection artifacts, frozen producers and sources were verified. No
+primary, validation, final or confirmation exists. All **120 existing raw/gzip
+ledgers** were independently checked: 24 base, 24 doubled-cost and 72
+chronological fold scenarios. Hashes, costs, funding, lots/margin, complete
+calendars and flat-account PnL reconciled; maximum cash error was **3.275e-10**.
+The audit read retained outputs rather than replaying market strategies.
+
+The best descriptive TRAIN row, suffix `f442813b13f4`, returned **-26.7892%**;
+doubled costs returned **-43.2079%**, with 508 completed episodes. At those actual
+quantities/exits, gross price PnL was +13.0144% of initial capital, versus
+26.4343% fees, 13.2171% adverse fills and 0.1523% funding loss. Adverse drawdown
+was 31.314%, with nine unknown checkpoint observations. This decomposition
+does not imply a profitable executable strategy without those costs.
+
+Before outcomes, all 24 variants produced nonvacuous long/short synthetic trades
+and passed independent prefix/account/lot/cost/risk checks; all 23 engine/driver
+tests passed. Prior 14 completed same-clock weekday sessions and actual closed
+quote/base VWAP feed signals. Modified protective stops, delayed computed-mark
+risk and no same-bar flip are adaptations, not an original equity-paper
+replication. Fixed New York clocks and the OLD-exit correction were registered
+before outcomes; old mark/flow producers were not changed.
+
+Protocol digest:
+`327a854bb5f47feae8f268400dccf417c14164129dec206679c0182f6614f4a9`.
+Report SHA256:
+`698bf2ff7eac611171ba5fbf843027960bffa21a1935815637d3961372b5a71c`.
+
+### Corrected authentic-mark execution
+
+The separate Mark V2 protocol/producer/source hashes, exact 96 TRAIN rows,
+actual immutable training artifact and sole maximum-score selection were
+verified. Twenty configurations passed TRAIN; primary
+`native_trend-12db6855362d` was locked at `2026-10-02T12:27:29.602001Z`, before
+validation evidence creation. Its two full TRAIN and two full validation ledgers
+contain 406 completed trades and 5,388 funding rows. All margin, lot, two-sided
+fee, price/funding PnL, daily-calendar and final-cash identities reconciled.
+Maximum cash error was **8.732e-11**; maximum identity error including notional
+turnover was **1.165e-9**. Actual validation/evidence/trade/funding files match
+the report and bound digests; every target check and conditional interval
+reproduced exactly from retained daily arrays.
+
+The sole primary's 2025 return was **-1.523278%**, doubled costs **-2.833050%**,
+monthly equivalent **-0.127835%**, with 109 completed episodes. Adverse drawdown
+was 5.411709%; referenced daily loss was 1.318760%. The conditional 99% daily
+mean interval was **[-0.047477%, +0.044421%]**. At actual quantities/exits,
+gross price PnL was +0.127487% of initial capital before fees, adverse fills and
+funding. Twelve held sparse computed-mark asset observations additionally fail
+both cost scenarios. The economic and uncertainty failures do not depend on
+removing that source guard. No final, passing confirmation or replacement
+exists; phase is `completed_locked_validation_failed`.
+
+Protocol digest:
+`e67fb6db565023a616a211c487a7e55aa70d48dc5b367c02f7f71a8c21858274`.
+Selection digest:
+`05a482a6863b73011f6887eb3e024d81254cf1db0cd48c36b8c2dfbb88447dd2`.
+Report SHA256:
+`c9d0567fe6ced073ea1b4aea5c50a93cf7445448719be9a20d499cbf5c8bf3bc`.
+
+### Current-survivor cross-sectional adaptations
+
+The exact fixed 72 identities, frozen source/producer specification, actual
+`training-results.json` and immutable NO-primary selection were verified. All
+**144 retained base/double-cost raw/gzip ledgers** passed hashes and accounting
+checks. The ledgers contain 46,049 completed asset-position episodes across
+correlated configurations, 2,194,742 partial-close slices and 649,211 funding
+rows. Partial slices allocate original margin, entry fees and funding; their
+episode IDs prevent activity being inflated into millions of independent bets.
+Two-sided costs, signed PnL/accounting adjustments, funding, full 366-day
+calendars, flat-account cash and target/conditional-CI values matched.
+Maximum cash error was **1.921e-9**, and maximum ledger identity error was
+**4.843e-8**. All 72 BTC/ETH/equal-eleven descriptive Pearson correlations,
+OLS betas and mean residuals independently matched canonical traded closes.
+These gross references are not costed investable benchmarks or causal alpha.
+
+There were 34 positive base and 22 positive doubled-cost TRAIN rows, but zero
+passed all gates. Every configuration held an absent-trade source observation.
+The best descriptive annual return was **+8.522125%**, monthly equivalent
+**+0.683860%**, doubled-cost annual return **+5.980685%**, with 162 asset episodes,
+13.405144% adverse drawdown and three held absent-trade observations. Annual
+8.5% does not establish monthly 8%. No primary was selected; no new-cohort OOS
+sources, validation, final or confirmation were acquired or calculated.
+
+Before freeze, all 72 variants produced nonvacuous independent synthetic entries
+with future-field prefix, physical 1x cash/margin, lot, funding and cost checks.
+Both final cost scenarios independently reconciled 2,492 synthetic completed
+asset episodes. Exact-boundary debit, old-exit volume, old first-print, side
+balance, post-debit maintenance and sparse-exposure controls passed. Nine driver
+guard tests passed independently; the owner's final 50 engine/driver/source/common
+tests passed. TRAIN selection requires actual complete 72 rows and all raw/gzip
+ledgers; later source acquisition requires the original maximum-score lock,
+actual passing validation/confirmation and verified earlier source bytes.
+
+This is a current-survivor-conditioned eleven-asset perpetual reference with
+FTMO-inspired costs, not an unbiased historical roster or CFD swap/contract
+execution proof. Unknown hourly first-trade ordering and old/new overlap are
+conservatively bounded. Actual retrospective union gross/risk breaches reject
+without rewriting quantities or financing entries from a same-hour old exit.
+
+Protocol digest:
+`7f6f7059b06e831730070862930553e80bfe469f3631141d0f9548ac9b7c9bce`.
+NO-primary selection digest:
+`05ac3c25a3d27b2c223fcc74ff33924ceaf0f67139eff45643ba306c7590e9db`.
+Report SHA256:
+`4b9475fddee8d61749330da601021d8d6041d69944eb767ac4dead77e3f99f37`.
+
+Across FX, native FVG, gold, the blocked first mark primary, noise-area,
+corrected mark and cross-sectional scenarios, **614 existing full ledgers**
+received hash and accounting checks.
+This is separate from the 1,388 TRAIN configurations and does not denote 614
+independent profitable strategies or new complete historical strategy replays.
 
 Local hashes, immutable files and creation-order checks establish local artifact
 consistency. They are not cryptographic external timestamps, proof that the
 underlying vendor delivered every real exchange event, or a fresh independent
 market replay. Public trade OHLC, modeled spread/slippage, unknown queue and
 historical specification/maintenance assumptions keep execution provisional.
+
+## Partial dependence diagnostic on retained TRAIN paths
+
+The original immutable read-only `CAMPAIGN_DEPENDENCE.json` snapshot has daily paths for
+**169 of the 808 additional configurations**: all 72 FX, all 96 gold and the
+native FVG study's originally selected primary. The other **639 configurations**
+retain compact summaries and are excluded. The earlier 292 are not reconstructed.
+The 338 base/double-cost paths are existing registered TRAIN ledgers, not 338
+additional strategies. No engine, new selection or historical replay was run.
+
+This audit rechecked the retained ledger/report/producer hashes and complete
+calendar arrays, and independently calculated covariance concentration using
+a time-by-time Gram matrix. For the identical 90-day 2024 Q4 window, the 168 base
+paths have effective covariance rank **11.6598472873**; including their 168 cost
+counterfactuals gives **12.0315164487**. The 366-day native primary stays in its
+own exact-calendar group: one base path has rank 1; its two cost paths together
+give **1.0084872406**. These calculations agree with the diagnostic's separate
+covariance-matrix calculation. Its 11 edge-case/receipt tests also passed.
+
+The statistic is `trace(C)^2 / trace(C*C)` for centered daily simple returns.
+It describes variance concentration and depends on scale, costs and window;
+it is not an independent-trial count, sample-size estimate, multiplicity
+correction or portfolio recommendation. All retained risk/cost siblings remain
+in the matrix and are labeled. Missing observations are never assigned zero;
+zero-variance correlations are undefined. This original nine-study snapshot
+excludes both later mark interpretations, noise-area and cross-sectional studies.
+There is no complete 1,388-path matrix.
+Diagnostic JSON SHA256:
+`44b50d21fc19f460c0577f2eaf425ead597c38c4f8592ca7053a87289cc93364`.
+
+The separate immutable `CAMPAIGN_DEPENDENCE_V2.json` publication extends actual
+retained coverage to **267 of 1,096 additional configurations**, with **534
+base/double-cost paths** and **829 unavailable daily configurations**. It adds
+all 24 noise-area and 72 cross-sectional TRAIN paths plus only the originally
+selected TRAIN primary from each mark interpretation. No other compact mark
+row is reconstructed or selected by correlation. The first mark primary is
+explicitly causally blocked diagnostic data; a parallel non-revoked matrix
+excludes it. Non-revoked does not mean certified, qualified or independent.
+
+All 13 sealed study/source/producer/TRAIN-lock inventories and every retained
+ledger/date/return fingerprint were independently verified. A separate
+time-by-time Gram calculation reproduced every reported covariance
+concentration statistic. In the exact 366-day 2024 group, 99 base paths give
+rank **2.0876480843**; the 98 non-revoked base paths give **2.0755421676**.
+Double-cost rank is **2.2267994255** and the 198 combined paths give
+**2.2195507472**. The original 168-base 90-day Q4 group remains unchanged.
+Both already selected mark base primary paths are observationally identical,
+Pearson 1.0; that diagnostic repetition does not restore the revoked execution
+model. Different windows remain separate, all risk/cost siblings stay in the
+matrix, and absent daily paths are never filled or invented.
+
+Nine new adapter tests and the 33 campaign tests passed independently. This
+diagnostic performed no market strategy simulation, model selection or
+promotion. Original V1 JSON/Markdown hashes remain byte-identical.
+V2 JSON SHA256:
+`0289908f14d3aba8d0c34ee6c3d6e732adb5dd2d93303a734edb568f86a0080a`.
+
+## Authentic source coverage
+
+A separate fixed, explicitly current-survivor-conditioned 11-asset cohort has
+was acquired for **December 2023 warm-up plus 2024 TRAIN only**, before its own
+72-case study. Acquisition alone contributed zero evaluated configurations;
+the completed study is counted separately above. No new-cohort 2025 or 2026
+sources or strategy performance were acquired or calculated.
+All 429 official monthly ZIP/CHECKSUM chunks were independently reconstructed
+and matched to all 33 canonical datasets and producer/CSV/checksum/JSON hashes.
+The 222,717 records comprise 9,528 trade1h and 9,528 computed-mark1h rows plus
+1,191 realized funding events for each asset. All 209,616 hourly labels match
+the exact registered calendar without gaps or duplicates. The observed funding
+intervals in this acquisition are eight hours; the parser retains each actual
+source interval rather than imposing that schedule on other assets or years.
+All 12 source-contract tests passed.
+
+The cohort is BTC, ETH, SOL, XRP, ADA, DOGE, LINK, LTC, BNB, BCH and DOT. Current
+survival, current FTMO mapping and source completeness do not establish a
+historical eligible universe, executable FTMO quotes/swaps, exact historical
+contract filters or profit. The subsequent engine received its own
+before-outcome audit and freeze. Manifest SHA256:
+`7345f51f6733f1d3b62e3c911f5fcafed45940eb2951456d3cd8aca4fd106d5c`.
+Source protocol-file SHA256:
+`21ad25b060d9f88909c7e1a5cf48ce9065bece325e85c3efd033004df3a95a92`.
+
+The separate authentic BTC/ETH computed-mark source refinement preserves the
+blocked June 2026 monthly witnesses and replaces the entire June container with
+all 30 official daily ZIP/checksums per asset. The complete revision has 124 used
+official sources; all preserved monthly overlap is identical. Its 19 source
+tests passed independently. Source manifest SHA256:
+`9887c9b08a73a6a63e71c00815f45d9534977045e15d79805e10ae4f37f59e94`.
+Source protocol-file SHA256:
+`84c03585b12b75ada698f942581953ddd4e56e9c96b474b12f748c38c7fc1aef`.
+
+The completed first mark interpretation and its causal block are documented
+above. The separately frozen Mark V2 received independent nonvacuous checks of
+all 96 current variants before outcomes: prior-completed-day ATR, later-price
+prefix curves, 2x isolated margin/free cash, lots, both fees and final
+100,000-plus-PnL accounting. Coupled OLD-exit/NEW-entry tests cover both assets,
+both directions, hourly/daily clocks, stops, targets, liquidations and exact/later
+funding outcomes. Four old-first-print controls preserve the NEW quantity while
+the retrospective gross-cap breach rejects. The owner's final 37 tests passed;
+independently, the earlier 36 and both latest affected tests passed. This is
+clearance for the registered provisional historical TRAIN interpretation only;
+its completed one-primary validation failure is documented above.
+
+Sparse held/preceding-opening marks, unknown reopening timing, liquidation/debt,
+terminal unfilled exposure, negative free cash, physical gross-cap breach or
+cashflow mismatch reject base and stress qualification. Possible current
+mark-OPEN liquidation before an old native exit forfeits the old wallet: this
+is a retrospective adverse bound with unknown simultaneous ordering, not an
+earlier alpha observation or exact venue liquidation path. Full selected TRAIN
+and validated OOS evidence plus actual selection/validation/confirmation files
+remain mandatory before later windows. Source auxiliary counts are not exchange
+trade counts or proof of continuous mark sampling.
 
 ## Profit, payout and application promotion remain separate
 
@@ -350,12 +635,38 @@ Refreshed official-source document SHA256:
 The read-only campaign card reports actual completed TRAIN counts and distinguishes
 reported artifacts from protocol/producer/input/selection consistency checks.
 Its `replay_artifacts_verified` label does not attest a new complete backtest run.
-Twenty-one API/card tests passed independently, including forged or missing inputs,
-unsafe paths, staged locks, actual context/trend schemas and zero contribution
-from merely registered metal/flow budgets. It always disables live orders and Telegram.
+Thirty-three campaign API/card tests passed independently, including
+forged or missing inputs, unsafe paths, staged locks, actual completed-study
+schemas and zero contribution from pending budgets. Portable administrative
+receipts can establish version/lock consistency without raw quotes; absent raw
+inputs leave input/replay checks false. A present invalid original never falls
+back to a replacement portable receipt. It always disables live orders and Telegram.
 Earlier evidence promotion requires the actual validation AND final checks,
 the exact passing phase and verified frozen producers; a stale passing
 confirmation cannot replace a failed actual final result.
+
+The campaign registry also hard-blocks the known first mark protocol even if
+its nominal report flags are forged or its retrospective sidecar is absent or
+poisoned. Artifact consistency and the separate causal revocation are different
+statuses; preserved 96 rows contribute research history, not trading admission.
+Completed blocked history does not remain displayed as an active research worker.
+
+The current main setup refresh uses `/api/trader/qualified-setups`; with no
+eligible fixed runtime model it returns no setups and launches no research,
+price fetch, parameter selection or orders. The main board also suppresses
+levels from legacy generic-holdout models that do not establish this 8% target.
+The updated 23 API and five navigation tests passed independently, including
+the actual browser route and forged legacy levels. The older research endpoint
+remains an advanced interface. This release does not yet continuously scan a
+qualified fixed model; button presence does not establish that capability.
+
+The explicit offline test runner was reviewed and its seven tests passed. It
+can skip only the single named immutable Flow raw-input integration test when
+every bound private input is entirely absent. Any partial existing input,
+dangling symlink, linked ancestor or junction disables that skip. Frozen public
+hashes remain tested; unrelated failures still fail and the production verifier
+still rejects unavailable history. Offline integration skips must be reported
+as skips, never as private-history replay or a fully passed historical check.
 
 No eligible strategy or approved account execution was established by this
 snapshot. Any subsequent study needs its own before-outcome registration and

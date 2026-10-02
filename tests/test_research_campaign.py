@@ -90,6 +90,22 @@ class ResearchCampaignTests(unittest.TestCase):
     def tearDown(self):
         self.temporary.cleanup()
 
+    def test_cross_fixed_objective_path_still_requires_the_frozen_target_hash(self):
+        value, path, directory = fixture(self.root, "cross_sectional")
+        value["protocol"].pop("common_objective_path")
+        value["protocol_sha256"] = campaign.digest(value["protocol"])
+        value["selection_lock"]["protocol_sha256"] = value["protocol_sha256"]
+        value["selection_lock_sha256"] = campaign.digest(value["selection_lock"])
+        write(directory / "protocol.json", value["protocol"])
+        write(directory / "training-selection.json", value["selection_lock"])
+        write(path, value)
+        self.assertTrue(campaign.inspect(self.root, "cross_sectional", value)["protocol_verified"])
+        write(self.root / "docs/EIGHT_PERCENT_PROTOCOL.json", {"target": 999})
+        checked = campaign.inspect(self.root, "cross_sectional", value)
+        self.assertFalse(checked["protocol_verified"])
+        self.assertFalse(checked["replay_artifacts_verified"])
+        self.assertIn("Общий протокол цели не подтверждён", checked["verification_reasons"])
+
     def test_missing_reports_keep_prior_count_without_fake_new_experiments(self):
         board = campaign.board(self.root)
         self.assertEqual(board["reported_evaluated_configurations"], 292)

@@ -27,7 +27,7 @@ STUDIES = {
                     "causality_audit_sha256": "bc17693ce65a61900c46ea4d3210836e8558a874e18050955a4dc5c895f6092f"},
     "native_mark_v2": {"file": "native-crypto-mark-v2-research.json", "directory": "native-crypto-mark-v2-research", "title": "Крипто: исправленная хронология исполнения mark", "count": 96, "engine": "native_crypto_mark_v2", "driver": "research_native_crypto_mark_v2", "kind": "generic", "selection_file": "training_selection.json"},
     "native_noise": {"file": "native-noise-area-research.json", "directory": "native-noise-area-research", "title": "Крипто: пробой внутридневной шумовой зоны", "count": 24, "engine": "native_noise_area", "driver": "research_native_noise_area", "kind": "generic", "selection_file": "selection.json", "selection_field": "selection", "selection_digest_field": "selection_sha256"},
-    "cross_sectional": {"file": "cross-sectional-research.json", "directory": "cross-sectional-research", "title": "Крипто: относительный импульс корзины", "count": 72, "engine": "cross_sectional", "driver": "research_cross_sectional", "kind": "generic"},
+    "cross_sectional": {"file": "cross-sectional-research.json", "directory": "cross-sectional-research", "title": "Крипто: относительный импульс корзины", "count": 72, "engine": "cross_sectional", "driver": "research_cross_sectional", "kind": "generic", "objective_path": "docs/EIGHT_PERCENT_PROTOCOL.json"},
 }
 
 
@@ -155,7 +155,7 @@ def inspect(root, study, value):
     if not producer_verified:
         reasons.append("Версия движка или исследовательского скрипта не подтверждена")
     objective = protocol.get("common_target_protocol", {}) if kind == "sessions" else {}
-    objective_path = objective.get("path", protocol.get("common_objective_path"))
+    objective_path = objective.get("path", protocol.get("common_objective_path", spec.get("objective_path")))
     objective_hash = objective.get("file_sha256", protocol.get("common_objective_sha256"))
     objective_verified = (_hash_matches(root, objective_path, objective_hash) if objective_path else
                           "docs/EIGHT_PERCENT_PROTOCOL.json" in (producers or {}) and
