@@ -11,7 +11,7 @@ not a passing historical replay. New unit tests independently check the actual
 common/parent protocol and all public producer hashes and prove the production
 verifier still rejects unavailable historical inputs.
 
-If any bound private artifact or a dangling input/parent symlink exists, the
+If any bound private artifact, input/parent symlink or Windows junction exists, the
 original integration test runs normally. Partial or tampered inputs do not
 activate the skip. With all actual research inputs present, ordinary
 `python -m unittest discover -s tests -q` also runs the full integration check.

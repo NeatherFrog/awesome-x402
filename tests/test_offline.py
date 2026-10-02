@@ -37,6 +37,12 @@ class OfflineRunnerTests(unittest.TestCase):
                            {".local/../outside": "1" * 64}, {".local/a": "invalid"}):
                 self.assertFalse(runner.private_inputs_absent(temp, {"inputs": inputs}))
 
+    def test_windows_junction_api_is_treated_as_presence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(Path, "is_junction", return_value=True, create=True):
+                self.assertFalse(runner.private_inputs_absent(temp, {
+                    "inputs": {".local/a.json": "1" * 64}}))
+
     def test_only_the_explicit_raw_integration_id_is_skipped_and_other_failures_remain(self):
         class Fixture(unittest.TestCase):
             def __init__(self, name, fail=False):

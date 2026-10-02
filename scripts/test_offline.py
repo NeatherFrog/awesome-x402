@@ -20,6 +20,10 @@ RAW_INTEGRATION_IDS = frozenset({
 })
 
 
+def linked(path):
+    return path.is_symlink() or getattr(path, "is_junction", lambda: False)()
+
+
 def private_inputs_absent(root, protocol):
     root = Path(root).resolve()
     inputs = protocol.get("inputs", {})
@@ -32,12 +36,12 @@ def private_inputs_absent(root, protocol):
                 or any(ch not in "0123456789abcdef" for ch in fingerprint)):
             return False
         path = root / name
-        if path.exists() or path.is_symlink():
+        if path.exists() or linked(path):
             return False
         for parent in path.parents:
             if parent == root:
                 break
-            if parent.is_symlink():
+            if linked(parent):
                 return False
     return True
 
