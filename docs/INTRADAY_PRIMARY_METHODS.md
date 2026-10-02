@@ -147,6 +147,15 @@ one-basis-point full spread are stated research assumptions; double-cost
 stress replays fills, sizing and cash. Current/historical venue tariffs,
 quantity filters, maintenance tiers and executable book depth are unverified.
 
+The own protective implementation uses a completed-mark breach as a queued
+exit at the next genuinely traded five-minute opening. It never backfills an
+intrabar execution at the old band. Opening gaps can exceed the stop budget.
+No same-bar re-entry or reversal follows an exit. All new entry intents reserve
+cash, known equity, gross exposure and risk before any old volume-dependent
+exit can release collateral; that released cash is usable at a later decision.
+These are conservative research choices, distinct from the original paper's
+semi-hourly discretionary stop checks and opposite-side reversals.
+
 Before native P&L, the final implementation needs causal/nonvacuous fixtures,
 source and unit checks, independent review and immutable protocol/input
 locks. Use unchanged common gates, 2024 TRAIN and exactly one primary before

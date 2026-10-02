@@ -31,13 +31,23 @@ def package_receipts(root=ROOT):
     copied = []
     for study, spec in STUDIES.items():
         report = read_report(root, study)
-        if not report or not str(report.get("phase", "")).startswith(("completed", "complete")):
+        if not report:
+            continue
+        completed = str(report.get("phase", "")).startswith(("completed", "complete"))
+        blocked_sealed = (report.get("phase") == "training_complete_primary_locked_oos_unopened"
+                          and bool(spec.get("blocked_protocol_sha256"))
+                          and report.get("protocol_sha256") == spec["blocked_protocol_sha256"])
+        if not completed and not blocked_sealed:
             continue
         status = inspect(root, study, report)
         if not all(status[key] for key in (
             "protocol_verified", "producer_hashes_verified", "training_results_verified"
         )):
             raise ValueError("Unverified completed research receipts: " + study)
+        if blocked_sealed and (status.get("promotion_blocked") is not True
+                or status.get("causality_audit_receipt_verified") is not True
+                or status.get("reported_evaluated_configurations") != spec["count"]):
+            raise ValueError("Unverified blocked research correction: " + study)
         source = root / "data" / spec["directory"]
         if source.is_symlink():
             raise ValueError("Research receipt directory cannot be a link")

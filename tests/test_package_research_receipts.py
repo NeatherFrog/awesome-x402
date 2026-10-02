@@ -18,9 +18,9 @@ class PackagedReceiptTests(unittest.TestCase):
         self.status = {"protocol_verified": True, "producer_hashes_verified": True,
                        "training_results_verified": True}
 
-    def run_packager(self, *, phase="completed_no_training_candidate"):
+    def run_packager(self, *, phase="completed_no_training_candidate", extra=None):
         with patch.object(packager, "STUDIES", self.spec), \
-                patch.object(packager, "read_report", return_value={"phase": phase}), \
+                patch.object(packager, "read_report", return_value={"phase": phase, **(extra or {})}), \
                 patch.object(packager, "inspect", return_value=self.status):
             return packager.package_receipts(self.root)
 
@@ -52,6 +52,31 @@ class PackagedReceiptTests(unittest.TestCase):
             self.run_packager()
         self.assertEqual((self.root / "docs/research-receipts/example-research/protocol.json").read_bytes(),
                          b'{"original":true}')
+
+    def test_sealed_blocked_training_includes_verified_correction_without_oos(self):
+        self.spec["example"].update(blocked_protocol_sha256="a" * 64, count=96)
+        self.status.update(promotion_blocked=True, causality_audit_receipt_verified=True,
+                           reported_evaluated_configurations=96)
+        (self.source / "protocol.json").write_bytes(b"{}")
+        (self.source / "retrospective-causality-audit.json").write_bytes(b'{"promotion_blocked":true}')
+        result = self.run_packager(phase="training_complete_primary_locked_oos_unopened",
+                                  extra={"protocol_sha256": "a" * 64})
+        self.assertEqual(len(result), 2)
+        self.status["causality_audit_receipt_verified"] = False
+        with self.assertRaisesRegex(ValueError, "blocked research correction"):
+            self.run_packager(phase="training_complete_primary_locked_oos_unopened",
+                              extra={"protocol_sha256": "a" * 64})
+
+    def test_unsealed_or_unknown_training_cannot_use_blocked_exception(self):
+        (self.source / "protocol.json").write_bytes(b"{}")
+        self.assertEqual(self.run_packager(phase="training_complete_primary_locked_oos_unopened",
+                                         extra={"protocol_sha256": "a" * 64}), [])
+        self.spec["example"].update(blocked_protocol_sha256="a" * 64, count=96)
+        self.status.update(promotion_blocked=True, causality_audit_receipt_verified=True,
+                           reported_evaluated_configurations=95)
+        with self.assertRaisesRegex(ValueError, "blocked research correction"):
+            self.run_packager(phase="training_complete_primary_locked_oos_unopened",
+                              extra={"protocol_sha256": "a" * 64})
 
 
 if __name__ == "__main__":

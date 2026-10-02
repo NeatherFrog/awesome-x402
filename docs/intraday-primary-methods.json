@@ -61,7 +61,7 @@
       "instrument": "SPY ETF",
       "provider": "IQFeed",
       "resolution": "1-minute OHLCV",
-      "sample": "May2007–April2024",
+      "sample": "May2007\u2013April2024",
       "original_vendor_panel_available_locally": false
     },
     "definitions": {
@@ -175,7 +175,7 @@
         8
       ],
       "universe": "~7000NYSE/NasdaqUSstocks including delisted",
-      "sample": "2016-01-01–2023-12-31",
+      "sample": "2016-01-01\u20132023-12-31",
       "daily_vendor": "CRSP",
       "intraday_vendor": "IQFeed",
       "unadjusted_intraday": true,
@@ -193,7 +193,7 @@
           6,
           9
         ],
-        "rule": "First09:30–09:35bodydirection fixesonlyallowedside; stop-entry atfirst5mhigh forbull/low forbear;dojinotrade."
+        "rule": "First09:30\u201309:35bodydirection fixesonlyallowedside; stop-entry atfirst5mhigh forbull/low forbear;dojinotrade."
       },
       "exit": {
         "pages": [
@@ -289,7 +289,7 @@
     "clock": "DirectpinnedNYTZif;actual9:30opening weekdays;completedcheckpointprices;next5mopening fills/updates;flatfirst16NYopening. NoNYSEholiday assertion for24/7crypto.",
     "vwap": "sum(originalquote_volume)/sum(originalbase_volume) overalreadycompletedcurrentsessionbars;nevermarkvolume.",
     "causal_quality": "Only14priorcompletedeligiblelocalweekday sessions forslotmeans;todayfuture16/fullsessionmissing cannot cancel earlierentry. Unavailableupdates/gaps explicit;no stale/zero-tradefills.",
-    "own_deltas": "15mcheckpoints,kgrid,protectivebandstop,monotoniccheckpointtrail,2xsharedcashgross,riskbudgets,two-assetcryptoUSDTfunding/marks differfromauthors.",
+    "own_deltas": "15mcheckpoints,kgrid,protectivebandstop,monotoniccheckpointtrail,2xsharedcashgross,riskbudgets,two-assetcryptoUSDTfunding/marks differfromauthors. Completed-markstopqueuesnextgenuinetradeopen,nointrabarbandfill/no samebarreversal. ALLnewintentscash/equity/gross/risklockedBEFOREanyoldvolume-dependentexit releasescash; releasedmarginusableonlylater.",
     "capital_costs": "TOTAL100000USDT,physicalisolated2x,positiveavailablecash,aggregatecost-inclusivestoprisk/gross<=2equity;5bpstaker/side+2bpsslip/side+1bpsfullspread researchassumptions. Bothfees/actualfunding,doublecostreplay;.001grid/actualtariffs/tierfiltersunverified,neverprop/livequalified.",
     "gates": "Originalunchanged8%objective;2024TRAINoneprimarybefore2025validation;failedval leaves2026unopened,no substitute/rescale."
   },

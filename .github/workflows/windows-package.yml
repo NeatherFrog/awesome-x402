@@ -54,4 +54,5 @@ jobs:
             dist/windows-validation.json
           retention-days: 30
       - name: Publish tested package for direct download
+        if: github.ref == 'refs/heads/main'
         run: python -X utf8 scripts/ci_check.py publish
