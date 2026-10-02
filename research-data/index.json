@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "source_commit": "8a9b6d7dcd0336513bc14ee3ed514d64a33c3b8e",
+  "branch": "research-data-8a9b6d7dcd03",
+  "kind": "spot",
+  "run_url": "https://github.com/NeatherFrog/awesome-x402/actions/runs/36991405971",
+  "purpose": "personal_nonproduction_historical_research",
+  "license": "CC-BY-NC-SA-4.0",
+  "exports": [
+    {
+      "filename": "manifest.json.gz",
+      "output": "manifest.json",
+      "bytes": 154062,
+      "sha256": "abcff4bf824ee9c37e1e5f7f44fa1bb82d87a4cbbcb6819c092c274e6528a49a",
+      "compressed_sha256": "c809941472ad1ef956ac136ef20951d24866e5c1036c7db85e2bab05a3ea6325"
+    },
+    {
+      "filename": "protocol.json.gz",
+      "output": "protocol.json",
+      "bytes": 1358,
+      "sha256": "a91c5618c87b80d3f6c64711b4d9bcd241bc7480dd57a14d7a98e649acfaaeea",
+      "compressed_sha256": "c850459f9bc66641d1f1d9114b072dd5608d2a67cb2a82bf59847e40dcc32c13"
+    },
+    {
+      "filename": "BTCUSDT-1h.json.gz",
+      "output": "BTCUSDT-1h.json",
+      "bytes": 3784191,
+      "sha256": "c287aa48b8f206af74543f01c083121f06bb0e49ccc4e83db98020817ce8a406",
+      "compressed_sha256": "577ee1efa33c76bcca05033b46266ab0ae7268a1508567789635c6ac345e0ff8"
+    },
+    {
+      "filename": "ETHUSDT-1h.json.gz",
+      "output": "ETHUSDT-1h.json",
+      "bytes": 3679940,
+      "sha256": "1e1e26e0d886b0a0d212213acb8ab5ca3aefd6842884fbe106613bd2098a4084",
+      "compressed_sha256": "acf02d91aea0e7e3e8ef1ffb9d052c8992824263e66c3e4248db35d91047299c"
+    },
+    {
+      "filename": "BTCUSDT-5m.json.gz",
+      "output": "BTCUSDT-5m.json",
+      "bytes": 4101019,
+      "sha256": "1ac79d5b858f8f82d8aaf2bb93f49c09eb26ad64700aabab81ee2e958446fcd5",
+      "compressed_sha256": "8052a8b4628e96426f535d6791a5644e4ab5d28302a46a74eace8daf6e30c07c"
+    },
+    {
+      "filename": "ETHUSDT-5m.json.gz",
+      "output": "ETHUSDT-5m.json",
+      "bytes": 4016765,
+      "sha256": "2b1962a04eff751cf8d0c35809b65c626178d0646b4958571e8ef4461bd08cc8",
+      "compressed_sha256": "4322827994d06d98ba3668ccf2ba8973ad46dd3f0ebf4dbf33c9ab9fb05cb0ec"
+    }
+  ]
+}
