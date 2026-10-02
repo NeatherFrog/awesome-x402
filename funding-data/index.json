@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "source_commit": "8a9b6d7dcd0336513bc14ee3ed514d64a33c3b8e",
+  "branch": "funding-data-8a9b6d7dcd03",
+  "kind": "funding",
+  "run_url": "https://github.com/NeatherFrog/awesome-x402/actions/runs/36991406076",
+  "purpose": "personal_nonproduction_historical_research",
+  "license": "CC-BY-NC-SA-4.0",
+  "exports": [
+    {
+      "filename": "manifest.json.gz",
+      "output": "manifest.json",
+      "bytes": 150240,
+      "sha256": "0474ae39b55f8e8ed2baa3ebb169dd326a4e47b2fa87c387d6f4906dc106c2d5",
+      "compressed_sha256": "b2d003c35333cb17183567e88b9c0215aeea100740320e91823226fd1862dedb"
+    },
+    {
+      "filename": "protocol.json.gz",
+      "output": "protocol.json",
+      "bytes": 1617,
+      "sha256": "4009bcd014d5bc65d12c23960f688eaa16cd23fb10183c8601cbf99deca86477",
+      "compressed_sha256": "1c1aae044f3496189550bf9c787fb238f6d13d72640528e1afefca7b25231881"
+    },
+    {
+      "filename": "BTCUSDT-1h.json.gz",
+      "output": "BTCUSDT-1h.json",
+      "bytes": 3686359,
+      "sha256": "b511b490f8c992f5777cc2ccfca21c8e75b61a0ae47ebedc713b13d5f2089a53",
+      "compressed_sha256": "3a933d24582e4844d5a3597dbd8a1c990cc7ae72636ed8c37f143de1c37d820b"
+    },
+    {
+      "filename": "ETHUSDT-1h.json.gz",
+      "output": "ETHUSDT-1h.json",
+      "bytes": 3679592,
+      "sha256": "d554f9212a70d289d3a1cd4fbbad7d5da0d53d5d327d56e6b6834d7de0beb2da",
+      "compressed_sha256": "be311a1d2012f6050dbefb3b3e1274b62cfd3d2d552a57eadd9df42a9796b5d4"
+    },
+    {
+      "filename": "BTCUSDT-funding.json.gz",
+      "output": "BTCUSDT-funding.json",
+      "bytes": 675303,
+      "sha256": "6bbb69ac5fa5497af6cb4ad621b511e6cb395ebdace6ba512bdf034d901f27f7",
+      "compressed_sha256": "a512097f0a5f9209c8cd965d7797e5873e4df46841194d2501fe867cd6a80ed9"
+    },
+    {
+      "filename": "ETHUSDT-funding.json.gz",
+      "output": "ETHUSDT-funding.json",
+      "bytes": 675421,
+      "sha256": "033fc2ed8a46ee53196356f13341caa788e9e1a9938bd75e43a0b06afb0e54c3",
+      "compressed_sha256": "e15c7f7ff5d59cee96ebdfbd09fa765cb1cf90367878989fca5b23d18c074270"
+    }
+  ]
+}
