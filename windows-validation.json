@@ -1,10 +1,10 @@
 {
-  "archive_name": "PROP-LAB-Windows-x64-0.5.0.zip",
-  "archive_sha256": "469376dc5466aa6e48bf84517a7db1bef234e11aada832454a86f0bbea13fb1e",
+  "archive_name": "PROP-LAB-Windows-x64-0.6.0.zip",
+  "archive_sha256": "b131412d26e0e4b833cee6e59c3b440d79abb27ba371b9ed5eb9365b036f1781",
   "platform": "win32",
   "status": "passed",
-  "version": "0.5.0",
-  "source_commit": "9b38ac3cb14427e7a9ce1f6caa61c437bdaca0b0",
+  "version": "0.6.0",
+  "source_commit": "e6321b0569f96b1e393c3553008b97a9b3191970",
   "runtime": {
     "python": "3.13.16",
     "isolated": 1,
@@ -13,6 +13,9 @@
     "ny_winter_hours": -5.0,
     "ny_summer_hours": -4.0
   },
+  "research_evaluated_configurations": 1388,
+  "research_studies": 13,
+  "update_elapsed_seconds": 6.112701399999992,
   "checks": [
     "clean_extraction",
     "isolated_runtime_imports",
@@ -23,6 +26,8 @@
     "setup_board",
     "fixed_evidence_reports",
     "crypto_research_evidence",
+    "campaign_receipts",
+    "qualified_setup_gate",
     "retrospective_diary",
     "rsi2_diary",
     "supervised_updater",
