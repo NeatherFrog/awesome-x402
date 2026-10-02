@@ -1,0 +1,508 @@
+{
+  "audit_harness_sha256": "4ab93eb80c0ba706d870bf62f81d5b5d17df52622158006fadf393dd9e2891ed",
+  "campaign_summary": {
+    "eligible_for_paper": false,
+    "live_orders": false,
+    "new_protocol_producer_verified_configurations": 1096,
+    "new_replay_artifacts_verified_configurations": 0,
+    "new_reported_evaluated_configurations": 1096,
+    "previous_evaluated_configurations": 292,
+    "primary": null,
+    "reported_evaluated_configurations": 1388,
+    "target_monthly_return_pct": 8,
+    "telegram_enabled": false
+  },
+  "checks": [
+    {
+      "backup_baseline_verified": true,
+      "evaluated_studies_verified": 13,
+      "installed_managed_files": 386,
+      "original_source_backup_files": 201,
+      "package": "PROP-LAB-0.5.0.zip",
+      "passed": true,
+      "private_user_state_preserved": true,
+      "public_fixtures_preserved": 15,
+      "restart_required": true,
+      "sha256": "bc25db07ac93dcdca3ef932359687085b8bc4600051ff8ded2752692cd9d3c72",
+      "v1_sealed_training_and_causality_block_verified": true,
+      "version_after_update": "0.6.0",
+      "windows_runtime_files_preserved": 0
+    },
+    {
+      "backup_baseline_verified": true,
+      "evaluated_studies_verified": 13,
+      "installed_managed_files": 386,
+      "original_source_backup_files": 201,
+      "package": "PROP-LAB-Windows-x64-0.5.0.zip",
+      "passed": true,
+      "private_user_state_preserved": true,
+      "public_fixtures_preserved": 15,
+      "restart_required": true,
+      "sha256": "469376dc5466aa6e48bf84517a7db1bef234e11aada832454a86f0bbea13fb1e",
+      "v1_sealed_training_and_causality_block_verified": true,
+      "version_after_update": "0.6.0",
+      "windows_runtime_files_preserved": 35
+    }
+  ],
+  "exact_public_archive": {
+    "compressed_bytes": 7916370,
+    "data_entries_absent": true,
+    "downloaded_at": "2026-10-02T13:05:23.731891Z",
+    "entries": 418,
+    "excluded_optional_reports": [
+      "docs/edge-search.json",
+      "docs/current-research.json"
+    ],
+    "expanded_bytes": 48183991,
+    "expanded_limit_remaining_bytes": 4244809,
+    "files": 393,
+    "old_limits": {
+      "archive": 20971520,
+      "entries": 2000,
+      "expanded": 52428800,
+      "files": 1000
+    },
+    "sha256": "e7264b787b92db21ef65214c1070e74a3d4b102c36a419a6f256545ec61d644d",
+    "url": "https://api.github.com/repos/NeatherFrog/awesome-x402/zipball/e6321b0569f96b1e393c3553008b97a9b3191970"
+  },
+  "frozen_receipts": {
+    "docs/research-receipts/cross-sectional-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/cross-sectional-research/protocol.json",
+      "sha256": "cadfc5b52264578aac88b4243dcf94a79ad3a919aadbf78bb31f0b886f333b83"
+    },
+    "docs/research-receipts/cross-sectional-research/training-selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/cross-sectional-research/training-selection.json",
+      "sha256": "8a34061bf116111ebd8b31e7b03dbc4968133f49789625f0f2532d0a7da4cc16"
+    },
+    "docs/research-receipts/crypto-flow-research/input-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/crypto-flow-research/input-lock.json",
+      "sha256": "c7a00df759188f90dc35bf55b2660611eb6c4f3eb20fb34794279c70730dcb5c"
+    },
+    "docs/research-receipts/crypto-flow-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/crypto-flow-research/protocol.json",
+      "sha256": "7c9b7b6dd9c8fa56fd308db0e6c53ea2cff1181f0d2e04ef0c3258bec184e399"
+    },
+    "docs/research-receipts/crypto-flow-research/training-selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/crypto-flow-research/training-selection.json",
+      "sha256": "36b30aef7b1c517382f0e161f8caa804b88fc34877c3be4c418801e788198233"
+    },
+    "docs/research-receipts/fx-session-research/input-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/fx-session-research/input-lock.json",
+      "sha256": "91564d5d34b86656f7a6386e1ec0f9d05b6d7b2ff08f1de91fcb94129f05276d"
+    },
+    "docs/research-receipts/fx-session-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/fx-session-research/protocol.json",
+      "sha256": "2602dc969ecba4f6e4cca9660f3b2fffb3db5a8e0097d62017aaf403ae14a514"
+    },
+    "docs/research-receipts/fx-session-research/runtime-timezone-audit.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/fx-session-research/runtime-timezone-audit.json",
+      "sha256": "ca035cff952f8f936d191bb7aef82177a6c798794d9c457963e7e01b71862e59"
+    },
+    "docs/research-receipts/fx-session-research/selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/fx-session-research/selection.json",
+      "sha256": "fbd4cd98c2efa01a53c923e8156784fffcc138d15897c6814538d61f72e7b3dd"
+    },
+    "docs/research-receipts/liquidity-context-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/liquidity-context-research/protocol.json",
+      "sha256": "19984331f8aa37947a336faa33d8a9e8ac7d0f818d4971195503bca4a4957097"
+    },
+    "docs/research-receipts/liquidity-context-research/training-selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/liquidity-context-research/training-selection.json",
+      "sha256": "13f00e3ff62083670b0e3763f313d6269d1d172ebb2b3ea8b605efcc177885a7"
+    },
+    "docs/research-receipts/liquidity-native-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/liquidity-native-research/protocol.json",
+      "sha256": "34e844b9c4d7eeaf8430a36629ac0466cca076412739e46ef9fc63d7a7449a32"
+    },
+    "docs/research-receipts/liquidity-native-research/training-selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/liquidity-native-research/training-selection.json",
+      "sha256": "5c750d7a17c886a1f868dec6ca01c5fccb15afe4405f291df3c03b4042e2f1e5"
+    },
+    "docs/research-receipts/metal-session-research/input-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/metal-session-research/input-lock.json",
+      "sha256": "e797efacf40e3c589c12f95bd9c46be028376dba566efa4f0fcea90dc058f851"
+    },
+    "docs/research-receipts/metal-session-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/metal-session-research/protocol.json",
+      "sha256": "c9510665b2089b6c1b3507d84a61cac76bf27c71ad158ab711cca029e7990ae9"
+    },
+    "docs/research-receipts/metal-session-research/selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/metal-session-research/selection.json",
+      "sha256": "e7136a923d4daef73d06455ed222b8d76c9ad3974411778720851eee5781c4f3"
+    },
+    "docs/research-receipts/native-crypto-mark-research/pre_outcome_audit.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-research/pre_outcome_audit.json",
+      "sha256": "d30b5e5b1720ecd88580bbfdda5cb8499a40ebe657acebb26728fbba44ba59bb"
+    },
+    "docs/research-receipts/native-crypto-mark-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-research/protocol.json",
+      "sha256": "fb8ca6eb89cdceb87f2a1ba8057134e4d8ac3cfef2434b8a5a42ac84fdbfb11d"
+    },
+    "docs/research-receipts/native-crypto-mark-research/retrospective-causality-audit.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-research/retrospective-causality-audit.json",
+      "sha256": "bc17693ce65a61900c46ea4d3210836e8558a874e18050955a4dc5c895f6092f"
+    },
+    "docs/research-receipts/native-crypto-mark-research/training_results.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-research/training_results.json",
+      "sha256": "fae31241bfe023df7570b050819a05c4756946f7a3c1b7f585c211ed365cdf4c"
+    },
+    "docs/research-receipts/native-crypto-mark-research/training_selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-research/training_selection.json",
+      "sha256": "ae7e216e8692baba698be3a008c996a9cf91d9a32ea4dc3b89e0c93acf4f262c"
+    },
+    "docs/research-receipts/native-crypto-mark-v2-research/pre_outcome_audit.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-v2-research/pre_outcome_audit.json",
+      "sha256": "5d728177c221f8eba3fadd26fe5bd5ce5813e25f0354ce8d5db69b6ed8aa90e1"
+    },
+    "docs/research-receipts/native-crypto-mark-v2-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-v2-research/protocol.json",
+      "sha256": "8909dbe5c0cd76b50f35d9aeadc8488127684397f26bd0f8207261705d89b48c"
+    },
+    "docs/research-receipts/native-crypto-mark-v2-research/training_results.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-v2-research/training_results.json",
+      "sha256": "a03fa9116672526e8e3730b3f3c5bfdadf9acf728323457fc53bbe18635127da"
+    },
+    "docs/research-receipts/native-crypto-mark-v2-research/training_selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-mark-v2-research/training_selection.json",
+      "sha256": "44710749f313b519d5eb46db889a66145926c97a10b07c6a1f0858ec6c5a400d"
+    },
+    "docs/research-receipts/native-crypto-trend-research/pre_outcome_audit.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-trend-research/pre_outcome_audit.json",
+      "sha256": "06bfc7a7244541f118e46fee2e9dbe5dd341fe18215709434b3ab94e605dc0c1"
+    },
+    "docs/research-receipts/native-crypto-trend-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-trend-research/protocol.json",
+      "sha256": "38fa47e759b08e9c50988aed92c9dfe0845143e82bf51494809fb90da2db0d0d"
+    },
+    "docs/research-receipts/native-crypto-trend-research/training_results.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-trend-research/training_results.json",
+      "sha256": "2ae6f9f1086b6a946840496a79a555c47df1a3421074265d08bd240c1384439d"
+    },
+    "docs/research-receipts/native-crypto-trend-research/training_selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-crypto-trend-research/training_selection.json",
+      "sha256": "0874f558f4da1861ffc8a84d6c3165d563b55367ed837df77f8069c228c4d70d"
+    },
+    "docs/research-receipts/native-noise-area-research/input-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-noise-area-research/input-lock.json",
+      "sha256": "49322f07b64751e8fa3b41dec751030b33a212b63b5bf67797f47071e0c8b039"
+    },
+    "docs/research-receipts/native-noise-area-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-noise-area-research/protocol.json",
+      "sha256": "27318e0c7668dcf9a3a74bd82fc6a012c49b7678cce59e7f722955f24b27c588"
+    },
+    "docs/research-receipts/native-noise-area-research/selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/native-noise-area-research/selection.json",
+      "sha256": "89da46910ef942e0fcd4d7ec6fac63a6db210ae1349cdebd1ff883948f15c7eb"
+    },
+    "docs/research-receipts/relative-value-close-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/relative-value-close-research/protocol.json",
+      "sha256": "57bc2449b015ecfc011c2440267f558701e3101e69d5f9b8ff7f2277a3a8be94"
+    },
+    "docs/research-receipts/relative-value-close-research/training_selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/relative-value-close-research/training_selection.json",
+      "sha256": "a6e78e2db26591a5632b751a07efd1ce19c643820233acdd35315b6f30c171f3"
+    },
+    "docs/research-receipts/relative-value-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/relative-value-research/protocol.json",
+      "sha256": "ab2e6860dcd87f5368e4cf8e0d1f7444cb1a77f8b52d87281a0017d2a8dea3eb"
+    },
+    "docs/research-receipts/relative-value-research/training_selection.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/relative-value-research/training_selection.json",
+      "sha256": "276ff63c2cdbf378536c69c6d4596587b21483abe63b70d0895c794e7ef738d1"
+    },
+    "docs/research-receipts/session-research/protocol.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/session-research/protocol.json",
+      "sha256": "69e8d52124ff05e9a950ed77bdb7f6ef2b481257e49be6a2b0005618b7ccb65a"
+    },
+    "docs/research-receipts/session-research/result-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/session-research/result-lock.json",
+      "sha256": "2d98ec078f60b542917198f01dc53dd734ed2de922202033bee8a73f5bcef95b"
+    },
+    "docs/research-receipts/session-research/source-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/session-research/source-lock.json",
+      "sha256": "dc119430b4070eaad5241b7934e9eafa11e00666ad27b8aa2a98b98931bcae86"
+    },
+    "docs/research-receipts/session-research/training-lock.json": {
+      "matches_original_blob_in_tested_commit": true,
+      "original_git_path": "data/session-research/training-lock.json",
+      "sha256": "9f669a05d82bdf4da948e512f5d5bc8c824c6a7a49ce8fa5530993e856995457"
+    }
+  },
+  "old_release_commit": "9b38ac3cb14427e7a9ce1f6caa61c437bdaca0b0",
+  "old_updater_sha256": "518a927e45a3a0a4ba80c4df33442a82fbc414a93d0ad63c0acd6e2f7b46d292",
+  "portable_studies": [
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "pairs",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 48,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "pairs_close",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 48,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "sessions",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "complete",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 144,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "fx",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_validation_failed_final_unopened",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 72,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "native_fvg",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_validation_failed",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 192,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "native_trend",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 96,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "native_context",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 48,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "metals",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_validation_failed_final_unopened",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 96,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "crypto_flow",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 64,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": true,
+      "eligible_for_paper": false,
+      "execution_causality_status": "revoked_after_synthetic_audit",
+      "id": "native_mark",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "training_complete_primary_locked_oos_unopened",
+      "producer_hashes_verified": true,
+      "promotion_blocked": true,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 96,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "native_mark_v2",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_locked_validation_failed",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 96,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "native_noise",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 24,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    },
+    {
+      "causality_audit_receipt_verified": false,
+      "eligible_for_paper": false,
+      "execution_causality_status": "not_certified_by_this_api",
+      "id": "cross_sectional",
+      "input_available": false,
+      "input_hashes_verified": false,
+      "live_orders": false,
+      "phase": "completed_no_training_candidate",
+      "producer_hashes_verified": true,
+      "promotion_blocked": false,
+      "protocol_verified": true,
+      "reported_evaluated_configurations": 72,
+      "telegram_enabled": false,
+      "training_results_verified": true
+    }
+  ],
+  "recheck_rule": "Results bind exactly to the public ZIP hash and source commit above. Recheck any changed merge/release commit separately.",
+  "recorded_at": "2026-10-02T13:06:17.404018Z",
+  "runtime_reader": {
+    "frozen_archive_reader_sha256": "2fc2fdd500a55437fb937f24d03de3963b6cde6eab0f0f56f0f490151844940a",
+    "module": "propdesk.research_progress",
+    "sha256": "859371628924454e1daf644621aa1a70c6390ccdcee8fc1e0f949f323f55b5df"
+  },
+  "schema": 2,
+  "test_scope": {
+    "actual_old_distributions_used": true,
+    "actual_public_archive_fetched": true,
+    "execution_host": "Linux",
+    "full_market_history_replay_claimed": false,
+    "historical_6336_proof_modified": false,
+    "launcher_restart_executed": false,
+    "main_metadata_points_to_candidate_in_test": true,
+    "main_publication_claimed": false,
+    "native_windows_binaries_executed": false,
+    "native_windows_run_result_claimed": false,
+    "only_api_response_delivery_mocked": true,
+    "profitability_claimed": false,
+    "raw_campaign_inputs_present": false,
+    "unchanged_old_apply_unpack_install_backup_code": true
+  },
+  "tested_source_branch": "trading-eight-percent-research",
+  "tested_source_commit": "e6321b0569f96b1e393c3553008b97a9b3191970"
+}
