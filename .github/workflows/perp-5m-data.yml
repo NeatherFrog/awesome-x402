@@ -1,0 +1,40 @@
+name: Official five-minute perpetual research inputs
+
+on:
+  push:
+    branches: [prop-source-acquisition]
+    paths:
+      - '.github/workflows/perp-5m-data.yml'
+      - 'propdesk/perp_resolution.py'
+      - 'scripts/download_perp_5m.py'
+      - 'tests/test_perp_resolution.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-perp-five-minute-data
+  cancel-in-progress: false
+
+jobs:
+  archives:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify milliseconds, checksums and calendar gaps
+        run: python -X utf8 -m unittest discover -s tests -p test_perp_resolution.py -q
+      - name: Acquire official five-minute perpetual history and publish attributed inputs
+        run: python -X utf8 scripts/download_perp_5m.py --data-dir .local/perp-5m-history --workers 6 --publish-ci
+      - name: Retain source receipts even when calendar exposure fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: five-minute-perpetual-manifests
+          path: |
+            .local/perp-5m-history/manifest.json
+            .local/perp-5m-history/protocol.json
+          retention-days: 30

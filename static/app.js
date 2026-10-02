@@ -3,6 +3,7 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const state = {profiles: [], strategies: [], journal: {trades: [], stats: {}}, research: null, activeProfile: null, detailId: null, accountDirty: false, updates: null, updateAction: false, setup: null, scanJob: null, scanStarting: false, autopilot: null, autopilotAction: false, autopilotError: ''};
 Object.assign(state,{trader:null,traderAction:false,traderError:'',replayDiary:null,strategyEvidence:null,strategyEvidenceError:''});
+Object.assign(state,{researchProgress:null,researchProgressError:''});
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const num = (value, digits = 2) => value === null || value === undefined || !Number.isFinite(Number(value)) ? '—' : Number(value).toLocaleString('ru-RU', {minimumFractionDigits: digits, maximumFractionDigits: digits});
 const money = value => value === null || value === undefined ? '—' : '$' + num(value);
@@ -606,7 +607,7 @@ let strategyEvidenceLoading=false,strategyEvidenceLastRequest=0;
 function strategyReportUrl(value) {
 if(typeof value!=='string'||!value.startsWith('/api/trader/evidence?'))return null;
 try{
-const url=new URL(value,window.location.origin),knownStudies=['broad','low_turnover','liquidity','funding','funding_sized','funding_static'];
+const url=new URL(value,window.location.origin),knownStudies=['broad','low_turnover','liquidity','funding','funding_sized','funding_static','funding_calibrated'];
 if(url.origin!==window.location.origin||url.pathname!=='/api/trader/evidence'||url.hash||url.searchParams.size!==1||!knownStudies.includes(url.searchParams.get('study')))return null;
 return url.pathname+url.search;
 }catch{return null;}
@@ -638,9 +639,38 @@ finally{strategyEvidenceLoading=false;renderStrategyEvidence();}
 function scheduleTraderPoll() {
 clearTimeout(traderPollTimer);traderPollTimer=setTimeout(()=>loadTraderBoard(),state.traderError?5000:state.trader?.status==='searching'||['queued','running'].includes(state.trader?.job?.state)?1500:15000);
 }
+let researchProgressLoading=false,researchProgressLastRequest=0;
+const researchProgressStudies=['pairs','pairs_close','sessions','fx','native_fvg','native_trend'];
+function researchProgressReportUrl(study) {
+return researchProgressStudies.includes(study)?'/api/trader/research-progress?study='+encodeURIComponent(study):null;
+}
+function renderResearchProgress() {
+const summary=$('#research-progress-summary'),details=$('#research-progress-details'),data=state.researchProgress;
+if(state.researchProgressError){summary.textContent='Результаты исследований · цель: 8% в месяц. Связь с отчётами недоступна.';details.hidden=true;return;}
+if(!data)return;
+summary.textContent='Результаты исследований · цель: 8% в месяц. По отчётам проверено '+num(data.reported_evaluated_configurations,0)+' конфигураций ('+num(data.previous_evaluated_configurations,0)+' ранее + '+num(data.new_reported_evaluated_configurations,0)+' новых).'+(data.crypto_pending_reports?' Крипто: ждём следующие отчёты.':'');
+const studies=Array.isArray(data.studies)?data.studies:[];
+$('#research-progress-reports').innerHTML=studies.filter(item=>item&&researchProgressStudies.includes(item.id)).map(item=>{
+const url=researchProgressReportUrl(item.id),count=Number.isInteger(item.reported_evaluated_configurations)?item.reported_evaluated_configurations:0;
+const verification=item.replay_artifacts_verified?'Файлы протокола, движка и истории подтверждены':item.protocol_verified&&item.producer_hashes_verified&&!item.input_available?'Версия подтверждена; исходные файлы истории отсутствуют':item.status==='missing_report'?'Отчёт ещё не опубликован':'Контрольные суммы не подтверждены';
+return '<div><p><strong>'+esc(item.title||'Исследование')+'</strong> · '+esc(num(count,0))+' конфигураций<br>'+esc(verification)+'</p>'+(item.status!=='missing_report'?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Отчёт JSON ↗</a>':'')+(item.id==='pairs_close'?'<p class="field-help">48 повторных оценок исполнения; не 48 новых независимых стратегий.</p>':'')+'</div>';
+}).join('')+'<p class="field-help">Контроль исходных файлов подтверждён для '+esc(num(data.new_replay_artifacts_verified_configurations,0))+' новых конфигураций. Прежние 292 — учёт выполненных исследований. Цель доходности не означает допуск к торговле; торговля и Telegram не включаются этим разделом.</p>';
+details.hidden=false;
+}
+async function loadResearchProgress(force=false) {
+if(researchProgressLoading||(!force&&Date.now()-researchProgressLastRequest<15000))return;
+researchProgressLoading=true;researchProgressLastRequest=Date.now();
+try{
+const data=await api('/api/trader/research-progress');
+if(!data||data.target_monthly_return_pct!==8||!Number.isInteger(data.reported_evaluated_configurations)||data.reported_evaluated_configurations<0||data.live_orders!==false||data.telegram_enabled!==false||data.eligible_for_paper!==false||!Array.isArray(data.studies))throw new Error('Неподтверждённое состояние исследований.');
+state.researchProgress=data;state.researchProgressError='';
+}catch(e){state.researchProgressError=e.message;}
+finally{researchProgressLoading=false;renderResearchProgress();}
+}
 async function loadTraderBoard(force=false) {
 clearTimeout(traderPollTimer);if(state.traderAction&&!force)return;
 loadStrategyEvidence(force);
+loadResearchProgress(force);
 const serial=++traderRequestSerial;
 try{const response=await api('/api/trader/board');if(serial!==traderRequestSerial)return;state.trader=response.board||response;state.traderError='';renderTraderBoard();}
 catch(e){if(serial!==traderRequestSerial)return;state.traderError='Связь с помощником недоступна: '+e.message;renderTraderBoard();}

@@ -1,0 +1,326 @@
+"""Progress is passive and counts actual rows without promoting a strategy."""
+from copy import deepcopy
+import hashlib
+import http.client
+from http.server import ThreadingHTTPServer
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+import threading
+import unittest
+from unittest.mock import patch
+
+from propdesk import research_campaign as campaign
+from propdesk.server import Application, make_handler
+
+
+def write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, allow_nan=False), encoding="utf-8")
+
+
+def fixture(root, study="pairs", *, kind=None):
+    spec = campaign.STUDIES[study]
+    kind = kind or spec["kind"]
+    producers = {}
+    for name in ("propdesk/" + spec["engine"] + ".py", "scripts/" + spec["driver"] + ".py"):
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("frozen")
+        producers[name] = hashlib.sha256(b"frozen").hexdigest()
+    source = root / "data" / "quotes.json"
+    write(source, {"bars": [{"time": "2024-01-01T00:00:00Z", "close": 100}]})
+    source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
+    objective = root / "docs" / "EIGHT_PERCENT_PROTOCOL.json"
+    write(objective, {"target": 8})
+    objective_hash = hashlib.sha256(objective.read_bytes()).hexdigest()
+    variants = [{"id": "a"}, {"id": "b"}, {"id": "c"}]
+    evaluation = {"passed": False, "base": {"total_return": -.01}}
+    directory = root / "data" / spec["directory"]
+    protocol = {"grid": variants, "producers": producers, "inputs": {"data/quotes.json": source_hash},
+                "common_objective_path": "docs/EIGHT_PERCENT_PROTOCOL.json", "common_objective_sha256": objective_hash}
+    rows = [{"id": name, "target": deepcopy(evaluation), "passed": False} for name in ("a", "b")]
+    if kind == "sessions":
+        protocol = {"variants": variants, "common_target_protocol": {"path": "docs/EIGHT_PERCENT_PROTOCOL.json", "file_sha256": objective_hash}}
+        value = {"phase": "complete", "protocol": protocol, "protocol_sha256": campaign.digest(protocol, ascii=False),
+                 "producer_sha256": producers, "source_lock": {"MES=F": {"path": "data/quotes.json", "file_sha256": source_hash,
+                    "canonical_bars_sha256": campaign.digest(json.loads(source.read_text())["bars"], ascii=False)}},
+                 "variants": [{"id": name, "training": deepcopy(evaluation)} for name in ("a", "b")]}
+        lock = {"protocol_sha256": value["protocol_sha256"], "producer_sha256": producers,
+                "source_lock_sha256": campaign.digest(value["source_lock"], ascii=False),
+                "training_metrics": {item["id"]: item["training"] for item in value["variants"]}}
+        value["training_lock_sha256"] = campaign.digest(lock, ascii=False)
+        write(directory / "training-lock.json", lock)
+        write(directory / "source-lock.json", value["source_lock"])
+    elif kind == "fx":
+        protocol["variants"] = protocol.pop("grid")
+        protocol["inputs"] = {"EURUSD": {"file": "data/quotes.json", "sha256": source_hash}}
+        rows = [{**deepcopy(evaluation), "variant": {"id": name}} for name in ("a", "b")]
+        value = {"phase": "completed_training_failed", "protocol": protocol,
+                 "protocol_sha256": campaign.digest(protocol), "training": rows,
+                 "selection": {"variant": None, "training_sha256": campaign.digest(rows)}}
+        write(directory / "selection.json", value["selection"])
+        write(directory / "input-lock.json", protocol["inputs"])
+    else:
+        value = {"phase": "completed_no_training_candidate", "protocol": protocol,
+                 "protocol_sha256": campaign.digest(protocol), "training": rows}
+        lock = {"protocol_sha256": value["protocol_sha256"], "training_results_sha256": campaign.digest(rows), "selected": None}
+        value.update(selection_lock=lock, selection_lock_sha256=campaign.digest(lock))
+        filename = "training-selection.json" if study == "native_fvg" else "training_selection.json"
+        write(directory / filename, lock)
+    write(directory / "protocol.json", protocol)
+    path = root / "docs" / spec["file"]
+    write(path, value)
+    if kind == "sessions":
+        write(directory / "result-lock.json", {"report_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+              "protocol_sha256": value["protocol_sha256"], "producer_sha256": producers,
+              "training_lock_sha256": value["training_lock_sha256"]})
+    return value, path, directory
+
+
+class ResearchCampaignTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.root = Path(self.temporary.name)
+
+    def tearDown(self):
+        self.temporary.cleanup()
+
+    def test_missing_reports_keep_prior_count_without_fake_new_experiments(self):
+        board = campaign.board(self.root)
+        self.assertEqual(board["reported_evaluated_configurations"], 292)
+        self.assertEqual(board["new_reported_evaluated_configurations"], 0)
+        self.assertEqual(board["new_replay_artifacts_verified_configurations"], 0)
+        self.assertTrue(board["crypto_pending_reports"])
+        self.assertFalse(board["live_orders"])
+        self.assertFalse(board["telegram_enabled"])
+        self.assertIsNone(board["primary"])
+        self.assertIn("does not rerun simulations", board["verification_scope"])
+
+    def test_actual_two_evaluated_rows_not_three_registered_or48_expected(self):
+        fixture(self.root)
+        board = campaign.board(self.root)
+        row = board["studies"][0]
+        self.assertEqual(row["registered_configurations"], 3)
+        self.assertEqual(row["reported_evaluated_configurations"], 2)
+        self.assertEqual(board["reported_evaluated_configurations"], 294)
+        self.assertEqual(board["new_replay_artifacts_verified_configurations"], 2)
+        self.assertTrue(row["replay_artifacts_verified"])
+
+    def test_missing_inputs_preserve_reported_count_but_not_replay_proof(self):
+        fixture(self.root)
+        (self.root / "data" / "quotes.json").unlink()
+        board = campaign.board(self.root)
+        row = board["studies"][0]
+        self.assertEqual(board["new_reported_evaluated_configurations"], 2)
+        self.assertTrue(row["protocol_verified"])
+        self.assertTrue(row["producer_hashes_verified"])
+        self.assertFalse(row["input_available"])
+        self.assertEqual(board["new_replay_artifacts_verified_configurations"], 0)
+
+    def test_changed_source_hash_is_unverified_and_does_not_create_candidate(self):
+        value, path, _ = fixture(self.root)
+        value.update(live_orders=True, telegram_enabled=True, retrospective_target_candidate=True,
+                     selected="a", historical_reference_passed=True)
+        write(path, value)
+        (self.root / "data" / "quotes.json").write_text("changed")
+        row = campaign.board(self.root)["studies"][0]
+        self.assertTrue(row["input_available"])
+        self.assertFalse(row["input_hashes_verified"])
+        self.assertFalse(row["eligible_for_paper"])
+        self.assertFalse(row["live_orders"])
+        self.assertFalse(row["telegram_enabled"])
+        response = campaign.report(self.root, "pairs")
+        self.assertFalse(response["live_orders"])
+        self.assertFalse(response["telegram_enabled"])
+
+    def test_changed_producer_and_protocol_are_separate_checks(self):
+        value, path, _ = fixture(self.root)
+        (self.root / "propdesk" / "relative_value.py").write_text("changed")
+        row = campaign.board(self.root)["studies"][0]
+        self.assertTrue(row["protocol_verified"])
+        self.assertFalse(row["producer_hashes_verified"])
+        value["protocol"]["inputs"]["data/quotes.json"] = "0" * 64
+        write(path, value)
+        self.assertFalse(campaign.board(self.root)["studies"][0]["protocol_verified"])
+
+    def test_source_traversal_absolute_windows_and_symlink_rejected(self):
+        with tempfile.TemporaryDirectory() as outside:
+            sentinel = Path(outside) / "private"
+            sentinel.write_text("not project data")
+            for name in ("../private", str(sentinel), "C:\\private", "data/../../private"):
+                value, path, directory = fixture(self.root)
+                value["protocol"]["inputs"] = {name: hashlib.sha256(sentinel.read_bytes()).hexdigest()}
+                value["protocol_sha256"] = campaign.digest(value["protocol"])
+                write(directory / "protocol.json", value["protocol"])
+                write(path, value)
+                self.assertFalse(campaign.board(self.root)["studies"][0]["replay_artifacts_verified"])
+            link = self.root / "data" / "outside-link"
+            try:
+                link.symlink_to(sentinel)
+            except (OSError, NotImplementedError):
+                return  # Windows runners may not grant symlink creation.
+            value, path, directory = fixture(self.root)
+            value["protocol"]["inputs"] = {"data/outside-link": hashlib.sha256(sentinel.read_bytes()).hexdigest()}
+            value["protocol_sha256"] = campaign.digest(value["protocol"])
+            write(directory / "protocol.json", value["protocol"])
+            write(path, value)
+            self.assertFalse(campaign.board(self.root)["studies"][0]["replay_artifacts_verified"])
+
+    def test_protocol_only_registration_does_not_count_unseen_training(self):
+        value, path, _ = fixture(self.root)
+        value.pop("training")
+        value["phase"] = "frozen_before_outcomes"
+        write(path, value)
+        self.assertEqual(campaign.board(self.root)["new_reported_evaluated_configurations"], 0)
+
+    def test_crypto_partial_training_counts_only_rows_and_waits_for_lock(self):
+        value, path, directory = fixture(self.root, "native_fvg")
+        (directory / "training-selection.json").unlink()
+        value.pop("selection_lock")
+        value.pop("selection_lock_sha256")
+        value["phase"] = "training_in_progress"
+        write(path, value)
+        board = campaign.board(self.root)
+        row = next(item for item in board["studies"] if item["id"] == "native_fvg")
+        self.assertEqual(row["expected_configurations"], 192)
+        self.assertEqual(row["reported_evaluated_configurations"], 2)
+        self.assertTrue(row["protocol_verified"])
+        self.assertTrue(row["producer_hashes_verified"])
+        self.assertFalse(row["replay_artifacts_verified"])
+        self.assertTrue(board["crypto_pending_reports"])
+
+    def test_duplicate_unknown_and_unevaluated_rows_never_add_configurations(self):
+        value, path, _ = fixture(self.root)
+        value["training"] += [deepcopy(value["training"][0]), {"id": "unknown", "target": {"passed": False, "base": {"total_return": 0}}}, {"id": "c"}]
+        write(path, value)
+        board = campaign.board(self.root)
+        self.assertEqual(board["new_reported_evaluated_configurations"], 2)
+        self.assertEqual(board["new_replay_artifacts_verified_configurations"], 0)
+
+    def test_forged_training_results_without_lock_fail(self):
+        value, path, _ = fixture(self.root)
+        value["training"][0]["target"]["base"]["total_return"] = 10
+        write(path, value)
+        row = campaign.board(self.root)["studies"][0]
+        self.assertFalse(row["training_results_verified"])
+        self.assertFalse(row["replay_artifacts_verified"])
+
+    def test_session_special_producer_and_canonical_source_lock(self):
+        _, _, _ = fixture(self.root, "sessions")
+        board = campaign.board(self.root)
+        row = next(item for item in board["studies"] if item["id"] == "sessions")
+        self.assertTrue(row["replay_artifacts_verified"])
+        self.assertEqual(row["reported_evaluated_configurations"], 2)
+        value = campaign.read_report(self.root, "sessions")
+        value["source_lock"]["MES=F"]["canonical_bars_sha256"] = "0" * 64
+        row = campaign.inspect(self.root, "sessions", value)
+        self.assertFalse(row["input_hashes_verified"])
+        self.assertFalse(row["replay_artifacts_verified"])
+
+    def test_session_result_file_lock_detects_modified_report(self):
+        value, path, _ = fixture(self.root, "sessions")
+        value["live_orders"] = True
+        write(path, value)
+        row = campaign.inspect(self.root, "sessions", value)
+        self.assertFalse(row["training_results_verified"])
+        self.assertFalse(row["replay_artifacts_verified"])
+
+    def test_fx_named_inputs_and_selection_hash_supported(self):
+        fixture(self.root, "fx")
+        row = next(item for item in campaign.board(self.root)["studies"] if item["id"] == "fx")
+        self.assertTrue(row["replay_artifacts_verified"])
+        self.assertEqual(row["reported_evaluated_configurations"], 2)
+
+    def test_unknown_report_path_and_nonfinite_content_fail_closed(self):
+        for study in ("../private", "/etc/passwd", "pairs?path=secret", "", "native"):
+            with self.assertRaises(ValueError):
+                campaign.report(self.root, study)
+        value, path, _ = fixture(self.root)
+        path.write_text('{"protocol": {"bad": NaN}}')
+        self.assertEqual(campaign.board(self.root)["new_replay_artifacts_verified_configurations"], 0)
+        with self.assertRaises(ValueError):
+            campaign.report(self.root, "pairs")
+
+    def test_get_endpoint_and_allowlisted_report_are_read_only(self):
+        fixture(self.root)
+        app = Application(str(self.root / "runtime"))
+        app.trader.root = self.root
+        handler = make_handler(app)
+        handler.log_message = lambda *_args: None
+        server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        worker = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": .01}, daemon=True)
+        worker.start()
+        before = {str(path.relative_to(self.root)): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+        def request(method, url):
+            connection = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
+            try:
+                connection.request(method, url, body=b"{}" if method == "POST" else None,
+                                   headers={"Content-Type": "application/json"} if method == "POST" else {})
+                response = connection.getresponse()
+                return response.status, json.loads(response.read())
+            finally:
+                connection.close()
+        try:
+            status, board = request("GET", "/api/trader/research-progress")
+            self.assertEqual(status, 200)
+            self.assertEqual(board["reported_evaluated_configurations"], 294)
+            self.assertFalse(board["live_orders"])
+            self.assertFalse(board["telegram_enabled"])
+            status, result = request("GET", "/api/trader/research-progress?study=pairs")
+            self.assertEqual(status, 200)
+            self.assertEqual(result["study"], "pairs")
+            self.assertFalse(result["eligible_for_paper"])
+            self.assertEqual(request("GET", "/api/trader/research-progress?study=native_fvg")[0], 404)
+            for query in ("study=..%2Fprivate", "study=pairs&study=sessions", "path=private", "study=pairs&path=private", "study="):
+                self.assertEqual(request("GET", "/api/trader/research-progress?" + query)[0], 400)
+            self.assertNotEqual(request("POST", "/api/trader/research-progress")[0], 200)
+            self.assertEqual(before, {str(path.relative_to(self.root)): path.read_bytes() for path in self.root.rglob("*") if path.is_file()})
+        finally:
+            server.shutdown()
+            server.server_close()
+            worker.join(timeout=2)
+
+    @unittest.skipUnless(shutil.which("node"), "Optional Node runtime is unavailable")
+    def test_browser_card_escapes_reports_and_ignores_supplied_urls(self):
+        source = Path(__file__).resolve().parents[1] / "static" / "app.js"
+        program = r"""
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const block=source.slice(source.indexOf('let researchProgressLoading='),source.indexOf('async function loadTraderBoard'));
+const prior=source.slice(source.indexOf('function strategyReportUrl'),source.indexOf('function renderStrategyEvidence'));
+const esc=source.split('\n').find(line=>line.startsWith('const esc ='));
+const num=source.split('\n').find(line=>line.startsWith('const num ='));
+const elements={};
+const context={Number,String,Date,URL,encodeURIComponent,window:{location:{origin:'http://127.0.0.1:8765'}},
+state:{researchProgress:{target_monthly_return_pct:8,reported_evaluated_configurations:604,
+previous_evaluated_configurations:292,new_reported_evaluated_configurations:312,new_replay_artifacts_verified_configurations:0,
+crypto_pending_reports:true,studies:[{id:'pairs',title:'<img src=x onerror=alert(1)>',reported_evaluated_configurations:48,
+status:'unverified_artifacts',report_url:'javascript:alert(2)'},{id:'https://attacker.invalid',title:'evil'}]},researchProgressError:''},
+$:selector=>elements[selector]||(elements[selector]={hidden:true,textContent:'',innerHTML:''}),
+api:()=>{throw new Error('Rendering must not start a request');}};
+vm.createContext(context);vm.runInContext(esc+'\n'+num+'\n'+prior+'\n'+block,context);
+assert.strictEqual(vm.runInContext("strategyReportUrl('/api/trader/evidence?study=funding_calibrated')",context),'/api/trader/evidence?study=funding_calibrated');
+assert.strictEqual(vm.runInContext("strategyReportUrl('/api/trader/evidence?study=funding_calibrated&path=private')",context),null);
+vm.runInContext('renderResearchProgress()',context);
+const html=elements['#research-progress-reports'].innerHTML;
+assert(html.includes('&lt;img'));
+assert(!html.includes('<img'));
+assert(!html.includes('javascript:'));
+assert(!html.includes('attacker.invalid'));
+assert(html.includes('/api/trader/research-progress?study=pairs'));
+assert(elements['#research-progress-summary'].textContent.includes('604'));
+assert(elements['#research-progress-summary'].textContent.includes('8%'));
+assert.strictEqual(elements['#research-progress-details'].hidden,false);
+context.state.researchProgressError='<script>failure</script>';
+vm.runInContext('renderResearchProgress()',context);
+assert.strictEqual(elements['#research-progress-details'].hidden,true);
+assert(!elements['#research-progress-summary'].textContent.includes('<script>'));
+"""
+        subprocess.run([shutil.which("node"), "-e", program, str(source)], check=True, capture_output=True, text=True, timeout=10)
+
+
+if __name__ == "__main__":
+    unittest.main()

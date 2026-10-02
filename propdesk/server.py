@@ -608,6 +608,17 @@ def make_handler(app):
                     self.respond(200, {"job": app.scanner.latest()})
                 elif path == "/api/trader/board":
                     self.respond(200, app.trader_board())
+                elif path == "/api/trader/research-progress":
+                    from . import research_campaign
+                    query = parse_qs(parsed.query, keep_blank_values=True)
+                    if set(query) - {"study"} or any(len(values) != 1 for values in query.values()):
+                        raise ValueError("Допустим только один параметр study")
+                    result = (research_campaign.report(app.trader.root, query["study"][0])
+                              if "study" in query else research_campaign.board(app.trader.root))
+                    if result is None:
+                        self.respond(404, {"error": "Отчёт ещё не опубликован"})
+                    else:
+                        self.respond(200, result)
                 elif path == "/api/trader/evidence":
                     from . import evidence
                     query = parse_qs(parsed.query, keep_blank_values=True)

@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "audit_stage": "retrospective_runtime_timezone_identity_only",
+  "audited_at": "2026-10-02T11:01:49.190181+00:00",
+  "strategy_outcomes_inspected": false,
+  "frozen_protocol_id": "fx-asian-london-72-v1",
+  "frozen_protocol_file_sha256": "2602dc969ecba4f6e4cca9660f3b2fffb3db5a8e0097d62017aaf403ae14a514",
+  "frozen_protocol_canonical_sha256": "fb67d169210a1768e44706ebdf87c7a2103b6d96d3192f6eb17e2b3959918f61",
+  "frozen_producers_unchanged_at_audit": true,
+  "audit_producer_file": ".local/audit_fx_runtime_timezone.py",
+  "audit_producer_sha256": "19ec682380f105b670147601a815962cdbd30705744a547457132728d2d7efb4",
+  "runtime_clock": {
+    "key": "Europe/London",
+    "resolver": "propdesk.timezones.timezone_for, host ZoneInfo first",
+    "timezone_resolver_file": "propdesk/timezones.py",
+    "timezone_resolver_sha256": "bfddb1912d436006bcf717a4eb3d0a1616f0613ade7d2ad2ac5c7a4ec9d81d94",
+    "TZPATH": [
+      "/usr/share/zoneinfo",
+      "/usr/lib/zoneinfo",
+      "/usr/share/lib/zoneinfo",
+      "/etc/zoneinfo"
+    ],
+    "first_existing_host_timezone_file": "/usr/share/zoneinfo/Europe/London",
+    "host_timezone_sha256": "c85495070dca42687df6a1c3ee780a27cbcb82f1844750ea6f642833a44d29b4",
+    "pinned_bundled_file": "propdesk/tzdata/Europe/London",
+    "pinned_bundled_sha256": "c85495070dca42687df6a1c3ee780a27cbcb82f1844750ea6f642833a44d29b4",
+    "host_and_pinned_bytes_equal": true
+  },
+  "source_labels": [
+    {
+      "symbol": "EURUSD",
+      "input_file": ".local/prop-research/fx-2026-10-02T10-40-40Z/EURUSD-1h.json",
+      "input_sha256": "294d3ace770bcf672b1fe703c6e9d43b431ea2f94372729bc5770bcc4ba6d7c3",
+      "observed_bar_open_labels": 12320,
+      "local_date_hour_minute_second_offset_fold_mismatch_count": 0,
+      "mismatch_examples": [],
+      "agreement": true
+    },
+    {
+      "symbol": "GBPUSD",
+      "input_file": ".local/prop-research/fx-2026-10-02T10-40-40Z/GBPUSD-1h.json",
+      "input_sha256": "1b789aa0293010219376256e7a65b33df8300b28e43d4fc97466078c5b2e02ce",
+      "observed_bar_open_labels": 12322,
+      "local_date_hour_minute_second_offset_fold_mismatch_count": 0,
+      "mismatch_examples": [],
+      "agreement": true
+    },
+    {
+      "symbol": "USDJPY",
+      "input_file": ".local/prop-research/fx-2026-10-02T10-40-40Z/USDJPY-1h.json",
+      "input_sha256": "eaf20985cc896a95655bdb056b39455b7f842e265b1bb1ac541a7864f9d19f49",
+      "observed_bar_open_labels": 12253,
+      "local_date_hour_minute_second_offset_fold_mismatch_count": 0,
+      "mismatch_examples": [],
+      "agreement": true
+    }
+  ],
+  "passed": true,
+  "interpretation": "Current actual host clock and frozen pinned clock are byte-identical and map every immutable source timestamp to the same local date/hour/offset. This is a retrospective structural audit, not a newly preregistered strategy or a performance result.",
+  "historical_runtime_statement": "Parent confirms the host timezone did not change during the study. This audit observes current files; no contemporaneous runtime-clock receipt existed before the run.",
+  "future_exact_reproduction": "Before rerunning this frozen study, verify the resolved runtime timezone file SHA256 equals the frozen London TZif hash and all input local date/hour/offset mappings agree. A mismatch invalidates exact reproduction; do not rewrite the frozen producers, protocol or results to hide it."
+}

@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "data_protocol_id": "binance-usdm-btceth-five-minute-2024-2026-v1",
+  "declared_at": "2026-10-02",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT"
+  ],
+  "start": "2024-01-01T00:00:00Z",
+  "end_exclusive": "2026-10-01T00:00:00Z",
+  "interval": "5m",
+  "interval_seconds": 300,
+  "timestamp_unit": "milliseconds",
+  "expected_bars_each": 289152,
+  "quote_currency": "USDT",
+  "provider": "Binance USD-M perpetual official checksum-verified archives",
+  "missing_data": "No imputation, sorting, duplicate removal, venue substitution or replacement prices.",
+  "fallback": "Only September2026 monthlyHTTP404 may use all30official daily archives; otherwise missing exposure blocks complete canonical output.",
+  "knowledge": "OHLC known after each bar closes, not at UTC opening label. Five-minute bars improve resolution but do not reveal synchronized intrabar price paths.",
+  "alignment": "Both assets' UTC open labels must match each other and the fixed spot calendar; prices must remain independently sourced and are never equated.",
+  "data_license": "CC-BY-NC-SA-4.0; Binance Vision Dataset Terms v1.0; personal non-production historical research",
+  "not_verified": [
+    "Mark-price path",
+    "maintenance margin/liquidation",
+    "executable bid/ask",
+    "queue/latency",
+    "profitability",
+    "production permissions"
+  ],
+  "live_orders": false
+}

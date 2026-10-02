@@ -1,4 +1,9 @@
-# Current research handoff — 0.5.0
+# Completed baseline research handoff — 0.5.0
+
+**Active continuation:** see [HIGH_RETURN_CAMPAIGN.md](HIGH_RETURN_CAMPAIGN.md).
+The user reopened research with an 8% monthly objective. The preserved results
+below do not end that active task; new separately preregistered families and
+their actual progress are recorded in the continuation and read-only API.
 
 The executor is available. User priority: evaluate hundreds of strategies and
 statistical/correlation evidence, choose one robust strategy, **then** Telegram.
